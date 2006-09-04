@@ -16,7 +16,7 @@
 <h1 style="margin-top:0;">Forums</h1>
 <p class="subtitle">
 <%= feed_icon_tag "Recent Posts", formatted_all_posts_path(:format => 'rss') %>
-<%= number_with_delimiter(Post.count(:conditions => "id=topic_id")) %> topics, <%= number_with_delimiter(Post.count) %> posts, 
+<%= number_with_delimiter(Topic.count) %> topics, <%= number_with_delimiter(Post.count) %> posts, 
 <%= number_with_delimiter(User.count(:conditions => "posts_count>0")) %> voices
   
 </p>
