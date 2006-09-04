@@ -31,8 +31,9 @@
               { :id => "monitorship-#{@topic.dom_id}", :style => (@monitoring && 'display:none') }) %>
         <%= link_to_remote('unwatch', {:url => monitorships_path(@forum, @topic), :method => :delete},
               { :id => "delete-monitorship-#{@topic.dom_id}", :style => (!@monitoring && 'display:none') }) %>
-      </strong> |
+      </strong> 
       <% if @topic.editable_by?(current_user) -%>
+				|
         <%= link_to('edit', edit_topic_path(@forum, @topic), :class => "utility") %> |
         <%= link_to('delete', topic_path(@forum, @topic), :class => "utility", :method => :delete, :confirm => "Delete this topic forever?") %>
       <% end -%>
