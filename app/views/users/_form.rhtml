@@ -1,14 +1,8 @@
-<p>
-  <label for="user_login">Login</label>
-  
-  <p class="help">Logins should start with least 2 characters and may consist of letters, numbers, or the underscore.</p>
-  
-  <%= form.text_field :login %>
-</p>
+<p class="help">Logins should start with least 2 characters and may consist of letters, numbers, or the underscore.</p>
 
 <p>
-  <label for="display_name">Display Name</label><br />
-  <%= form.text_field :display_name %>
+  <label for="user_login">Login</label><br />
+  <%= form.text_field :login %>
 </p>
 
 <p>
@@ -17,11 +11,16 @@
 </p>
 
 <p>
-  <label for="user_password">Password</label><br />
-  <%= form.password_field :password %>
+  <label for="display_name">Display Name (optional)</label><br />
+  <%= form.text_field :display_name %>
 </p>
 
-<p>
-  <label for="user_password_confirmation">Password Confirmation</label><br />
+<div>
+	  <label for="user_password">Password</label><br />
+	<p class="help">Enter your desired password twice.  It must be at least 5 characters.</span></p>
+
+  <%= form.password_field :password %>
+<span class="entryhelp">(once)</span><br />
   <%= form.password_field :password_confirmation %>
-</p>
+<span class="entryhelp">(and then again)</span>
+</div>
