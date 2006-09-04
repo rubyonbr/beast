@@ -37,7 +37,9 @@
 
 
 <% if @topic_pages.page_count > 1 -%>
+<% if logged_in? %>
 <p style="float:right; margin-top:0;"><%= link_to 'New topic', new_topic_path(@forum), :class => "utility" %></p>
+<% end %>
 <p class="pages">Pages: <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
@@ -93,4 +95,6 @@
 <p class="pages">Pages: <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
+<% if logged_in? %>
 <p><%= link_to 'New topic', new_topic_path(@forum), :class => "utility" %></p>
+<% end%>

@@ -41,7 +41,7 @@
       <% end %>
     </td>
     <td class="c2">
-      <%= link_to "Edit", edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" %>
+      <%= link_to "Edit", edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
 
       <%= link_to h(forum.name), forum_path(forum), :class => "title" %>
       <div class="posts">
