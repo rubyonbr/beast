@@ -1,0 +1,18 @@
+<% content_for :right do %>
+
+<h5>Avatars</h5>
+
+<p>To have your very own avatar displayed on this forum visit <a href="http://www.gravatar.com/">gravatar.com</a> and sign up for free gravatar.</p>
+
+<% end %>
+
+<h1>Settings</h1>
+<p class="subtitle">for <%= @user.display_name %></p>
+
+<% form_for :user, :url => user_path(@user),
+  :html => { :method => :put } do |f| -%>
+  <%= render :partial => "settings", :object => f %>
+  <p><%= submit_tag 'Save settings' %></p>
+  <%= render :partial => "contact_info", :locals => { :settings => f } %>
+  <p><%= submit_tag 'Save settings' %></p>
+<% end -%>

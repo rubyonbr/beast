@@ -1,0 +1,2 @@
+page["monitorship-topics-#{params[:topic_id]}"].show
+page["delete-monitorship-topics-#{params[:topic_id]}"].hide

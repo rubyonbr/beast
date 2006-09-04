@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title><%= "#{h @page_title} - " if @page_title %>Beast</title>
+  <%= stylesheet_link_tag 'display' %>
+  <%= javascript_include_tag "prototype", "effects", "application" %>
+<% unless @feed_icons.blank? -%>
+  <% @feed_icons.each do |feed| -%>
+  <%= auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'" %>
+  <% end -%>
+<% end -%>
+</head>
+<body>
+
+<div id="header">
+
+  <ul id="nav">
+    <li><%= link_to 'Forums', home_path, :rel => 'home' %></li>
+    <li><%= link_to 'Users', users_path %></li>
+    <li id="search" style="display:none;">
+      <%= start_form_tag all_posts_path, :method => 'get' %>
+        <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
+      </form>
+    </li>
+    <li><%= link_to_function :Search, "$('search').toggle(); $('search').focus();" %></li>
+
+    <% if logged_in? %>
+    <li class="login"><%=  link_to current_user.login, user_path(current_user) %></li>
+    <li class="logout"><%= link_to "Settings", settings_path %></li>
+    <li class="logout"><%= link_to "Logout", logout_path %></li>
+    <% else %>
+    <li><%= link_to "Signup", signup_path %></li>
+    <li><%= link_to "Login", login_path %></li>
+    <% end %>
+    
+  </ul>
+
+  <h1><%= link_to 'Beast', home_path %></h1>
+  
+</div>
+
+<div id="container">
+
+<div id="content">
+  
+<%= content_tag 'p', h(flash[:notice]), :class => 'notice' if flash[:notice] %>
+<%= content_tag 'p', h(flash[:error]), :class => 'notice error' if flash[:error] %>
+  
+<%= yield %>
+</div>
+
+<div id="right">
+  <%= yield :right %>
+</div>
+
+<br style="clear:both;" />
+
+</div>
+
+<div id="footer">
+<!--
+<p class="legal">
+<a href="/legal/" style="color:#369;">Legal</a>
+</p>
+-->
+<p class="disclaim">
+<strong>
+  <%
+  footers=["Two's company. Three's a forum. More's a Beast."
+  ]
+  %>
+  <%= footers[rand(footers.size)]%>
+  </strong>
+</p>
+<p class="credit">
+  Powered by <a href="http://beast.caboo.se/">Beast</a><br />
+  &copy; 2006 <a href="mailto:josh@dwgsolutions.com" class="subtle">Josh Goebel</a> and <a href="http://weblog.techno-weenie.net" class="subtle">Rick Olson</a>
+</p>
+<br style="clear:both;" />
+</div>
+</body>
+</html>

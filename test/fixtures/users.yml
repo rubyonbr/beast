@@ -1,0 +1,50 @@
+aaron:
+  id: 1
+  login: aaron
+  email: aaron@email.com
+  password_hash: 4c426caff6b43918711cc94d7a0044bb60eee108 # testy
+  created_at: <%= 5.days.ago.to_s :db %>
+  posts_count: 2
+  last_login_at: <%= 5.minutes.ago.to_s :db %>
+  last_seen_at: <%= 5.minutes.ago.to_s :db %>
+  activated: true
+  admin: true
+  display_name: Aaron Stack
+sam:
+  id: 2
+  login: sam
+  display_name: sam
+  email: sam@email.com
+  password_hash: 4c426caff6b43918711cc94d7a0044bb60eee108 # testy
+  created_at: <%= 4.days.ago.to_s :db %>
+  posts_count: 2
+  last_login_at: <%= 4.minutes.ago.to_s :db %>
+  last_seen_at: <%= 4.minutes.ago.to_s :db %>
+  activated: true
+  login_key: 8305f94ab2b92f99137abbc235ee28e5a
+  login_key_expires_at: <%= Time.now.utc + 1.week %>
+joe:
+  id: 3
+  login: joe
+  display_name: joe
+  email: joe@email.com
+  password_hash: 4c426caff6b43918711cc94d7a0044bb60eee108 # testy
+  created_at: <%= 4.days.ago.to_s :db %>
+  posts_count: 2
+  last_login_at: <%= 4.minutes.ago.to_s :db %>
+  last_seen_at: <%= 4.minutes.ago.to_s :db %>
+  activated: true
+  login_key: 8305f94ab2b92f99137abbc235ee28e5b
+  login_key_expires_at: <%= (Time.now.utc + 1.week).to_s :db %>
+kyle:
+  id: 4
+  login: kyle
+  display_name: kyle
+  email: kyle@email.com
+  password_hash: 4c426caff6b43918711cc94d7a0044bb60eee108 # testy
+  created_at: <%= 3.days.ago.to_s :db %>
+  posts_count: 0
+  activated: false
+  login_key: 8305f94ab2b92f99137abbc235ee28e5c
+  login_key_expires_at: <%= (Time.now.utc + 1.week).to_s :db %>
+  

@@ -1,0 +1,31 @@
+<h1>Login</h1>
+
+<%= start_form_tag sessions_path %>
+<p>
+  <label for="login">Login</label><br />
+  <%= text_field_tag :login, params[:login] %>
+</p>
+
+<p>
+  <label for="password">Password</label><br />
+  <%= password_field_tag :password %>
+</p>
+
+<p><label><%= check_box_tag "remember_me", "1", true %> Remember me on this computer</label></p>
+
+<p><%= submit_tag 'Login', :or => link_to_function('reset password', "$('reset-password').toggle();") %></p>
+</form>
+
+<%= start_form_tag users_path, :id => 'reset-password', :style => 'display:none' %>
+
+<hr />
+
+<h5>Reset Password</h5>
+
+  <p>Enter your email, and a brand new login key will be sent to you.  Click the link in the email to log in, and then change your password.</p>
+  <p><%= text_field_tag :email, "", :size => 30 %>
+<br />
+<%= submit_tag "E-mail me the link", :or => link_to_function('cancel', "$('reset-password').hide()") %></p>
+</form>
+
+<%= javascript_tag "$('login').focus();"%>

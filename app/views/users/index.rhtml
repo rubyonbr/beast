@@ -1,0 +1,57 @@
+<% content_for :right do %>
+<h5>Find a User</h5>
+
+<%= start_form_tag nil, :method => 'get' %>
+<p>
+<label>Display name or login</label>
+<%= text_field_tag :q, params[:q] %> 
+<%= submit_tag "Search" %></p>
+</form>
+
+<% end %>
+
+<h1 style="margin-top:0;">Users</h1>
+<p class="subtitle">
+<%
+@user_count=User.count
+@active=User.count(:conditions => "posts_count>0")
+%>
+<%= number_with_delimiter(@user_count) %> users, <%= @active %> active, <%= @user_count-@active %> lurking
+</p>
+
+<% if @user_pages.page_count > 1 -%>
+<p class="pages">Pages: <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
+<% end -%>
+
+<table border="0" cellspacing="0" cellpadding="0" class="wide forums">
+  <tr>
+    <th class="la" width="88%">Name / Login</th>
+    <th>Website</th>
+    <th width="1%">Posts</th>
+  </tr>
+<% @users.each do |user|-%>  
+  <tr>
+    <td><%= link_to h(user.display_name), user_path(user), :class => (user.admin? ? "admin" : nil) %>
+      <span style="color:#666">
+      <%= "(admin)" if user.admin? %>
+      <%#= "(moderator)" unless user.moderatorships.empty? %>
+      </span>
+      </td>
+    <td class="la">
+      <% unless user.website.blank? %>
+      <%= white_list link_to(user.website.gsub("http://",""), "http://" + user.website.gsub("http://","")) %>
+      <% end %>
+    </td>
+    <td class="ca inv"><%= user.posts_count %></td>
+  </tr>
+<% end %>
+</table>
+
+<% if @user_pages and @user_pages.current.next %>
+<p style="float:right;"><%= link_to "Next page", { :page => @user_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
+<% end %>
+
+<% if @user_pages.page_count > 1 -%>
+<p class="pages">Pages: <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
+<% end -%>
+

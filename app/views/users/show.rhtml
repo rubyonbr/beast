@@ -1,0 +1,44 @@
+<% @page_title = @user.display_name -%>
+
+<p style="float:right;"><%= avatar_for @user, 80 %></p> 
+
+<h1><%=h @user.display_name %> </h1>
+
+<p class="subtitle">
+  <%= feed_icon_tag @user.display_name, formatted_user_posts_path(:user_id => @user, :format => :rss) %>
+  <span>
+    <%= pluralize @user.posts_count, 'post' %>
+    (view <%= link_to "all", user_posts_path(@user) %> | 
+    <%= link_to 'monitored', monitored_posts_path(@user) %> posts)<br />
+  </span>
+</p>
+
+<%= format_text @user.bio %>
+
+<% unless @user.website.blank? -%>
+<p><strong>Website:</strong> <%= white_list link_to(@user.website.gsub("http://",""), "http://" + @user.website.gsub("http://","")) %>
+<% end -%>
+<p>User since <%= @user.created_at.to_date.to_s :long %></p>
+
+<% form_for :user, :url => admin_user_path(@user), :html => {:class => "dialog"} do |f| -%>
+  <p>Moderated Forums</p>
+  
+  <% if @user.forums.any? -%>
+  <ul>
+  <% @user.forums.find(:all, :select => 'forums.*, moderatorships.id as moderatorship_id').each do |forum| -%>
+    <li>
+      <%= link_to forum.name, forum_path(forum) %>
+      (<%= link_to 'x', moderator_path(@user, forum.moderatorship_id), :method => :delete %>)
+    </li>
+  <% end -%>
+  </ul>
+  <% end -%>
+  
+  <p><select name="moderator">
+    <option value="-">Add as moderator to...</option>
+    <%= options_from_collection_for_select(Forum.find(:all) - @user.forums, "id", "name") %>
+  </select></p>
+  
+  <p><label><%= f.check_box :admin %> is admin?</label></p>
+  <p><%= submit_tag :Save %></p>
+<% end if admin? -%>

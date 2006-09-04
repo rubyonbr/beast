@@ -1,0 +1,12 @@
+<h1 id="new_topic">New Topic</h1>
+<p class="subtitle">by <%= current_user.display_name %></p>
+
+<%= error_messages_for :topic %>
+<% form_for :topic,
+     :url  => topics_path(@forum) do |f| -%>
+<%= render :partial => "form", :locals => { :f => f } %>
+<%= submit_tag 'Post Topic', :or => link_to('Cancel', forum_path(@forum)) %>
+<% end -%>
+
+<%= javascript_tag "$('topic_title').focus();" %>
+

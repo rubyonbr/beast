@@ -1,0 +1,99 @@
+<% content_for :right do %>
+
+<h5>What is Beast?</h5>
+
+<p>
+  A small, light-weight forum in Rails with a scary name and a goal of around 500 lines of code when we're done.
+</p>
+
+<% if admin? %>
+<h6>Admin</h6>
+<p><%= link_to 'Create New Forum', new_forum_path, :class => "utility" %></p>
+<% end %>
+
+<% end %>
+
+<h1 style="margin-top:0;">Forums</h1>
+<p class="subtitle">
+<%= feed_icon_tag "Recent Posts", formatted_all_posts_path(:format => 'rss') %>
+<%= number_with_delimiter(Post.count(:conditions => "id=topic_id")) %> topics, <%= number_with_delimiter(Post.count) %> posts, 
+<%= number_with_delimiter(User.count(:conditions => "posts_count>0")) %> voices
+  
+</p>
+
+<table border="0" cellspacing="0" cellpadding="0" class="wide forums">
+  <tr>
+    <th class="la" width="70%" colspan="2">Forum</th>
+<!--
+    <th width="5%">Topics</th>
+    <th width="5%">Posts</th>
+-->
+    <th class="la" width="30%">Last Post</th>
+  </tr>
+<% for forum in @forums do %>  
+  <tr>
+    <td class="vat c1">
+    
+      <% if recent_forum_activity(forum) %>
+      <%= image_tag "clearbits/comment.gif", :class => "icon green", :title => "Recent activity" %>
+      <% else %>
+      <%= image_tag "clearbits/comment.gif", :class => "icon grey", :title => "No recent activity" %>
+      <% end %>
+    </td>
+    <td class="c2">
+      <%= link_to "Edit", edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" %>
+
+      <%= link_to h(forum.name), forum_path(forum), :class => "title" %>
+      <div class="posts">
+        <%= number_with_delimiter(forum.topics_count) %> topics, 
+        <%= number_with_delimiter(forum.posts_count) %> posts
+      </div>
+      <p class="desc"><%= h forum.description %>
+        </p>
+    </td>
+<!--
+    <td class="ca inv"><%= number_with_delimiter(forum.topics_count) %></td>
+    <td class="ca inv"><%= number_with_delimiter(forum.posts_count) %></td>
+-->
+
+    <td class="inv lp">
+      <% if forum.posts.last %>
+        <%= time_ago_in_words(forum.posts.last.created_at) %><br />
+        by <strong><%= h(forum.posts.last.user.display_name) %></strong>
+        <span>(<%= link_to 'view', topic_path(:forum_id => forum, :id => forum.posts.last.topic_id, :page => forum.posts.last.topic.last_page) %>)</span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<p>
+  <%= link_to "Recent posts", all_posts_path %>
+</p>
+
+<div class="stats">
+
+<%
+=begin
+%>
+<div class="posts">
+Total users: <strong><%= number_with_delimiter(User.count) %></strong><br />
+Total topics: <strong><%= number_with_delimiter(Post.count(:conditions => "id=topic_id")) %></strong><br />
+Total posts: <strong><%= number_with_delimiter(Post.count) %></strong>
+</div>
+<%
+=end
+%>
+
+<div class="users">
+<% online_users = User.currently_online -%>
+<% unless online_users.empty? %>
+Users online: <%= online_users.map { |u| link_to "<strong>#{h u.display_name}</strong>", user_path(u) } * ", " %><br />
+<% end %>
+<% if (guests=Session.active_guests)>0 %>
+Guests online: <%= guests %>
+<% end %>
+</div>
+  
+</div>
+
