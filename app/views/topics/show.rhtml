@@ -3,7 +3,7 @@
 
 <% content_for :right do %>
 
-<h4>Voices</h4>
+<h5>Voices</h5>
 <ul class="flat talking">
 <% @voices.each do | user | %>
   <li><%= link_to h(user.display_name), user_path(user) %></li>
