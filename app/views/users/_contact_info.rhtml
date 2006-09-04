@@ -1,13 +1,19 @@
-<h2>Contact Info</h2>
+<h3>User Profile</h3>
 
-<p>Only fields you enter will be shown on your user profile.</p>
+<p>
+  <label for="display_name">Display Name</label><br />
+  <%= settings.text_field :display_name %>
+</p>
 
 <p>
   <label for="user_website">Website</label><br />
-  <%= settings.text_field :website %>
+  <%= settings.text_field :website %> 
+	<span class="entryhelp">
+	(without http://)
+	</span>
 </p>
 
 <p>
   <label for="user_bio">Bio</label><br />
-  <%= settings.text_area :bio %>
+  <%= settings.text_area :bio, :rows => 10, :style => "width:99%" %>
 </p>

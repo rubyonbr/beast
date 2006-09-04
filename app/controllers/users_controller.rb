@@ -38,8 +38,8 @@ class UsersController < ApplicationController
     @user.attributes = params[:user]
     # temp fix to let people with dumb usernames change them
     @user.login = params[:user][:login] if not @user.valid? and @user.errors.on(:login)
-    @user.save!
-    redirect_to user_path(@user)
+    @user.save! and flash[:notice]="Your settings have been saved."
+    redirect_to edit_user_path(@user)
   end
 
   def admin

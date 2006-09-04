@@ -181,10 +181,12 @@ h2 span
 
 h3 
 {
-	color:#393;
-	font-size:0.8em;
-	background:#e0e7e0;
-	padding:3px 10px;
+  padding:2px 10px 3px;
+  background:#333;
+  color:white;
+	font-size:0.70em;
+  border-bottom:1px solid #999;
+  font-family: 'Lucida Grande', Tahoma, Arial, Helvetica, sans-serif;
 }
 
 h6 { margin-bottom:0; }
@@ -645,6 +647,11 @@ form.dialog
 	padding:15px;
 }
 
+form .entryhelp
+{
+  font-size:0.7em;
+}
+
 form .help
 {
 	font-size:0.8em;
@@ -683,7 +690,6 @@ div.stats .posts { float:right; text-align:right; }
 
 table.posts
 {
-	xborder-collapse:collapse;
 	border-bottom:2px solid #eee;
 }
 
@@ -775,6 +781,7 @@ table.posts tr.spacer td
 	border:1px solid #ccc;
 	border-left:3px solid #ddd;
 	border-right:0;
+	overflow:auto;
 }
 
 .posts .post .body a:hover { color:brown; }

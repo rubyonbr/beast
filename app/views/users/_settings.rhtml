@@ -1,5 +1,5 @@
 
-<h2>Basics</h2>
+<h3>Basics</h3>
 
 
 <% if not @user.valid? and @user.errors.on(:login) %>
@@ -14,24 +14,21 @@
 <% end %>
 
 <p>
-  <label for="display_name">Display Name (optional)</label><br />
-  <%= settings.text_field :display_name %>
-</p>
-
-<p>
   <label for="user_email">Email</label><br />
   <%= settings.text_field :email %>
 </p>
 
-<p>
-  <label for="user_password">Password</label><br />
-  <%= settings.password_field :password %>
-</p>
+	<div>
+		  <label for="user_password">Password</label><br />
+		<p class="entryhelp" style="margin-top:0.5em;">Type your password twice to change it.</p>
+		  <%= settings.password_field :password %>
+		<span class="entryhelp">(once)</span><br />
+		
+		  <%= settings.password_field :password_confirmation %>
+				<span class="entryhelp">(and again)</span>
+			</div>
 
-<p>
-  <label for="user_password_confirmation">Password Confirmation</label><br />
-  <%= settings.password_field :password_confirmation %>
-</p>
+
 
 
 
