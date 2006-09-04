@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   validates_format_of     :display_name, :with => /^[a-zA-Z]{2}(?:[.'\-\w ]+)?$/
   validates_uniqueness_of :display_name, :case_sensitive => false
 
+  validates_length_of :password, :minimum => 5, :allow_nil => true
   validates_confirmation_of :password, :on => :create
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
   # first user becomes admin automatically
