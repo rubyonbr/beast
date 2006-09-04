@@ -723,6 +723,7 @@ table.posts tr.spacer td
 	font-size:0.9em;
 	min-height:32px;
 	width:10em;
+	min-width:8em;
 	vertical-align:top;
 }
 
@@ -775,13 +776,14 @@ table.posts tr.spacer td
 
 .posts .post .body pre
 {
-	font-size:0.9em;
+	font-size:0.8em;
 	background:#eee;
 	padding:5px 10px;
 	border:1px solid #ccc;
 	border-left:3px solid #ddd;
 	border-right:0;
 	overflow:auto;
+	font-family: "Monaco", "Bitstream Vera Sans Mono", "Courier New", serif;
 }
 
 .posts .post .body a:hover { color:brown; }
