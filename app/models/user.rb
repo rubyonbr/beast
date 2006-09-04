@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :forums, :through => :moderatorships, :order => 'forums.name'
 
   has_many :posts
+  has_many :topics
   has_many :monitorships
   has_many :monitored_topics, :through => :monitorships, :conditions => ['monitorships.active = ?', true], :order => 'topics.replied_at desc', :source => :topic
 

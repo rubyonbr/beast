@@ -43,8 +43,8 @@ a { color: #24c; }
 {
 	font-size:0.75em;
 }
-#right p a.hidden { color:black; text-decoration:none; border-bottom:1px solid #999; }
-#right p a.hidden:hover { color:blue; text-decoration:none; border-bottom:1px solid blue; }
+#right a.hidden { color:black; text-decoration:none; border-bottom:1px solid #999; }
+#right a.hidden:hover { color:blue; text-decoration:none; border-bottom:1px solid #963; }
 
 #right p.help
 {
