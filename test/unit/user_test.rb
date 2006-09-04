@@ -27,6 +27,21 @@ class UserTest < Test::Unit::TestCase
     end
   end
   
+  def test_minimum_password_length
+    u = users(:sam)
+    u.password = "bluegill"
+    assert_valid u
+    u.password = "fishing"
+    assert_valid u
+    u.password = "trout"
+    assert_valid u
+    # fewer than 5 chars are not valid passwords
+    u.password = "bass"
+    assert ! u.valid?
+    u.password = "chi"
+    assert ! u.valid?
+  end
+  
   def test_no_valid_display_names
     u=users(:sam)
     u.display_name="1234556789"
