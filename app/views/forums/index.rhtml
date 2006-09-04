@@ -60,7 +60,7 @@
       <% if forum.posts.last %>
         <%= time_ago_in_words(forum.posts.last.created_at) %><br />
         by <strong><%= h(forum.posts.last.user.display_name) %></strong>
-        <span>(<%= link_to 'view', topic_path(:forum_id => forum, :id => forum.posts.last.topic_id, :page => forum.posts.last.topic.last_page) %>)</span>
+        <span>(<%= link_to 'view', topic_path(:forum_id => forum, :id => forum.posts.last.topic_id, :page => forum.posts.last.topic.last_page, :anchor => forum.posts.last.dom_id) %>)</span>
       <% end %>
     </td>
   </tr>
@@ -72,18 +72,6 @@
 </p>
 
 <div class="stats">
-
-<%
-=begin
-%>
-<div class="posts">
-Total users: <strong><%= number_with_delimiter(User.count) %></strong><br />
-Total topics: <strong><%= number_with_delimiter(Post.count(:conditions => "id=topic_id")) %></strong><br />
-Total posts: <strong><%= number_with_delimiter(Post.count) %></strong>
-</div>
-<%
-=end
-%>
 
 <div class="users">
 <% online_users = User.currently_online -%>
