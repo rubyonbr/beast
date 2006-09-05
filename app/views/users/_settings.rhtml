@@ -20,11 +20,11 @@
 
 	<div>
 		  <label for="user_password">Password</label><br />
-		<p class="entryhelp" style="margin-top:0.5em;">Type your password twice to change it.</p>
-		  <%= settings.password_field :password %>
+		<p class="entryhelp" style="margin-top:0.5em;">Enter a new password twice to change your password. (must be longer than 5 characters)</p>
+		  <%= settings.password_field :password, :size => 16 %>
 		<span class="entryhelp">(once)</span><br />
 		
-		  <%= settings.password_field :password_confirmation %>
+		  <%= settings.password_field :password_confirmation, :size => 16 %>
 				<span class="entryhelp">(and again)</span>
 			</div>
 
