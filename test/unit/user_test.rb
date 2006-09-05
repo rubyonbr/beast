@@ -64,9 +64,11 @@ class UserTest < Test::Unit::TestCase
     u.login="bobby"
     assert u.save
     assert u.admin?
+    assert u.activated?
     u=User.create(:email => "woody@aol.com", :password => "zoegirl", :password_confirmation => "zoegirl")
     u.login="woody"
     assert ! u.admin?    
+    assert ! u.activated?
   end
   
   def test_login_token
