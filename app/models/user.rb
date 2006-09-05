@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
   end
 
   def password=(value)
+    return if value.blank?
     write_attribute :password_hash, Digest::SHA1.hexdigest(value + PASSWORD_SALT)
     @password = value
   end
