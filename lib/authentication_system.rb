@@ -10,8 +10,13 @@ module AuthenticationSystem
     # this could be a filter for the entire app and keep with it's true meaning, but that 
     # would just slow things down without any forseeable benefit since we already know 
     # who is online from the user/session connection 
+    #
+    # This is now also used to show which users are online... not at accurate as the
+    # session based approach, but less code and less overhead.
     def update_last_seen_at
-      User.update_all ['last_seen_at = ?', Time.now.utc], ['id = ?', current_user.id] if logged_in?
+      return unless logged_in?
+      User.update_all ['last_seen_at = ?', Time.now.utc], ['id = ?', current_user.id] 
+      current_user.last_seen_at = Time.now.utc
     end
     
     def login_required
@@ -28,9 +33,6 @@ module AuthenticationSystem
     def current_user=(value)
       if @current_user = value
         session[:user_id] = @current_user.id 
-        # need to remove the unless RAILS_ENV when figure out how
-        # to make this work with tests
-        session.model.user_id = @current_user.id unless RAILS_ENV == "test"
         # this is used while we're logged in to know which threads are new, etc
         session[:last_active] = @current_user.last_seen_at
         session[:topics] = session[:forums] = {}

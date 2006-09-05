@@ -28,8 +28,7 @@ class User < ActiveRecord::Base
   attr_protected :admin, :posts_count, :login, :created_at, :updated_at, :last_login_at, :topics_count, :activated
 
   def self.currently_online
-    user_ids = Session.find(:all, :select => "user_id", :conditions => ["user_id is NOT NULL and sessions.updated_at > ?", Time.now.utc-5.minutes]).map(&:user_id).uniq
-    User.find(user_ids)
+    User.find(:all, :conditions => ["last_seen_at > ?", Time.now.utc-5.minutes])
   end
 
   # we allow false to be passed in so a failed login can check

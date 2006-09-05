@@ -71,17 +71,14 @@
   <%= link_to "Recent posts", all_posts_path %>
 </p>
 
-<div class="stats">
-
-<div class="users">
 <% online_users = User.currently_online -%>
+<% unless online_users.empty? %>
+<div class="stats">
+<div class="users">
 <% unless online_users.empty? %>
 Users online: <%= online_users.map { |u| link_to "<strong>#{h u.display_name}</strong>", user_path(u) } * ", " %><br />
 <% end %>
-<% if (guests=Session.active_guests)>0 %>
-Guests online: <%= guests %>
+</div>
+</div>
 <% end %>
-</div>
-  
-</div>
 
