@@ -7,11 +7,14 @@
 <% end %>
 
 <h1>Settings</h1>
+
 <p class="subtitle">for <%= @user.display_name %> 
 	<% if @user.login!=@user.display_name %>
 	(<%= @user.login %>)
 	<% end %>
 	</p>
+
+<%= error_messages_for :user %>
 
 <% form_for :user, :url => user_path(@user),
   :html => { :method => :put } do |f| -%>

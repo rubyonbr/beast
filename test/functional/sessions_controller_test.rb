@@ -18,7 +18,7 @@ class SessionsControllerTest < Test::Unit::TestCase
     assert_redirected_to home_path
     assert_equal users(:aaron).id, session[:user_id]
     assert old != users(:aaron).reload.last_seen_at
-    assert_equal old, @controller.send(:last_login)
+    assert_equal old, @controller.send(:last_active)
   end
 
   def test_remember_me

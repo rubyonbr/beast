@@ -1,4 +1,5 @@
 require 'digest/sha1'
+
 class User < ActiveRecord::Base
   has_many :moderatorships, :dependent => :destroy
   has_many :forums, :through => :moderatorships, :order => 'forums.name'
