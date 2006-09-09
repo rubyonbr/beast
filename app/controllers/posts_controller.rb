@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
   before_filter :find_post,      :except => [:index, :create, :monitored]
   before_filter :login_required, :except => [:index, :monitored]
-  before_filter(:only => [:index, :monitored]) { |c| c.params[:page] = 1 if c.params[:format] == 'rss' }
 
   def index
     conditions = []
