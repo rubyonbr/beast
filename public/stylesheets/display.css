@@ -915,3 +915,7 @@ div.editbox ul.help { margin:0; }
 div.editbox ul.help {
   list-style-type:none; }
   
+#monitor_topic a
+{
+  color: #666;
+}

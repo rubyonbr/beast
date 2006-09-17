@@ -4,16 +4,17 @@
 <% content_for :right do %>
 
 <% if logged_in? %>
-<div id="monitor_topic">
-  <%= image_tag "clearbits/tv.gif", :class => "icon #{@monitoring ? :green : :grey}", :id => "monitorship-icon-#{@topic.dom_id}" %>
+<div id="monitor_topic" style="margin-top:1em">
+  <%= image_tag "clearbits/tv.gif", :class => "icon #{@monitoring ? :green : :darkgrey}", :id => "monitorship-icon-#{@topic.dom_id}" %>
   <span id="monitorship-<%= @topic.dom_id %>"<%= %( style="display:none") if @monitoring %>>
-    <%= link_to_remote('Watch', {:url => monitorships_path(@forum, @topic)}) %> this topic.
+    <%= link_to_remote('Watch this topic', {:url => monitorships_path(@forum, @topic)}) %>
   </span>
   <span id="delete-monitorship-<%= @topic.dom_id %>"<%= %( style="display:none") unless @monitoring %>>
-    <%= link_to_remote('Stop', {:url => monitorships_path(@forum, @topic), :method => :delete}) %> watching this topic.
+    <%= link_to_remote('Stop watching', {:url => monitorships_path(@forum, @topic), :method => :delete}) %>
   </span>
 </div>
 <% end -%>
+
 
 <h5>Voices</h5>
 <ul class="flat talking">
@@ -22,7 +23,7 @@
 <% end %>
 </ul>
 
-<% end %>
+<% end # right content%>
 
 <div class="crumbs">
   <%= link_to "Forums", home_path %> <span class="arrow">&rarr;</span>
