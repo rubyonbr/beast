@@ -1,6 +1,8 @@
 <h1>Edit Post</h1>
 
-<%= link_to('Delete post', post_path(:forum_id => @post.topic.forum, :topic_id => @post.topic, :id => @post, :page => params[:page]), 
+<h2><%= link_to h(@post.topic.title), topic_path(@post.forum_id, @post.topic) %></h2>
+
+<%= link_to('Delete post', post_path(:forum_id => @post.forum_id, :topic_id => @post.topic, :id => @post, :page => params[:page]), 
       :class => "utility", :method => :delete, :confirm => "Delete this post forever?") %>
 
 <%= error_messages_for :topic %>
