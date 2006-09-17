@@ -867,7 +867,14 @@ div.editbox .button_or a
 {
   color:#ccc;
 }
-div.editbox table td { border:0;}
+div.editbox table td { border:0; }
+div.editbox a.utility
+{
+  color: #f99;
+  font-size: 0.7em;
+  padding-top: 5px;
+  display: block;
+}
 
 div.editbox h5
 {

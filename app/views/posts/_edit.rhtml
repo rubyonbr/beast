@@ -6,7 +6,7 @@
       <td rowspan="2">
         <%= f.text_area :body, :rows => 10, :id => "edit_post_body" %>
       </td>
-      <td valign="top">
+      <td valign="top" colspan="2">
 
         <h5>Formatting Help</h5>
   
@@ -24,6 +24,10 @@
       <td valign="bottom" style="padding-bottom:15px;">
         <%= ajax_spinner_for "editbox", "spinner_black.gif" %>
         <%= submit_tag "Save Changes", :or => link_to_function('cancel', "EditForm.cancel()") %>
+      </td>
+      <td style="text-align:right;">
+        <%= link_to('Delete post', post_path(:forum_id => @post.topic.forum, :topic_id => @post.topic, :id => @post, :page => params[:page]), 
+              :class => "utility", :method => :delete, :confirm => "Delete this post?  Are you sure?") %>  
       </td>
     </tr>
   </table>
