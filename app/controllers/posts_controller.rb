@@ -6,14 +6,14 @@ class PostsController < ApplicationController
     conditions = []
     [:user_id, :forum_id].each { |attr| conditions << Post.send(:sanitize_sql, ["posts.#{attr} = ?", params[attr]]) if params[attr] }
     conditions << Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"]) unless params[:q].blank?
-    @post_pages, @posts = paginate(:posts, :per_page => 25, :select => 'posts.*, topics.title as topic_title', :joins => 'inner join topics on posts.topic_id = topics.id',
+    @post_pages, @posts = paginate(:posts, :per_page => 25, :select => 'posts.*, topics.title as topic_title, forums.name as forum_name', :joins => 'inner join topics on posts.topic_id = topics.id inner join forums on topics.forum_id = forums.id',
       :conditions => conditions.any? ? conditions.collect { |c| "(#{c})" }.join(' AND ') : nil, :order => 'posts.created_at desc, posts.id desc')
     render_posts_or_xml
   end
 
   def monitored
     @user = User.find params[:user_id]
-    @post_pages, @posts = paginate(:posts, :per_page => 25, :select => 'posts.*, topics.title as topic_title', :joins => 'inner join topics on posts.topic_id = topics.id inner join monitorships on monitorships.topic_id = topics.id',
+    @post_pages, @posts = paginate(:posts, :per_page => 25, :select => 'posts.*, topics.title as topic_title, forums.name as forum_name', :joins => 'inner join topics on posts.topic_id = topics.id inner join forums on topics.forum_id = forums.id inner join monitorships on monitorships.topic_id = topics.id',
       :conditions => ['monitorships.user_id = ? and posts.user_id != ?', params[:user_id], @user.id], :order => 'posts.created_at desc, posts.id desc')
     render_posts_or_xml
   end

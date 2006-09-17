@@ -26,7 +26,7 @@
         <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
       </form>
     </li>
-    <li><%= link_to_function :Search, "$('search').toggle(); $('search').focus();" %></li>
+    <li><%= link_to_function :Search, "$('search').toggle(); $('search').focus();", :href => home_path %></li>
 
     <% if logged_in? %>
     <li class="login"><%=  link_to current_user.login, user_path(current_user) %></li>

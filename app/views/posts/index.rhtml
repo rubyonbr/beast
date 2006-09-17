@@ -40,7 +40,10 @@
     <span class="posts"><%= pluralize post.user.posts_count, 'post' %></span>
   </td>
   <td class="body entry-content">
-    <p class="topic">Topic: <%= link_to h(post.topic_title), topic_path(post.forum_id, post.topic_id) %></p>
+    <p class="topic">
+      Topic: <%= link_to h(post.forum_name), forum_path(post.forum_id) %> / 
+      <%= link_to h(post.topic_title), topic_path(post.forum_id, post.topic_id) %>
+    </p>
     
     <%= format_text(post.body) %>
   </td>
