@@ -121,12 +121,13 @@
 <p><%= link_to_function "Reply to topic", "ReplyForm.init()", :class => "utility" %></p>
 
 <div id="reply" class="editbox">
+<div class="container">
   <%= content_tag 'p', h(flash[:bad_reply]), :class => 'notice' if flash[:bad_reply] %>
   <% form_for :post, :url => posts_path(:forum_id => @forum, :topic_id => @topic, :page => @topic.last_page) do |f| -%>
-  <table width="85%" border="0">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
-      <td rowspan="2">
-        <%= f.text_area :body, :rows => 7 %>
+      <td rowspan="2" width="70%">
+        <%= f.text_area :body, :rows => 8 %>
       </td>
       <td valign="top">
 
@@ -137,11 +138,11 @@
           <li>*bold*
           &nbsp; &nbsp; &nbsp;
           _italics_
-          &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp;<br />
           bq. <span>(quotes)</span></li>
-          <li>"IBM":http://www.ibm.com <span>(links)</span></li>
+          <li>"IBM":http://www.ibm.com</li>
           <li>* or # <span>(lists)</span></li>
-          </p>
+        </ul>
 
       </td>
     </tr>
@@ -152,6 +153,7 @@
    </tr>
   </table>
   <% end -%>
+</div>
 </div>
 <%= javascript_tag "$('reply').hide();"%>
 <% end %>
