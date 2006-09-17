@@ -3,6 +3,18 @@
 
 <% content_for :right do %>
 
+<% if logged_in? %>
+<div id="monitor_topic">
+  <%= image_tag "clearbits/tv.gif", :class => "icon #{@monitoring ? :green : :grey}", :id => "monitorship-icon-#{@topic.dom_id}" %>
+  <span id="monitorship-<%= @topic.dom_id %>"<%= %( style="display:none") if @monitoring %>>
+    <%= link_to_remote('Watch', {:url => monitorships_path(@forum, @topic)}) %> this topic.
+  </span>
+  <span id="delete-monitorship-<%= @topic.dom_id %>"<%= %( style="display:none") unless @monitoring %>>
+    <%= link_to_remote('Stop', {:url => monitorships_path(@forum, @topic), :method => :delete}) %> watching this topic.
+  </span>
+</div>
+<% end -%>
+
 <h5>Voices</h5>
 <ul class="flat talking">
 <% @voices.each do | user | %>
@@ -26,14 +38,7 @@
   <% end %>
   <% if logged_in? %>
     <span style="display:none;" id="topic_mod">
-      <strong>
-        <%= link_to_remote('watch', {:url => monitorships_path(@forum, @topic)},
-              { :id => "monitorship-#{@topic.dom_id}", :style => (@monitoring && 'display:none') }) %>
-        <%= link_to_remote('unwatch', {:url => monitorships_path(@forum, @topic), :method => :delete},
-              { :id => "delete-monitorship-#{@topic.dom_id}", :style => (!@monitoring && 'display:none') }) %>
-      </strong> 
       <% if @topic.editable_by?(current_user) -%>
-				|
         <%= link_to('edit', edit_topic_path(@forum, @topic), :class => "utility") %> |
         <%= link_to('delete', topic_path(@forum, @topic), :class => "utility", :method => :delete, :confirm => "Delete this topic forever?") %>
       <% end -%>

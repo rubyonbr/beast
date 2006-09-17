@@ -209,6 +209,12 @@ hr
 
 #right hr { border-color:#bbb; }
 
+#monitor_topic { 
+  font-size: 12px; 
+}
+#monitor_topic .icon { 
+  background-image:none; 
+}
 
 /* footer */
 

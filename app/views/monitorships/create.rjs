@@ -1,2 +1,4 @@
 page["monitorship-topics-#{params[:topic_id]}"].hide
 page["delete-monitorship-topics-#{params[:topic_id]}"].show
+page["monitorship-icon-topics-#{params[:topic_id]}"].remove_class_name(:grey)
+page["monitorship-icon-topics-#{params[:topic_id]}"].add_class_name(:green)
