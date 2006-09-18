@@ -15,11 +15,15 @@
 
 <% if logged_in? %>
 
-<p style="margin-top:0em; float:right;">
-  <input id="monitor_checkbox" type="checkbox" <%= "checked='checked'" if @monitoring %> onclick="if (this.checked) {<%= remote_function :url => monitorships_path(@forum, @topic) %>} else {<%= remote_function :url => monitorships_path(@forum, @topic), :method => :delete %>}">
-  <%#= image_tag "clearbits/tv.gif", :class => "icon #{@monitoring ? :green : :darkgrey}", :id => "monitorship-icon-#{@topic.dom_id}" %>
+<%= start_form_tag monitorships_path(@forum, @topic), :style => 'margin-top:0em; float:right;' %>
+<div>
+  <input id="monitor_checkbox" type="checkbox" <%= "checked='checked'" if @monitoring %> 
+    onclick="if (this.checked) {<%= remote_function :url => monitorships_path(@forum, @topic) %>} else {<%= remote_function :url => monitorships_path(@forum, @topic), :method => :delete %>}" />
   <label id="monitor_label" for="monitor_checkbox">Watch<%= "ing" if @monitoring %> topic</label>
-</p>
+  <%= hidden_field_tag '_method', 'delete' if @monitoring %>
+  <%= submit_tag :Set, :id => 'monitor_submit' %>
+</div>
+</form>
 
 <% end -%>
 

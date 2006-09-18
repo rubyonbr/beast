@@ -52,4 +52,29 @@ class MonitorshipsControllerTest < Test::Unit::TestCase
 
     assert !topics(:pdi).monitors(true).include?(users(:aaron))
   end
+
+  def test_should_require_login_with_html
+    post :create, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => users(:aaron).id
+    assert_redirected_to login_path
+  end
+  
+  def test_should_add_monitorship_with_html
+    login_as :joe
+    assert_difference Monitorship, :count do 
+      post :create, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => users(:joe).id
+      assert_redirected_to topic_path(forums(:rails), topics(:pdi))
+    end
+    
+    assert topics(:pdi).monitors(true).include?(users(:joe))
+  end
+  
+  def test_should_deactivate_monitorship_with_html
+    login_as :aaron
+    assert_difference Monitorship, :count, 0 do
+      delete :destroy, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => users(:aaron).id
+      assert_redirected_to topic_path(forums(:rails), topics(:pdi))
+    end
+
+    assert !topics(:pdi).monitors(true).include?(users(:aaron))
+  end
 end

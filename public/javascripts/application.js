@@ -66,5 +66,5 @@ var ReplyForm = {
 }
 
 Event.addBehavior({
-  '#search': function() { this.hide(); }
+  '#search,#monitor_submit': function() { this.hide(); }
 })
