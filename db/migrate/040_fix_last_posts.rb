@@ -6,8 +6,8 @@ class FixLastPosts < ActiveRecord::Migration
 
   def self.up
     Topic.find(:all, :include => :posts).each do |topic|
-      say_with_time "fixing #{topic.title}" do
-        post = topic.posts.last
+      post = topic.posts.last
+      Topic.transaction do
         Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', 
           post.created_at, post.user_id, post.id], ['id = ?', topic.id]) if post
       end
