@@ -14,7 +14,7 @@ class Forum < ActiveRecord::Base
 
   has_many :posts, :order => 'posts.created_at desc' do
     def last
-      @last_post ||= find(:first, :include => :user, :limit => 1)
+      @last_post ||= find(:first, :include => :user)
     end
   end
 

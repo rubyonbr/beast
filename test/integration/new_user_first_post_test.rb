@@ -92,7 +92,7 @@ class NewUserFirstPostTest < ActionController::IntegrationTest
     def click_edit_post(post)
       get edit_post_path(post.topic.forum, post.topic, post)
       assert_response :success
-      assert_template "posts/edit"
+      assert_template "posts/edit.rhtml"
     end
     
     def login(user, password)

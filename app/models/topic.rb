@@ -4,7 +4,12 @@ class Topic < ActiveRecord::Base
   has_many :monitorships
   has_many :monitors, :through => :monitorships, :conditions => ['monitorships.active = ?', true], :source => :user, :order => 'users.login'
 
-  has_many :posts, :order => 'posts.created_at', :dependent => :destroy
+  has_many :posts, :order => 'posts.created_at', :dependent => :destroy do
+    def last
+      @last_post ||= find(:first, :order => 'posts.created_at desc')
+    end
+  end
+
   belongs_to :replied_by_user, :foreign_key => "replied_by", :class_name => "User"
   
   validates_presence_of :forum, :user, :title

@@ -41,6 +41,13 @@ class PostTest < Test::Unit::TestCase
     assert_equal p.created_at.to_i, topics(:pdi).replied_at.to_i
   end
 
+  def test_should_delete_last_post_and_fix_topic_cached_data
+    posts(:pdi_rebuttal).destroy
+    assert_equal posts(:pdi_reply).id, topics(:pdi).last_post_id
+    assert_equal posts(:pdi_reply).user_id, topics(:pdi).replied_by
+    assert_equal posts(:pdi_reply).created_at.to_i, topics(:pdi).replied_at.to_i
+  end
+
   def test_should_create_reply_and_set_forum_from_topic
     p = create_post topics(:pdi), :body => 'blah'
     assert_equal topics(:pdi).forum_id, p.forum_id
