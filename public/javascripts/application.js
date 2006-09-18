@@ -64,3 +64,7 @@ var ReplyForm = {
 //    setTimeout('$(\"post_body\").focus();',50);
   }
 }
+
+Event.addBehavior({
+  '#search': function() { this.hide(); }
+})

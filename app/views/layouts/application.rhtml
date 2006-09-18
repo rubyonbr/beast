@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title><%= "#{h @page_title} - " if @page_title %>Beast</title>
   <%= stylesheet_link_tag 'display' %>
-  <%= javascript_include_tag "prototype", "effects", "application" %>
+  <%= javascript_include_tag "prototype", "effects", "lowpro", "application" %>
 <% unless @feed_icons.blank? -%>
   <% @feed_icons.each do |feed| -%>
   <%= auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'" %>
@@ -20,7 +20,7 @@
   <ul id="nav">
     <li><%= link_to 'Forums', home_path, :rel => 'home' %></li>
     <li><%= link_to 'Users', users_path %></li>
-    <li id="search" style="display:none;">
+    <li id="search">
       <%= start_form_tag all_posts_path, :method => 'get' %>
         <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
       </form>
