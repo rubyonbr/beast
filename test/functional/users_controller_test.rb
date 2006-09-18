@@ -2,7 +2,11 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'users_controller'
 
 # Re-raise errors caught by the controller.
-class UsersController; def rescue_action(e) raise e end; end
+class UsersController
+  def rescue_action(exception)
+    exception.is_a?(ActiveRecord::RecordInvalid) ? render_invalid_record(exception.record) : super
+  end
+end
 
 class UsersControllerTest < Test::Unit::TestCase
   all_fixtures
@@ -45,7 +49,14 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_redirected_to login_path
     assert old_key != users(:sam).reload.login_key
   end
-  
+
+  def test_should_require_password
+    assert_difference User, :count, 0 do
+      post :create, :user => { :password => '', :password_confirmation => '', :login => '', :email => '' }
+      assert_template 'new'
+    end
+  end
+
   def test_should_not_bomb_when_resetting_invalid_email
     assert_difference User, :count, 0 do
       post :create, :email => 'whatever'
