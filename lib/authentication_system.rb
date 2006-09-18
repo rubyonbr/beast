@@ -21,7 +21,12 @@ module AuthenticationSystem
     
     def login_required
       login_by_token unless logged_in?
-      redirect_to login_path unless logged_in? && authorized?
+      # LOC FODDER
+      # respond_to { |f| f.html { redirect_to login_path } ; f.js { render(:update) { |p| p.redirect_to login_path } } } unless logged_in? && authorized?
+      respond_to do |format| 
+        format.html { redirect_to login_path }
+        format.js   { render(:update) { |p| p.redirect_to login_path } }
+      end unless logged_in? && authorized?
     end
     
     def login_by_token
