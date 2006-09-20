@@ -1,6 +1,7 @@
 class ForumsController < ApplicationController
   before_filter :login_required, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :find_forum, :except => [:index, :new, :create]
+  before_filter :find_or_initialize_forum, :except => :index
+
   def index
     @forums = Forum.find(:all, :order => "position")
   end
@@ -11,21 +12,15 @@ class ForumsController < ApplicationController
     @topic_pages, @topics = paginate(:topics, :per_page => 25, :conditions => ['forum_id = ?', params[:id]], :include => :replied_by_user, :order => 'sticky desc, replied_at desc')
   end
 
-  def new
-    @forum = Forum.new
-  end
+  # new renders new.rhtml
   
-  def create
-    @forum = Forum.new(params[:forum])
-    @forum.save!
-    redirect_to forums_path
-  end
-  
+  # we're cheating a bit, but create/new are essentially the same thing
   def update
     @forum.attributes = params[:forum]
     @forum.save!
     redirect_to forums_path
   end
+  alias create update
   
   def destroy
     @forum.destroy
@@ -33,6 +28,6 @@ class ForumsController < ApplicationController
   end
   
   protected
-    def find_forum() @forum = Forum.find(params[:id]) end
+    def find_or_initialize_forum() @forum = params[:id] ? Forum.find(params[:id]) : Forum.new end
     alias authorized? admin?
 end
