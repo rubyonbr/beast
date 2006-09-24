@@ -48,7 +48,7 @@
         <%= number_with_delimiter(forum.topics_count) %> topics, 
         <%= number_with_delimiter(forum.posts_count) %> posts
       </div>
-      <p class="desc"><%= h forum.description %>
+      <p class="desc"><%= format_text forum.description %>
         </p>
     </td>
 <!--
