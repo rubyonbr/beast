@@ -22,7 +22,9 @@ class ModeratorshipTest < Test::Unit::TestCase
   def test_should_not_add_duplicate_moderator
     assert_models_equal [users(:sam)], forums(:rails).moderators
     assert_difference Moderatorship, :count, 0 do
-      forums(:rails).moderators << users(:sam)
+      assert_raise ActiveRecord::RecordNotSaved do 
+        forums(:rails).moderators << users(:sam)
+      end
     end
   end
 end
