@@ -14,6 +14,8 @@ class Topic < ActiveRecord::Base
   
   validates_presence_of :forum, :user, :title
   before_create { |r| r.replied_at = Time.now.utc }
+  after_save    { |r| Post.update_all ['forum_id = ?', r.forum_id], ['topic_id = ?', r.id] }
+
   attr_accessible :title
   # to help with the create form
   attr_accessor :body

@@ -3,6 +3,21 @@ require File.dirname(__FILE__) + '/../test_helper'
 class TopicTest < Test::Unit::TestCase
   all_fixtures
 
+  def test_save_should_update_post_id_for_posts_belonging_to_topic
+    # checking current forum_id's are in sync
+    topic = topics(:pdi)
+    post_forums = lambda do
+      topic.posts.each { |p| assert_equal p.forum_id, topic.forum_id }
+    end
+    post_forums.call
+    assert_equal forums(:rails).id, topic.forum_id
+    
+    # updating forum_id
+    topic.update_attribute :forum_id, forums(:comics).id
+    assert_equal forums(:comics).id, topic.reload.forum_id
+    post_forums.call
+  end
+
   def test_knows_last_post
     assert_equal posts(:pdi_rebuttal), topics(:pdi).posts.last
   end
@@ -10,17 +25,17 @@ class TopicTest < Test::Unit::TestCase
   def test_should_require_title_user_and_forum
     t=Topic.new
     t.valid?
-    assert t.errors.on( :title)
-    assert t.errors.on( :user)
-    assert t.errors.on( :forum)
+    assert t.errors.on(:title)
+    assert t.errors.on(:user)
+    assert t.errors.on(:forum)
     assert ! t.save
-    t.user=users(:aaron)
+    t.user  = users(:aaron)
     t.title = "happy life"
     t.forum = forums(:rails)
     assert t.save
-    assert_nil t.errors.on( :title)
-    assert_nil t.errors.on( :user)
-    assert_nil t.errors.on( :forum)
+    assert_nil t.errors.on(:title)
+    assert_nil t.errors.on(:user)
+    assert_nil t.errors.on(:forum)
   end
 
   def test_should_add_to_user_counter_cache
