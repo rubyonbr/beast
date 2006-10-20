@@ -3,12 +3,14 @@ class AddPostsBodyHtml < ActiveRecord::Migration
     add_column "posts",  "body_html",        :text
     add_column "users",  "bio_html",         :text
     add_column "forums", "description_html", :text
-    Post.transaction do
-      (Post.find(:all) + Forum.find(:all) + User.find(:all)).each do |record|
-        begin
-          record.save_without_validation!
-        rescue
-          puts message_for_record(record, "[#{$!.class.name}] #{$!.message}")
+    [Post, Forum, User].each do |klass|
+      klass.transaction do
+        klass.find(:all).each do |record|
+          begin
+            record.save_without_validation!
+          rescue
+            puts message_for_record(record, "[#{$!.class.name}] #{$!.message}")
+          end
         end
       end
     end
