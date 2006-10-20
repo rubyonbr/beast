@@ -15,16 +15,17 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password, :on => :create
 
   # names that start with #s really upset me for some reason
-  validates_format_of       :login, :with => /^[a-zA-Z]{2}(?:\w+)?$/
+  validates_format_of       :login, :with => /^[a-z]{2}(?:\w+)?$/i
 
   # names that start with #s really upset me for some reason
-  validates_format_of     :display_name, :with => /^[a-zA-Z]{2}(?:[.'\-\w ]+)?$/
+  validates_format_of     :display_name, :with => /^[a-z]{2}(?:[.'\-\w ]+)?$/i
 
   validates_uniqueness_of   :login, :email, :display_name, :case_sensitive => false
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
   # first user becomes admin automatically
   before_create { |u| u.admin = u.activated = true if User.count == 0 }
-  
+  format_attribute :bio
+
   attr_reader :password
   attr_protected :admin, :posts_count, :login, :created_at, :updated_at, :last_login_at, :topics_count, :activated
 

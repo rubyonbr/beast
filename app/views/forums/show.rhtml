@@ -1,7 +1,7 @@
 <% content_for :right do %>
 
 <% unless @forum.description.blank? %>
-<%= format_text @forum.description %>
+<%= @forum.description_html %>
 <hr />
 <% end %>
 

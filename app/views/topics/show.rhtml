@@ -102,7 +102,7 @@
 <!--
     <%= link_to_function image_tag('clearbits/comment.gif', :class => 'icon reply'), "$('reply').toggle()" if logged_in? %>
 -->
-    <%= format_text(post.body) %>
+    <%= post.body_html %>
   </td>
 </tr>
 

@@ -21,10 +21,6 @@ module ApplicationHelper
     link_to image_tag('feed-icon.png', :size => '14x14', :alt => "Subscribe to #{title}"), url
   end
 
-  def format_text(text)
-    white_list(RedCloth.new(auto_link(text.to_s)).to_html)
-  end
-
   def search_posts_title
     returning (params[:q].blank? ? 'Recent Posts' : "Searching for '#{h params[:q]}'") do |title|
       title << " by #{h User.find(params[:user_id]).display_name}" if params[:user_id]

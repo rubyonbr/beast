@@ -45,7 +45,7 @@
       <%= link_to h(post.topic_title), topic_path(post.forum_id, post.topic_id) %>
     </p>
     
-    <%= format_text(post.body) %>
+    <%= post.body_html %>
   </td>
 </tr>
 

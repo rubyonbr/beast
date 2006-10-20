@@ -18,4 +18,5 @@ class Forum < ActiveRecord::Base
     end
   end
 
+  format_attribute :description
 end

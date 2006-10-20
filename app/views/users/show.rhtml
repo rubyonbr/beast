@@ -48,7 +48,7 @@
   </span>
 </p>
 
-<%= format_text @user.bio %>
+<%= @user.bio_html %>
 
 <% unless @user.website.blank? -%>
 <p><strong>Website:</strong> <%= white_list link_to(@user.website.gsub("http://",""), "http://" + @user.website.gsub("http://","")) %>

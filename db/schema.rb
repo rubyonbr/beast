@@ -2,14 +2,15 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 40) do
+ActiveRecord::Schema.define(:version => 41) do
 
   create_table "forums", :force => true do |t|
-    t.column "name",         :string
-    t.column "description",  :string
-    t.column "topics_count", :integer, :default => 0
-    t.column "posts_count",  :integer, :default => 0
-    t.column "position",     :integer
+    t.column "name",             :string
+    t.column "description",      :string
+    t.column "topics_count",     :integer, :default => 0
+    t.column "posts_count",      :integer, :default => 0
+    t.column "position",         :integer
+    t.column "description_html", :text
   end
 
   create_table "logged_exceptions", :force => true do |t|
@@ -41,6 +42,7 @@ ActiveRecord::Schema.define(:version => 40) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
     t.column "forum_id",   :integer
+    t.column "body_html",  :text
   end
 
   add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
@@ -88,6 +90,7 @@ ActiveRecord::Schema.define(:version => 40) do
     t.column "login_key_expires_at", :datetime
     t.column "activated",            :boolean,  :default => false
     t.column "bio",                  :string
+    t.column "bio_html",             :text
   end
 
 end
