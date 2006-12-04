@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
-  map.resources :posts, :name_prefix => 'all_'
+  map.resources :posts, :name_prefix => 'all_', :collection => { :search => :get }
 
   %w(user forum).each do |attr|
     map.resources :posts, :name_prefix => "#{attr}_", :path_prefix => "/#{attr.pluralize}/:#{attr}_id"

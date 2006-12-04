@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  [ExceptionLoggable, BrowserFilters, AuthenticationSystem].each { |mod| include mod }
+  include ExceptionLoggable, BrowserFilters, AuthenticationSystem
   session :session_key => '_beast_session_id'
 
   helper_method :current_user, :logged_in?, :admin?, :last_active

@@ -131,21 +131,15 @@ class PostsControllerTest < Test::Unit::TestCase
   end
 
   def test_should_search_recent_posts
-    get :index, :q => 'pdi'
+    get :search, :q => 'pdi'
     assert_response :success
     assert_models_equal [posts(:pdi_rebuttal), posts(:pdi_reply), posts(:pdi)], assigns(:posts)
   end
 
   def test_should_search_posts_by_forum
-    get :index, :forum_id => forums(:comics).id, :q => 'galactus'
+    get :search, :forum_id => forums(:comics).id, :q => 'galactus'
     assert_response :success
     assert_models_equal [posts(:silver_surfer), posts(:galactus)], assigns(:posts)
-  end
-
-  def test_should_search_posts_by_user
-    get :index, :user_id => users(:sam).id, :q => 'pdi'
-    assert_response :success
-    assert_models_equal [posts(:pdi_reply)], assigns(:posts)
   end
   
   def test_should_view_recent_posts_as_rss

@@ -12,10 +12,6 @@
 
 <h1 style="margin-top:0;">Users</h1>
 <p class="subtitle">
-<%
-@user_count=User.count
-@active=User.count(:conditions => "posts_count>0")
-%>
 <%= number_with_delimiter(@user_count) %> users, <%= @active %> active, <%= @user_count-@active %> lurking
 </p>
 

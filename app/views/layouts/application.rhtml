@@ -21,7 +21,7 @@
     <li><%= link_to 'Forums', home_path, :rel => 'home' %></li>
     <li><%= link_to 'Users', users_path %></li>
     <li id="search">
-      <%= start_form_tag all_posts_path, :method => 'get' %>
+      <%= start_form_tag all_search_posts_path, :method => 'get' %>
         <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
       </form>
     </li>
@@ -49,11 +49,11 @@
 <%= content_tag 'p', h(flash[:notice]), :class => 'notice' if flash[:notice] %>
 <%= content_tag 'p', h(flash[:error]), :class => 'notice error' if flash[:error] %>
   
-<%= yield %>
+<%= @content_for_layout %>
 </div>
 
 <div id="right">
-  <%= yield :right %>
+  <%= @content_for_right %>
 </div>
 
 <br style="clear:both;" />

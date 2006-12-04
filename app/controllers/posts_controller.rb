@@ -1,20 +1,29 @@
 class PostsController < ApplicationController
-  before_filter :find_post,      :except => [:index, :create, :monitored]
-  before_filter :login_required, :except => [:index, :monitored]
+  before_filter :find_post,      :except => [:index, :create, :monitored, :search]
+  before_filter :login_required, :except => [:index, :monitored, :search]
+  @@query_options = { :per_page => 25, :select => 'posts.*, topics.title as topic_title, forums.name as forum_name', :joins => 'inner join topics on posts.topic_id = topics.id inner join forums on topics.forum_id = forums.id', :order => 'posts.created_at desc' }
 
   def index
     conditions = []
     [:user_id, :forum_id].each { |attr| conditions << Post.send(:sanitize_sql, ["posts.#{attr} = ?", params[attr]]) if params[attr] }
-    conditions << Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"]) unless params[:q].blank?
-    @post_pages, @posts = paginate(:posts, :per_page => 25, :select => 'posts.*, topics.title as topic_title, forums.name as forum_name', :joins => 'inner join topics on posts.topic_id = topics.id inner join forums on topics.forum_id = forums.id',
-      :conditions => conditions.any? ? conditions.collect { |c| "(#{c})" }.join(' AND ') : nil, :order => 'posts.created_at desc, posts.id desc')
+    conditions = conditions.any? ? conditions.collect { |c| "(#{c})" }.join(' AND ') : nil
+    @post_pages, @posts = paginate(:posts, @@query_options.merge(:conditions => conditions))
+    @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
     render_posts_or_xml
+  end
+
+  def search
+    conditions = params[:q].blank? ? nil : Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"])
+    @post_pages, @posts = paginate(:posts, @@query_options.merge(:conditions => conditions))
+    @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
+    render_posts_or_xml :index
   end
 
   def monitored
     @user = User.find params[:user_id]
-    @post_pages, @posts = paginate(:posts, :per_page => 25, :select => 'posts.*, topics.title as topic_title, forums.name as forum_name', :joins => 'inner join topics on posts.topic_id = topics.id inner join forums on topics.forum_id = forums.id inner join monitorships on monitorships.topic_id = topics.id',
-      :conditions => ['monitorships.user_id = ? and posts.user_id != ?', params[:user_id], @user.id], :order => 'posts.created_at desc, posts.id desc')
+    options = @@query_options.merge(:conditions => ['monitorships.user_id = ? and posts.user_id != ?', params[:user_id], @user.id])
+    options[:joins] += ' inner join monitorships on monitorships.topic_id = topics.id'
+    @post_pages, @posts = paginate(:posts, options)
     render_posts_or_xml
   end
 
@@ -69,10 +78,10 @@ class PostsController < ApplicationController
       @post = Post.find_by_id_and_topic_id_and_forum_id(params[:id], params[:topic_id], params[:forum_id]) || raise(ActiveRecord::RecordNotFound)
     end
     
-    def render_posts_or_xml
+    def render_posts_or_xml(template_name = action_name)
       respond_to do |format|
-        format.html
-        format.rss { render :action => "#{action_name}.rxml", :layout => false }
+        format.html { render :action => "#{template_name}.rhtml" }
+        format.rss  { render :action => "#{template_name}.rxml", :layout => false }
       end
     end
 end

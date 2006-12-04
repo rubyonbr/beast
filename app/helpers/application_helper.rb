@@ -1,7 +1,6 @@
 require 'md5'
 
 module ApplicationHelper
-
   def submit_tag(value = "Save Changes", options={} )
     or_option = options.delete(:or)
     return super + "<span class='button_or'>or " + or_option + "</span>" if or_option
@@ -30,11 +29,12 @@ module ApplicationHelper
 
   def search_posts_path(rss = false)
     options = params[:q].blank? ? {} : {:q => params[:q]}
+    prefix = rss ? 'formatted_' : ''
     options[:format] = 'rss' if rss
     [[:user, :user_id], [:forum, :forum_id]].each do |(route_key, param_key)|
-      return send("#{route_key}_posts_path", options.update(param_key => params[param_key])) if params[param_key]
+      return send("#{prefix}#{route_key}_posts_path", options.update(param_key => params[param_key])) if params[param_key]
     end
-    all_posts_path(options)
+    options[:q] ? all_search_posts_path(options) : send("#{prefix}all_posts_path", options)
   end
 
   def distance_of_time_in_words(from_time, to_time = 0, include_seconds = false)

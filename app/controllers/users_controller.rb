@@ -4,6 +4,8 @@ class UsersController < ApplicationController
 
   def index
     @user_pages, @users = paginate(:users, :per_page => 50, :order => "display_name", :conditions => (params[:q] && ['LOWER(display_name) LIKE :q OR LOWER(login) LIKE :q', {:q => "%#{params[:q]}%"}]))
+    @user_count = User.count
+    @active     = User.count(:all, :conditions => "posts_count > 0")
   end
 
   def show
