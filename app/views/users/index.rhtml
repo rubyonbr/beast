@@ -1,14 +1,14 @@
 <% content_for :right do %>
 <h5>Find a User</h5>
 
-<%= start_form_tag nil, :method => 'get' %>
+<% form_tag nil, :method => 'get' do -%>
 <p>
 <label>Display name or login</label>
 <%= text_field_tag :q, params[:q] %> 
 <%= submit_tag "Search" %></p>
-</form>
+<% end -%>
 
-<% end %>
+<% end -%>
 
 <h1 style="margin-top:0;">Users</h1>
 <p class="subtitle">

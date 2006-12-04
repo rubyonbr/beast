@@ -21,9 +21,9 @@
     <li><%= link_to 'Forums', home_path, :rel => 'home' %></li>
     <li><%= link_to 'Users', users_path %></li>
     <li id="search">
-      <%= start_form_tag all_search_posts_path, :method => 'get' %>
+      <% form_tag all_search_posts_path, :method => 'get' do -%>
         <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
-      </form>
+      <% end -%>
     </li>
     <li><%= link_to_function :Search, "$('search').toggle(); $('search').focus();", :href => home_path %></li>
 

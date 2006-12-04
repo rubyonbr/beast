@@ -1,6 +1,6 @@
 <h1>Login</h1>
 
-<%= start_form_tag sessions_path %>
+<% form_tag sessions_path do -%>
 <p>
   <label for="login">Login</label><br />
   <%= text_field_tag :login, params[:login] %>
@@ -14,9 +14,9 @@
 <p><label><%= check_box_tag "remember_me", "1", true %> Remember me on this computer</label></p>
 
 <p><%= submit_tag 'Login', :or => link_to_function('reset password', "$('reset-password').toggle();") %></p>
-</form>
+<% end -%>
 
-<%= start_form_tag users_path, :id => 'reset-password', :style => 'display:none' %>
+<% form_tag users_path, :id => 'reset-password', :style => 'display:none' do -%>
 
 <hr />
 
@@ -26,6 +26,6 @@
   <p><%= text_field_tag :email, "", :size => 30 %>
 <br />
 <%= submit_tag "E-mail me the link", :or => link_to_function('cancel', "$('reset-password').hide()") %></p>
-</form>
+<% end -%>
 
 <%= javascript_tag "$('login').focus();"%>
