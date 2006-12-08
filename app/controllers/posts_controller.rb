@@ -13,7 +13,7 @@ class PostsController < ApplicationController
   end
 
   def search
-    conditions = params[:q].blank? ? nil : Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"])
+    conditions = params[:q].blank? ? nilil : Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"])
     @post_pages, @posts = paginate(:posts, @@query_options.merge(:conditions => conditions))
     @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
     render_posts_or_xml :index
@@ -25,6 +25,13 @@ class PostsController < ApplicationController
     options[:joins] += ' inner join monitorships on monitorships.topic_id = topics.id'
     @post_pages, @posts = paginate(:posts, options)
     render_posts_or_xml
+  end
+
+  def show
+    respond_to do |format|
+      format.html { redirect_to topic_path(@post.forum_id, @post.topic_id) }
+      format.xml  { render :xml => @post.to_xml }
+    end
   end
 
   def create
