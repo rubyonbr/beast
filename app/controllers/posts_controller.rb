@@ -30,17 +30,35 @@ class PostsController < ApplicationController
   def create
     @topic = Topic.find_by_id_and_forum_id(params[:topic_id],params[:forum_id], :include => :forum)
     if @topic.locked?
-      flash[:notice] = 'This topic is locked.'
-      return redirect_to(topic_path(:forum_id => params[:forum_id], :id => params[:topic_id]))
+      respond_to do |format|
+        format.html do
+          flash[:notice] = 'This topic is locked.'
+          redirect_to(topic_path(:forum_id => params[:forum_id], :id => params[:topic_id]))
+        end
+        format.xml do
+          render :text => 'This topic is locked.', :status => 400
+        end
+      end
+      return
     end
     @forum = @topic.forum
     @post  = @topic.posts.build(params[:post])
     @post.user = current_user
     @post.save!
-    redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :anchor => @post.dom_id, :page => params[:page] || '1')
+    respond_to do |format|
+      format.html do
+        redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :anchor => @post.dom_id, :page => params[:page] || '1')
+      end
+      format.xml { head 201, :location => post_url(params[:forum_id], params[:topic_id], @post) }
+    end
   rescue ActiveRecord::RecordInvalid
     flash[:bad_reply] = 'Please post something at least...'
-    redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :anchor => 'reply-form', :page => params[:page] || '1')
+    respond_to do |format|
+      format.html do
+        redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :anchor => 'reply-form', :page => params[:page] || '1')
+      end
+      format.xml { render :xml => @post.errors.to_xml, :status => 400 }
+    end
   end
   
   def edit
@@ -60,7 +78,8 @@ class PostsController < ApplicationController
       format.html do
         redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :anchor => @post.dom_id, :page => params[:page] || '1')
       end
-      format.js 
+      format.js
+      format.xml { head 200 }
     end
   end
 
@@ -69,7 +88,12 @@ class PostsController < ApplicationController
     flash[:notice] = "Post of '#{CGI::escapeHTML @post.topic.title}' was deleted."
     # check for posts_count == 1 because its cached and counting the currently deleted post
     @post.topic.destroy and redirect_to forum_path(params[:forum_id]) if @post.topic.posts_count == 1
-    redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :page => params[:page]) unless performed?
+    respond_to do |format|
+      format.html do
+        redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :page => params[:page]) unless performed?
+      end
+      format.xml { head 200 }
+    end
   end
 
   protected
@@ -85,6 +109,7 @@ class PostsController < ApplicationController
       respond_to do |format|
         format.html { render :action => "#{template_name}.rhtml" }
         format.rss  { render :action => "#{template_name}.rxml", :layout => false }
+        format.xml  { render :xml => @posts.to_xml }
       end
     end
 end

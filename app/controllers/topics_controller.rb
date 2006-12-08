@@ -4,7 +4,13 @@ class TopicsController < ApplicationController
 #  before_filter :update_last_seen_at, :only => :show
 
   def index
-    redirect_to forum_path(params[:forum_id])
+    respond_to do |format|
+      format.html { redirect_to forum_path(params[:forum_id]) }
+      format.xml do
+        @topics = Topic.find_all_by_forum_id(params[:forum_id], :order => 'sticky desc, replied_at desc', :limit => 25)
+        render :xml => @topics.to_xml
+      end
+    end
   end
 
   def new
@@ -24,6 +30,9 @@ class TopicsController < ApplicationController
         @voices = @posts.map(&:user) ; @voices.uniq!
         @post   = Post.new
       end
+      format.xml do
+        render :xml => @topic.to_xml
+      end
       format.rss do
         @posts = @topic.posts.find(:all, :order => 'created_at desc', :limit => 25)
         render :action => 'show.rxml', :layout => false
@@ -41,20 +50,29 @@ class TopicsController < ApplicationController
       @post.user = current_user
       @post.save!
     end
-    redirect_to topic_path(@forum, @topic)
+    respond_to do |format|
+      format.html { redirect_to topic_path(@forum, @topic) }
+      format.xml  { head 201, :location => topic_url(@forum, @topic) }
+    end
   end
   
   def update
     @topic.attributes = params[:topic]
     assign_protected
     @topic.save!
-    redirect_to topic_path(@topic.forum, @topic)
+    respond_to do |format|
+      format.html { redirect_to topic_path(@forum, @topic) }
+      format.xml  { head 200 }
+    end
   end
   
   def destroy
     @topic.destroy
     flash[:notice] = "Topic '#{CGI::escapeHTML @topic.title}' was deleted."
-    redirect_to forum_path(@forum)
+    respond_to do |format|
+      format.html { redirect_to forum_path(@forum) }
+      format.xml  { head 200 }
+    end
   end
   
   protected

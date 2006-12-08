@@ -4,27 +4,52 @@ class ForumsController < ApplicationController
 
   def index
     @forums = Forum.find(:all, :order => "position")
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @forums.to_xml }
+    end
   end
 
   def show
-    # keep track of when we last viewed this forum for activity indicators
-    (session[:forums] ||= {})[@forum.id] = Time.now.utc if logged_in?
-    @topic_pages, @topics = paginate(:topics, :per_page => 25, :conditions => ['forum_id = ?', params[:id]], :include => :replied_by_user, :order => 'sticky desc, replied_at desc')
+    respond_to do |format|
+      format.html do
+        # keep track of when we last viewed this forum for activity indicators
+        (session[:forums] ||= {})[@forum.id] = Time.now.utc if logged_in?
+        @topic_pages, @topics = paginate(:topics, :per_page => 25, :conditions => ['forum_id = ?', params[:id]], :include => :replied_by_user, :order => 'sticky desc, replied_at desc')
+      end
+      
+      format.xml do
+        render :xml => @forum.to_xml
+      end
+    end
   end
 
   # new renders new.rhtml
   
-  # we're cheating a bit, but create/new are essentially the same thing
+  def create
+    @forum.attributes = params[:forum]
+    @forum.save!
+    respond_to do |format|
+      format.html { redirect_to forums_path }
+      format.xml  { head 201, :location => forum_url(@forum) }
+    end
+  end
+
   def update
     @forum.attributes = params[:forum]
     @forum.save!
-    redirect_to forums_path
+    respond_to do |format|
+      format.html { redirect_to forums_path }
+      format.xml  { head 200 }
+    end
   end
-  alias create update
   
   def destroy
     @forum.destroy
-    redirect_to forums_path
+    respond_to do |format|
+      format.html { redirect_to forums_path }
+      format.xml  { head 200 }
+    end
   end
   
   protected
