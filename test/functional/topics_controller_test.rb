@@ -18,9 +18,24 @@ class TopicsControllerTest < Test::Unit::TestCase
     assert_redirected_to forum_path(1)
   end
 
+  def test_should_get_index_as_xml
+    content_type 'application/xml'
+    get :index, :forum_id => 1, :format => 'xml'
+    assert_response :success
+    assert_select 'topics>topic'
+  end
+
   def test_should_show_topic_as_rss
     get :show, :forum_id => forums(:rails).id, :id => topics(:pdi).id, :format => 'rss'
     assert_response :success
+    assert_select 'channel'
+  end
+  
+  def test_should_show_topic_as_xml
+    content_type 'application/xml'
+    get :show, :forum_id => forums(:rails).id, :id => topics(:pdi).id, :format => 'xml'
+    assert_response :success
+    assert_select 'topic'
   end
 
   def test_should_get_new
@@ -64,20 +79,37 @@ class TopicsControllerTest < Test::Unit::TestCase
     post :create, :forum_id => forums(:rails).id, :topic => { :title => 'blah', :body => 'foo' }
     assert assigns(:topic)
     assert assigns(:post)
+    assert_redirected_to topic_path(forums(:rails), assigns(:topic))
     [forums(:rails), users(:aaron)].each &:reload
   
     assert_equal old.collect { |n| n + 1}, counts.call
   end
-  
+
+  def test_should_create_topic_with_xml
+    content_type 'application/xml'
+    authorize_as :aaron
+    post :create, :forum_id => forums(:rails).id, :topic => { :title => 'blah', :body => 'foo' }, :format => 'xml'
+    assert_response 201
+    assert_equal topic_url(forums(:rails), assigns(:topic)), @response.headers["Location"]
+  end
+
   def test_should_delete_topic
     counts = lambda { [Post.count, forums(:rails).topics_count, forums(:rails).posts_count] }
     old = counts.call
     
     login_as :aaron
     delete :destroy, :forum_id => forums(:rails).id, :id => topics(:ponies).id
+    assert_redirected_to forum_path(forums(:rails))
     [forums(:rails), users(:aaron)].each &:reload
 
     assert_equal old.collect { |n| n - 1}, counts.call
+  end
+
+  def test_should_delete_topic_with_xml
+    content_type 'application/xml'
+    authorize_as :aaron
+    delete :destroy, :forum_id => forums(:rails).id, :id => topics(:ponies).id, :format => 'xml'
+    assert_response :success
   end
 
   def test_should_allow_moderator_to_delete_topic
@@ -144,6 +176,13 @@ class TopicsControllerTest < Test::Unit::TestCase
     assert_redirected_to topic_path(forums(:rails), assigns(:topic))
   end
 
+  def test_should_update_with_xml
+    content_type 'application/xml'
+    authorize_as :sam
+    put :update, :forum_id => forums(:rails).id, :id => topics(:ponies).id, :topic => { }, :format => 'xml'
+    assert_response :success
+  end
+
   def test_should_not_update_user_id_of_own_post
     login_as :sam
     put :update, :forum_id => forums(:rails).id, :id => topics(:ponies).id, :topic => { :user_id => 32 }
@@ -155,6 +194,13 @@ class TopicsControllerTest < Test::Unit::TestCase
     login_as :sam
     put :update, :forum_id => forums(:comics).id, :id => topics(:galactus).id, :topic => { }
     assert_redirected_to login_path
+  end
+
+  def test_should_not_update_other_post_with_xml
+    content_type 'application/xml'
+    authorize_as :sam
+    put :update, :forum_id => forums(:comics).id, :id => topics(:galactus).id, :topic => { }, :format => 'xml'
+    assert_response :unauthorized
   end
 
   def test_should_update_other_post_as_moderator

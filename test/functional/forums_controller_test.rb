@@ -20,8 +20,8 @@ class ForumsControllerTest < Test::Unit::TestCase
   end
 
   def test_remember_me_logs_in_when_login_required
-    users(:aaron).login_key="8305f94ab2b92f99137abbc235ee28e5"
-    users(:aaron).login_key_expires_at=Time.now.utc+1.week
+    users(:aaron).login_key = "8305f94ab2b92f99137abbc235ee28e5"
+    users(:aaron).login_key_expires_at = Time.now.utc+1.week
     users(:aaron).save!
     @request.cookies['login_token'] = CGI::Cookie.new('login_token', [users(:aaron).id.to_s, users(:aaron).login_key].join(';'))
     get :edit, :id => users(:aaron).id
