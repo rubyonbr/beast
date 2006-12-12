@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
 
   def to_xml(options = {})
     options[:except] ||= []
-    options[:except] << :email
+    options[:except] << :email << :login_key << :login_key_expires_at << :password_hash
     super
   end
 end
