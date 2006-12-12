@@ -73,7 +73,7 @@ class ForumsControllerTest < Test::Unit::TestCase
     end
     
     assert_response 201
-    assert_equal forum_url(assigns(:forum)), @response.headers["Location"]
+    assert_equal formatted_forum_url(:id => assigns(:forum), :format => :xml), @response.headers["Location"]
   end
 
   def test_should_show_forum

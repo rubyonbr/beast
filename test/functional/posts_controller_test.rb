@@ -28,6 +28,14 @@ class PostsControllerTest < Test::Unit::TestCase
     assert_equal old_equal, equal.call
   end
 
+  def test_should_create_reply_with_xml
+    content_type 'application/xml'
+    authorize_as :aaron
+    post :create, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :post => { :body => 'blah' }, :format => 'xml'
+    assert_response :created
+    assert_equal formatted_post_url(:forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => assigns(:post), :format => :xml), @response.headers["Location"]
+  end
+
   def test_should_update_topic_replied_at_upon_replying
     old=topics(:pdi).replied_at
     login_as :aaron
@@ -52,10 +60,18 @@ class PostsControllerTest < Test::Unit::TestCase
 
     login_as :aaron
     delete :destroy, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => posts(:pdi_reply).id
+    assert_redirected_to topic_path(:forum_id => forums(:rails), :id => topics(:pdi))
     [forums(:rails), users(:sam), topics(:pdi)].each &:reload
 
     assert_equal old_counts.collect { |n| n - 1}, counts.call
     assert_equal old_equal, equal.call
+  end
+
+  def test_should_delete_reply_with_xml
+    content_type 'application/xml'
+    authorize_as :aaron
+    delete :destroy, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => posts(:pdi_reply).id, :format => 'xml'
+    assert_response :success
   end
 
   def test_should_delete_reply_as_moderator
@@ -82,6 +98,14 @@ class PostsControllerTest < Test::Unit::TestCase
     assert_redirected_to topic_path(:forum_id => forums(:comics), :id => topics(:galactus), :anchor => posts(:silver_surfer).dom_id, :page => '1')
   end
 
+  def test_can_edit_own_post_with_xml
+    content_type 'application/xml'
+    authorize_as :sam
+    put :update, :forum_id => forums(:comics).id, :topic_id => topics(:galactus).id, :id => posts(:silver_surfer).id, :post => {}, :format => 'xml'
+    assert_response :success
+  end
+
+
   def test_can_edit_other_post_as_moderator
     login_as :sam
     put :update, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => posts(:pdi_rebuttal).id, :post => {}
@@ -92,6 +116,13 @@ class PostsControllerTest < Test::Unit::TestCase
     login_as :sam
     put :update, :forum_id => forums(:comics).id, :topic_id => topics(:galactus).id, :id => posts(:galactus).id, :post => {}
     assert_redirected_to login_path
+  end
+
+  def test_cannot_edit_other_post_with_xml
+    content_type 'application/xml'
+    authorize_as :sam
+    put :update, :forum_id => forums(:comics).id, :topic_id => topics(:galactus).id, :id => posts(:galactus).id, :post => {}, :format => 'xml'
+    assert_response 401
   end
 
   def test_cannot_edit_own_post_user_id
@@ -111,18 +142,45 @@ class PostsControllerTest < Test::Unit::TestCase
     get :index
     assert_response :success
     assert_models_equal [posts(:il8n), posts(:shield_reply), posts(:shield), posts(:silver_surfer), posts(:galactus), posts(:ponies), posts(:pdi_rebuttal), posts(:pdi_reply), posts(:pdi), posts(:sticky)], assigns(:posts)
+    assert_select 'html>head'
   end
 
   def test_should_view_posts_by_forum
     get :index, :forum_id => forums(:comics).id
     assert_response :success
     assert_models_equal [posts(:shield_reply), posts(:shield), posts(:silver_surfer), posts(:galactus)], assigns(:posts)
+    assert_select 'html>head'
   end
 
   def test_should_view_posts_by_user
     get :index, :user_id => users(:sam).id
     assert_response :success
     assert_models_equal [posts(:shield), posts(:silver_surfer), posts(:ponies), posts(:pdi_reply), posts(:sticky)], assigns(:posts)
+    assert_select 'html>head'
+  end
+
+  def test_should_view_recent_posts_with_xml
+    content_type 'application/xml'
+    get :index, :format => 'xml'
+    assert_response :success
+    assert_models_equal [posts(:il8n), posts(:shield_reply), posts(:shield), posts(:silver_surfer), posts(:galactus), posts(:ponies), posts(:pdi_rebuttal), posts(:pdi_reply), posts(:pdi), posts(:sticky)], assigns(:posts)
+    assert_select 'posts>post'
+  end
+
+  def test_should_view_posts_by_forum_with_xml
+    content_type 'application/xml'
+    get :index, :forum_id => forums(:comics).id, :format => 'xml'
+    assert_response :success
+    assert_models_equal [posts(:shield_reply), posts(:shield), posts(:silver_surfer), posts(:galactus)], assigns(:posts)
+    assert_select 'posts>post'
+  end
+
+  def test_should_view_posts_by_user_with_xml
+    content_type 'application/xml'
+    get :index, :user_id => users(:sam).id, :format => 'xml'
+    assert_response :success
+    assert_models_equal [posts(:shield), posts(:silver_surfer), posts(:ponies), posts(:pdi_reply), posts(:sticky)], assigns(:posts)
+    assert_select 'posts>post'
   end
 
   def test_should_view_monitored_posts

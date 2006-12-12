@@ -90,7 +90,7 @@ class TopicsControllerTest < Test::Unit::TestCase
     authorize_as :aaron
     post :create, :forum_id => forums(:rails).id, :topic => { :title => 'blah', :body => 'foo' }, :format => 'xml'
     assert_response 201
-    assert_equal topic_url(forums(:rails), assigns(:topic)), @response.headers["Location"]
+    assert_equal formatted_topic_url(:forum_id => forums(:rails), :id => assigns(:topic), :format => :xml), @response.headers["Location"]
   end
 
   def test_should_delete_topic

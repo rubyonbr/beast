@@ -31,7 +31,7 @@ class ForumsController < ApplicationController
     @forum.save!
     respond_to do |format|
       format.html { redirect_to forums_path }
-      format.xml  { head 201, :location => forum_url(@forum) }
+      format.xml  { head 201, :location => formatted_forum_url(:id => @forum, :format => :xml) }
     end
   end
 
