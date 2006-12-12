@@ -21,11 +21,23 @@ class UsersControllerTest < Test::Unit::TestCase
     get :index
     assert_response :success
     assert assigns(:users)
+    assert_select 'html>head'
+  end
+  
+  def test_should_get_index_as_xml
+    get :index, :format => 'xml'
+    assert_response :success
+    assert_select 'users>user'
   end
 
   def test_should_get_new
     get :new
     assert_response :success
+  end
+  
+  def test_should_not_allow_user_creation_with_xml
+    post :create, :user => { :login => 'nico', :email => 'nico@email.com', :password => 'fooey', :password_confirmation => 'fooey' }, :format => 'xml'
+    assert_response 406
   end
   
   def test_should_create_user
@@ -67,6 +79,13 @@ class UsersControllerTest < Test::Unit::TestCase
   def test_should_show_user
     get :show, :id => 1
     assert_response :success
+    assert_select 'html>head'
+  end
+  
+  def test_should_show_user_with_xml
+    get :show, :id => 1, :format => 'xml'
+    assert_response :success
+    assert_select 'user'
   end
 
   def test_should_require_valid_user
@@ -91,6 +110,12 @@ class UsersControllerTest < Test::Unit::TestCase
     login_as :aaron
     put :update, :id => 1, :user => { }
     assert_redirected_to edit_user_path(assigns(:user))
+  end
+  
+  def test_should_update_user_with_xml
+    authorize_as :aaron
+    put :update, :id => 1, :user => { }, :format => 'xml'
+    assert_response :success
   end
 
   def test_should_only_update_safe_fields
@@ -127,6 +152,30 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_redirected_to login_path
   end
 
+  def test_admin_can_destroy_user_with_xml
+    authorize_as :aaron
+    old_count = User.count
+    delete :destroy, :id => 2, :format => 'xml'
+    assert_equal old_count-1, User.count
+    
+    assert_response :success
+  end
+
+  def test_normal_user_cannot_destroy_others_with_xml
+    authorize_as :sam
+    old_count = User.count
+    delete :destroy, :id => 1, :format => 'xml'
+    assert_equal old_count, User.count
+    
+    assert_response 401
+  end
+
+  def test_should_not_allow_setting_admin_with_xml
+    authorize_as :aaron
+    post :admin, :id => users(:sam).id, :user => { :admin => '1' }, :format => 'xml'
+    assert_response 406
+  end
+
   def test_should_set_admin
     assert !users(:sam).admin?
     
@@ -160,6 +209,11 @@ class UsersControllerTest < Test::Unit::TestCase
       delete :destroy, :id => users(:sam).id
     end
     assert_redirected_to login_path
+  end
+
+  def test_should_not_activate_user_with_xml
+    get :activate, :key => users(:kyle).login_key, :format => 'xml'
+    assert_response 406
   end
 
   def test_should_activate_user

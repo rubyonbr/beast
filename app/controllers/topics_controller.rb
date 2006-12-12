@@ -52,7 +52,7 @@ class TopicsController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to topic_path(@forum, @topic) }
-      format.xml  { head 201, :location => formatted_topic_url(:forum_id => @forum, :id => @topic, :format => :xml) }
+      format.xml  { head :created, :location => formatted_topic_url(:forum_id => @forum, :id => @topic, :format => :xml) }
     end
   end
   

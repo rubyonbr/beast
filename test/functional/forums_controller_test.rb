@@ -72,7 +72,7 @@ class ForumsControllerTest < Test::Unit::TestCase
       post :create, :forum => { :name => 'yeah' }, :format => 'xml'
     end
     
-    assert_response 201
+    assert_response :created
     assert_equal formatted_forum_url(:id => assigns(:forum), :format => :xml), @response.headers["Location"]
   end
 

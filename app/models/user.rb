@@ -39,6 +39,16 @@ class User < ActiveRecord::Base
     find_by_login_and_password_hash_and_activated(login, Digest::SHA1.hexdigest(password + PASSWORD_SALT), activated)
   end
 
+  def self.search(query, options = {})
+    with_scope :find => { :conditions => build_search_conditions(query) } do
+      find :all, options
+    end
+  end
+
+  def self.build_search_conditions(query)
+    query && ['LOWER(display_name) LIKE :q OR LOWER(login) LIKE :q', {:q => "%#{query}%"}]
+  end
+
   def password=(value)
     return if value.blank?
     write_attribute :password_hash, Digest::SHA1.hexdigest(value + PASSWORD_SALT)
@@ -57,4 +67,9 @@ class User < ActiveRecord::Base
     moderatorships.count(:all, :conditions => ['forum_id = ?', (forum.is_a?(Forum) ? forum.id : forum)]) == 1
   end
 
+  def to_xml(options = {})
+    options[:except] ||= []
+    options[:except] << :email
+    super
+  end
 end
