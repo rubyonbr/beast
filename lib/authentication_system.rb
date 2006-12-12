@@ -20,17 +20,27 @@ module AuthenticationSystem
     end
     
     def login_required
-      login_by_token unless logged_in?
-      # LOC FODDER
-      # respond_to { |f| f.html { redirect_to login_path } ; f.js { render(:update) { |p| p.redirect_to login_path } } } unless logged_in? && authorized?
+      login_by_token      unless logged_in?
+      login_by_basic_auth unless logged_in?
       respond_to do |format| 
         format.html { redirect_to login_path }
         format.js   { render(:update) { |p| p.redirect_to login_path } }
+        format.xml  do
+          headers["WWW-Authenticate"] = %(Basic realm="Beast")
+          render :text => "HTTP Basic: Access denied.\n", :status => :unauthorized
+        end
       end unless logged_in? && authorized?
     end
     
     def login_by_token
       self.current_user = User.find_by_id_and_login_key(*cookies[:login_token].split(";")) if cookies[:login_token] and not logged_in?
+    end
+    
+    @@http_auth_headers = %w(X-HTTP_AUTHORIZATION HTTP_AUTHORIZATION Authorization)
+    def login_by_basic_auth
+      auth_key  = @@http_auth_headers.detect { |h| request.env.has_key?(h) }
+      auth_data = request.env[auth_key].to_s.split unless auth_key.blank?
+      self.current_user = User.authenticate *Base64.decode64(auth_data[1]).split(':')[0..1] if auth_data && auth_data[0] == 'Basic'
     end
     
     def authorized?() true end
@@ -49,7 +59,11 @@ module AuthenticationSystem
       @current_user ||= ((session[:user_id] && User.find_by_id(session[:user_id])) || 0)
     end
     
-    def logged_in?() current_user != 0 end
+    def logged_in?
+      current_user != 0
+    end
     
-    def admin?() logged_in? and current_user.admin? end
+    def admin?
+      logged_in? && current_user.admin?
+    end
 end

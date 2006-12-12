@@ -20,12 +20,23 @@ class Test::Unit::TestCase
   def login_as(user)
     @request.session[:user_id] = user ? users(user).id : nil
     @request.session[:topics] = {}
-#    @controller.send :current_user=, (user ? users(user) : nil)
   end
-  
+
+  def authorize_as(user, mime_type = 'application/xml')
+    @request.env["HTTP_AUTHORIZATION"] = user ? "Basic #{Base64.encode64("#{users(user).login}:testy")}" : nil
+  end
+
   def logout
     @request.session[:user_id] = nil
     @controller.instance_variable_set("@current_user",nil)
+  end
+
+  def content_type(type)
+    @request.env['Content-Type'] = type
+  end
+
+  def accept(accept)
+    @request.env["HTTP_ACCEPT"] = accept
   end
 
   def assert_models_equal(expected_models, actual_models, message = nil)

@@ -33,6 +33,14 @@ class ForumsControllerTest < Test::Unit::TestCase
     get :index
     assert_response :success
     assert assigns(:forums)
+    assert_select 'html>head'
+  end
+
+  def test_should_get_index_with_xml
+    content_type 'application/xml'
+    get :index, :format => 'xml'
+    assert_response :success
+    assert_select 'forums>forum'
   end
 
   def test_should_get_new
@@ -55,6 +63,18 @@ class ForumsControllerTest < Test::Unit::TestCase
     
     assert_redirected_to forums_path
   end
+  
+  def test_should_create_forum_with_xml
+    content_type 'application/xml'
+    authorize_as :aaron
+
+    assert_difference Forum, :count do
+      post :create, :forum => { :name => 'yeah' }, :format => 'xml'
+    end
+    
+    assert_response 201
+    assert_equal forum_url(assigns(:forum)), @response.headers["Location"]
+  end
 
   def test_should_show_forum
     get :show, :id => 1
@@ -62,6 +82,14 @@ class ForumsControllerTest < Test::Unit::TestCase
     assert assigns(:topics)
     # sticky should be first
     assert_equal(topics(:sticky), assigns(:topics).first)
+    assert_select 'html>head'
+  end
+  
+  def test_should_show_forum_with_xml
+    content_type 'application/xml'
+    get :show, :id => 1, :format => 'xml'
+    assert_response :success
+    assert_select 'forum'
   end
 
   def test_should_get_edit
@@ -75,7 +103,14 @@ class ForumsControllerTest < Test::Unit::TestCase
     put :update, :id => 1, :forum => { }
     assert_redirected_to forums_path
   end
-  
+
+  def test_should_update_forum_with_xml
+    authorize_as :aaron
+    content_type 'application/xml'
+    put :update, :id => 1, :forum => { }, :format => 'xml'
+    assert_response :success
+  end
+
   def test_should_destroy_forum
     login_as :aaron
     old_count = Forum.count
@@ -83,5 +118,14 @@ class ForumsControllerTest < Test::Unit::TestCase
     assert_equal old_count-1, Forum.count
     
     assert_redirected_to forums_path
+  end
+
+  def test_should_destroy_forum_with_xml
+    authorize_as :aaron
+    content_type 'application/xml'
+    old_count = Forum.count
+    delete :destroy, :id => 1, :format => 'xml'
+    assert_equal old_count-1, Forum.count
+    assert_response :success
   end
 end
