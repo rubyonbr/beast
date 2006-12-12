@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_filter :find_post,      :except => [:index, :create, :monitored, :search]
-  before_filter :login_required, :except => [:index, :monitored, :search]
+  before_filter :login_required, :except => [:index, :monitored, :search, :show]
   @@query_options = { :per_page => 25, :select => 'posts.*, topics.title as topic_title, forums.name as forum_name', :joins => 'inner join topics on posts.topic_id = topics.id inner join forums on topics.forum_id = forums.id', :order => 'posts.created_at desc' }
 
   def index

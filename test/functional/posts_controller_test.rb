@@ -138,6 +138,12 @@ class PostsControllerTest < Test::Unit::TestCase
     assert_redirected_to topic_path(:forum_id => forums(:rails), :id => posts(:pdi), :anchor => posts(:pdi_rebuttal).dom_id, :page => '1')
   end
   
+  def test_should_view_post_as_xml
+    get :show, :forum_id => forums(:rails).id, :topic_id => topics(:pdi).id, :id => posts(:pdi_rebuttal).id, :format => 'xml'
+    assert_response :success
+    assert_select 'post'
+  end
+  
   def test_should_view_recent_posts
     get :index
     assert_response :success
