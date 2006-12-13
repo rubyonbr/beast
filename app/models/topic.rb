@@ -13,8 +13,8 @@ class Topic < ActiveRecord::Base
   belongs_to :replied_by_user, :foreign_key => "replied_by", :class_name => "User"
   
   validates_presence_of :forum, :user, :title
-  before_create { |r| r.replied_at = Time.now.utc }
-  after_save    { |r| Post.update_all ['forum_id = ?', r.forum_id], ['topic_id = ?', r.id] }
+  before_create :set_default_replied_at_and_sticky
+  after_save    :set_post_topic_id
 
   attr_accessible :title
   # to help with the create form
@@ -42,4 +42,13 @@ class Topic < ActiveRecord::Base
     user && (user.id == user_id || user.admin? || user.moderator_of?(forum_id))
   end
   
+  protected
+    def set_default_replied_at_and_sticky
+      self.replied_at = Time.now.utc
+      self.sticky   ||= 0
+    end
+
+    def set_post_topic_id
+      Post.update_all ['forum_id = ?', forum_id], ['topic_id = ?', id]
+    end
 end

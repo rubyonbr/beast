@@ -55,6 +55,7 @@ class TopicTest < Test::Unit::TestCase
     t.user = users(:aaron)
     assert_valid t
     t.save
+    assert_equal 0, t.sticky
     [forums(:rails), users(:aaron)].each &:reload
     assert_equal old.collect { |n| n + 1}, counts.call
   end
