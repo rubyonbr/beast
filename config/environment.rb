@@ -75,12 +75,14 @@ ActiveRecord::Base.class_eval do
 end
 
 Module.class_eval do
- def expiring_attr_reader(method_name, value)
-   class_eval(<<-EOS, __FILE__, __LINE__)
-     def #{method_name}
-       class << self; attr_reader :#{method_name}; end
-       @#{method_name} = eval(%(#{value}))
-     end
-   EOS
- end
+  def expiring_attr_reader(method_name, value)
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def #{method_name}
+        class << self; attr_reader :#{method_name}; end
+        @#{method_name} = eval(%(#{value}))
+      end
+    EOS
+  end
 end
+
+WhiteListHelper.tags.merge(%w(object param embed))
