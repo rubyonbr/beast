@@ -14,4 +14,14 @@ class ForumTest < Test::Unit::TestCase
   def test_should_find_last_post
     assert_equal posts(:il8n), forums(:rails).posts.last
   end
+
+  def test_should_format_body_html
+    forum = Forum.new(:description => 'foo')
+    forum.send :format_content
+    assert_not_nil forum.description_html
+    
+    forum.description = ''
+    forum.send :format_content
+    assert forum.description_html.blank?
+  end
 end

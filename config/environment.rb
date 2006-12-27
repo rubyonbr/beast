@@ -53,25 +53,31 @@ end
 # Include your application configuration below
 PASSWORD_SALT = '48e45be7d489cbb0ab582d26e2168621' unless Object.const_defined?(:PASSWORD_SALT)
 ActiveRecord::Base.class_eval do
+  include ActionView::Helpers::TagHelper, ActionView::Helpers::TextHelper, WhiteListHelper
   def self.format_attribute(attr_name)
     class << self; include ActionView::Helpers::TagHelper, ActionView::Helpers::TextHelper, WhiteListHelper; end
     define_method(:body)       { read_attribute attr_name }
     define_method(:body_html)  { read_attribute "#{attr_name}_html" }
     define_method(:body_html=) { |value| write_attribute "#{attr_name}_html", value }
-    before_save do |record|
-      unless record.body.blank?
-        record.body.strip!
-        record.body_html = auto_link record.body.to_s do |text|
-          truncate(text, 50)
-        end
-        record.body_html = white_list(RedCloth.new(record.body_html).to_html)
-      end
-    end
+    before_save :format_content
   end
 
   def dom_id
     [self.class.name.downcase.pluralize.dasherize, id] * '-'
   end
+
+  protected
+    def format_content
+      body.strip! if body.respond_to?(:strip!)
+      if body.blank?
+        self.body_html = ''
+      else
+        self.body_html = auto_link body do |text|
+          truncate(text, 50)
+        end
+        self.body_html = white_list(RedCloth.new(body_html).to_html)
+      end
+    end
 end
 
 Module.class_eval do
