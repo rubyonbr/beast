@@ -24,7 +24,7 @@
 	<label>Add as moderator</label><br />
 	<select name="moderator">
     <option value="-"></option>
-    <%= options_from_collection_for_select(Forum.find(:all) - @user.forums, "id", "name") %>
+    <%= options_from_collection_for_select(Forum.find(:all, :order => 'position') - @user.forums, "id", "name") %>
   </select></p>
 
   <p><label><%= f.check_box :admin %> User is an administrator</label></p>
