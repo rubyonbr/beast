@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def search_posts_title
-    returning (params[:q].blank? ? 'Recent Posts' : "Searching for '#{h params[:q]}'") do |title|
+    returning(params[:q].blank? ? 'Recent Posts' : "Searching for '#{h params[:q]}'") do |title|
       title << " by #{h User.find(params[:user_id]).display_name}" if params[:user_id]
       title << " in #{h Forum.find(params[:forum_id]).name}"       if params[:forum_id]
     end
