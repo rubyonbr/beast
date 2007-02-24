@@ -1,31 +1,31 @@
-<h1>Login</h1>
+<h1><%= _('Login') %></h1>
 
 <% form_tag sessions_path do -%>
 <p>
-  <label for="login">Login</label><br />
+  <label for="login"><%= _('Login') %></label><br />
   <%= text_field_tag :login, params[:login] %>
 </p>
 
 <p>
-  <label for="password">Password</label><br />
+  <label for="password"><%= _('Password') %></label><br />
   <%= password_field_tag :password %>
 </p>
 
-<p><label><%= check_box_tag "remember_me", "1", true %> Remember me on this computer</label></p>
+<p><label><%= check_box_tag "remember_me", "1", true %> <%= _('Remember me on this computer') %></label></p>
 
-<p><%= submit_tag 'Login', :or => link_to_function('reset password', "$('reset-password').toggle();") %></p>
+<p><%= submit_tag _('Login'), :or => link_to_function(_('reset password'), "$('reset-password').toggle();") %></p>
 <% end -%>
 
 <% form_tag users_path, :id => 'reset-password', :style => 'display:none' do -%>
 
 <hr />
 
-<h5>Reset Password</h5>
+<h5><%= _('Reset Password') %></h5>
 
-  <p>Enter your email, and a brand new login key will be sent to you.  Click the link in the email to log in, and then change your password.</p>
+  <p><%= _('Enter your email, and a brand new login key will be sent to you.  Click the link in the email to log in, and then change your password.') %></p>
   <p><%= text_field_tag :email, "", :size => 30 %>
 <br />
-<%= submit_tag "E-mail me the link", :or => link_to_function('cancel', "$('reset-password').hide()") %></p>
+<%= submit_tag _('E-mail me the link'), :or => link_to_function(_('cancel'), "$('reset-password').hide()") %></p>
 <% end -%>
 
 <%= javascript_tag "$('login').focus();"%>

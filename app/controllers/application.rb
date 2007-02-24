@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  init_gettext "beast" if Object.const_defined?(:GetText)
+
   include ExceptionLoggable, BrowserFilters, AuthenticationSystem
   session :session_key => '_beast_session_id'
 

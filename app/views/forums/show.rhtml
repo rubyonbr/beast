@@ -5,7 +5,7 @@
 <hr />
 <% end %>
 
-<h5 style="margin-bottom:1.0em;">Moderators</h5>
+<h5 style="margin-bottom:1.0em;"><%= _('Moderators') %></h5>
 
 <% if @forum.moderators.any? -%>
 <ul class="flat" style="margin-top:1em;">
@@ -14,8 +14,8 @@
 <% end -%>
 </ul>
 <% else -%>
-<p>This forum is currently unmoderated.</p>
-<p>Please always be courteous.</p>
+<p><%= _('This forum is currently unmoderated.') %></p>
+<p><%= _('Please always be courteous.') %></p>
 <% end -%>
 
 <% end %>
@@ -23,7 +23,7 @@
 <% @page_title = @forum.name %>
 
 <div class="crumbs">
-<%= link_to "Forums", home_path %> <span class="arrow">&rarr;</span>
+<%= link_to _('Forums'), home_path %> <span class="arrow">&rarr;</span>
 </div>
 <h1 style="margin-top:0.5em">
   <%= h @forum.name %>
@@ -31,7 +31,7 @@
 
 <p class="subtitle">
   <%= feed_icon_tag @forum.name, formatted_forum_posts_path(@forum, :rss) %> 
-  <%= pluralize @forum.topics_count, 'topic' %>, <%= pluralize @forum.posts_count, 'post' %>
+  <%= pluralize @forum.topics_count, _('topic') %>, <%= pluralize @forum.posts_count, _('post') %>
 </p>
 
 
@@ -40,15 +40,15 @@
 <% if logged_in? %>
 <p style="float:right; margin-top:0;"><%= link_to 'New topic', new_topic_path(@forum), :class => "utility" %></p>
 <% end %>
-<p class="pages">Pages: <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= _('Pages:') %> <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
 <table border="0" cellspacing="0" cellpadding="0" class="wide topics">
 <tr>
-  <th class="la" colspan="2">Topic</th>
-  <th width="1%">Posts</th>
-  <th width="1%">Views</th>
-  <th class="la">Last post</th>
+  <th class="la" colspan="2"><%= _('Topic') %></th>
+  <th width="1%"><%= _('Posts') %></th>
+  <th width="1%"><%= _('Views') %></th>
+  <th class="la"><%= _('Last post') %></th>
 </tr>
 <% for topic in @topics %>
 <tr class="hentry">
@@ -88,13 +88,13 @@
 </table>
 
 <% if @topic_pages and @topic_pages.current.next %>
-<p style="float:right;"><%= link_to "Next page", { :page => @topic_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
+<p style="float:right;"><%= link_to _('Next page'), { :page => @topic_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
 <% end %>
 
 <% if @topic_pages.page_count > 1 -%>
-<p class="pages">Pages: <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= _('Pages:') %> <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
 <% if logged_in? %>
-<p><%= link_to 'New topic', new_topic_path(@forum), :class => "utility" %></p>
+<p><%= link_to _('New topic'), new_topic_path(@forum), :class => "utility" %></p>
 <% end%>

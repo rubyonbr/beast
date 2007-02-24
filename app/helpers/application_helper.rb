@@ -52,5 +52,4 @@ module ApplicationHelper
       else from_time.strftime("%b %e, %Y  %l:%M%p").gsub(/([AP]M)/) { |x| x.downcase }
     end
   end
-  
 end

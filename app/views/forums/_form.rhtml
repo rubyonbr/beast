@@ -5,11 +5,11 @@
 
 <table border="0" cellspacing="0" cellpadding="0" class="noborder nopad wide">
   <td>
-    <label>Title</label><br />
+    <label><%= _('Title') %></label><br />
     <%= form.text_field :name %>
   </td>
   <td style="text-align:right">
-    <label>Position</label><br />
+    <label><%= _('Position') %></label><br />
     <%= form.text_field :position, :size => 5 %>
 
   </td>
@@ -17,5 +17,5 @@
 
 </p>
 <p id="forum_descripion">
-<label>Description</label><br />
+<label><%= _('Description') %></label><br />
 <%= form.text_area :description, :rows => 7 %></p>

@@ -64,4 +64,17 @@ Module.class_eval do
   end
 end
 
+begin
+  require 'gettext/rails'
+  GetText.locale = "nl" # Change this to your preference language
+  puts "GetText found!"
+rescue MissingSourceFile, LoadError
+  puts "GetText not found.  Using English."
+  class ActionView::Base
+    def _(s)
+      s
+    end
+  end
+end
+
 WhiteListHelper.tags.merge(%w(object param embed))
