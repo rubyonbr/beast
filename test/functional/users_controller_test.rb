@@ -117,6 +117,32 @@ class UsersControllerTest < Test::Unit::TestCase
     put :update, :id => 1, :user => { }, :format => 'xml'
     assert_response :success
   end
+  
+  def test_should_update_user_without_needing_password
+    login_as :sam
+    put :update, :id => users(:sam).id, :user => { :email => 'sam@newemail.com'}
+    assert_redirected_to edit_user_path(assigns(:user))
+    assert_not_equal users(:sam).email, assigns(:user).email
+  end
+  
+  def test_should_update_password_with_confirmation
+    login_as :sam
+    put :update, :id => users(:sam).id, :user => { :password => 'newpass', :password_confirmation => 'newpass'}
+    assert_redirected_to edit_user_path(assigns(:user))
+    assert flash.has_key?(:notice)
+  end
+
+  def test_should_not_update_password_with_wrong_confirmation
+    login_as :sam
+    put :update, :id => users(:sam).id, :user => { :password => 'newpass', :password_confirmation => 'notnewpass'}
+    assert !flash.has_key?(:notice)
+  end
+  
+  def test_should_not_update_password_with_blank_confirmation
+    login_as :sam
+    put :update, :id => users(:sam).id, :user => { :password => 'newpass', :password_confirmation => '' }
+    assert !flash.has_key?(:notice)
+  end
 
   def test_should_only_update_safe_fields
     # non-admin should not be able to change all this stuff

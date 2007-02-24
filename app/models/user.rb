@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   validates_length_of       :login, :minimum => 2
   validates_length_of :password, :minimum => 5, :allow_nil => true
   validates_confirmation_of :password, :on => :create
+  validates_confirmation_of :password, :on => :update, :allow_nil => true
 
   # names that start with #s really upset me for some reason
   validates_format_of       :login, :with => /^[a-z]{2}(?:\w+)?$/i
