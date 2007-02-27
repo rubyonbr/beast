@@ -2,7 +2,7 @@
 
 <p>
   <label for="user_login"><%= _('Login') %></label><br />
-  <%= form.text_field :login %>
+  <%= form.text_field :login, :onkeypress => 'LoginForm.checkLogin(this)' %>
 </p>
 
 <p>
@@ -11,8 +11,12 @@
 </p>
 
 <p>
+  <p class="help">
+    <%= _('Enter your OpenID Identity Url if you know it.  If your Identity Url supports the') %>
+    <acronym title="Simple Registration">sreg</acronym>
+    <%= _('extension, you can ')%><%= link_to _('login'), login_path %><%= _(' and create your account automatically.') %>
+  </p>
   <label for="user_identity_url"><%= _('Identity Url') %></label><br />
-  <p class="help"><%= _('Enter your OpenID Identity Url if you know it.')%></p>
   <%= form.text_field :identity_url %>
 </p>
 
@@ -21,7 +25,7 @@
   <%= form.text_field :display_name %>
 </p>
 
-<div>
+<div id="password_fields">
 	  <label for="user_password"><%= _('Password') %></label><br />
 	<p class="help"><%= _('Enter your desired password twice.  It must be at least 5 characters.') %></span></p>
 
