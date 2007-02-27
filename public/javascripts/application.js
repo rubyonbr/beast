@@ -7,6 +7,16 @@ var TopicForm = {
   }
 }
 
+var LoginForm = {
+  checkLogin: function(txt) {
+    if(txt.value.match(/^https?:\/\//)) {
+      $('password_fields').hide();
+    } else {
+      $('password_fields').show();
+    }
+  }
+}
+
 var EditForm = {
   // show the form
   init: function(postId) {

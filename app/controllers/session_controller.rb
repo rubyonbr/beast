@@ -26,7 +26,7 @@ class SessionController < ApplicationController
         when :failed
           failed_login "Sorry, the OpenID verification failed"
         when :successful
-          if self.current_user = User.find_by_identity_url(identity_url)
+          if self.current_user = User.find_or_initialize_by_identity_url(identity_url)
             {'login=' => 'nickname', 'email=' => 'email', 'display_name=' => 'fullname'}.each do |attr, reg|
               current_user.send(attr, registration[reg]) unless registration[reg].blank?
             end

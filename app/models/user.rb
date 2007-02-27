@@ -9,17 +9,22 @@ class User < ActiveRecord::Base
   has_many :monitorships
   has_many :monitored_topics, :through => :monitorships, :conditions => ['monitorships.active = ?', true], :order => 'topics.replied_at desc', :source => :topic
 
-  validates_presence_of     :login, :email, :password_hash
+  validates_presence_of     :login, :email
   validates_length_of       :login, :minimum => 2
-  validates_length_of :password, :minimum => 5, :allow_nil => true
-  validates_confirmation_of :password, :on => :create
-  validates_confirmation_of :password, :on => :update, :allow_nil => true
+  
+  with_options :if => :password_required? do |u|
+    u.validates_presence_of     :password_hash
+    u.validates_length_of       :password, :minimum => 5, :allow_nil => true
+    u.validates_confirmation_of :password, :on => :create
+    u.validates_confirmation_of :password, :on => :update, :allow_nil => true
+  end
 
   # names that start with #s really upset me for some reason
   validates_format_of       :login, :with => /^[a-z]{2}(?:\w+)?$/i
+  validates_format_of       :identity_url, :with => /^https?:\/\//i, :allow_nil => true
 
   # names that start with #s really upset me for some reason
-  validates_format_of     :display_name, :with => /^[a-z]{2}(?:[.'\-\w ]+)?$/i
+  validates_format_of     :display_name, :with => /^[a-z]{2}(?:[.'\-\w ]+)?$/i, :allow_nil => true
 
   validates_uniqueness_of   :login, :email, :display_name, :case_sensitive => false
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
@@ -72,5 +77,9 @@ class User < ActiveRecord::Base
     options[:except] ||= []
     options[:except] << :email << :login_key << :login_key_expires_at << :password_hash
     super
+  end
+  
+  def password_required?
+    identity_url.nil?
   end
 end

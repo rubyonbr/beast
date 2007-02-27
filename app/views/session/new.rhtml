@@ -2,16 +2,18 @@
 
 <% form_tag session_path do -%>
 <p>
-  <label for="login"><%= _('Login') %></label><br />
-  <%= text_field_tag :login, params[:login] %>
+  <label for="login"><%= _('Login or OpenID URL (starts with http://)') %></label><br />
+  <%= text_field_tag :login, params[:login], :onkeypress => 'LoginForm.checkLogin(this)' %>
 </p>
 
+<div id="password_fields">
 <p>
   <label for="password"><%= _('Password') %></label><br />
   <%= password_field_tag :password %>
 </p>
 
 <p><label><%= check_box_tag "remember_me", "1", true %> <%= _('Remember me on this computer') %></label></p>
+</div>
 
 <p><%= submit_tag _('Login'), :or => link_to_function(_('reset password'), "$('reset-password').toggle();") %></p>
 <% end -%>

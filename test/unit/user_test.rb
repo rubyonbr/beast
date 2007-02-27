@@ -79,4 +79,10 @@ class UserTest < Test::Unit::TestCase
     assert users(:aaron).login_key_expires_at < Time.now.utc+1.year+1.minute
     assert users(:aaron).login_key_expires_at > Time.now.utc+1.year-1.minute
   end
+  
+  def test_open_id_login
+    u = User.new(:identity_url => 'http://foo', :email => 'zoe@girl.com')
+    u.login = 'zoegirl'
+    assert_valid u
+  end
 end
