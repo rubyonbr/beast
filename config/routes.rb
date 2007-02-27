@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.home '', :controller => 'forums', :action => 'index'
 
-  map.resource :sessions
+  map.resource :session
   
   map.resources :users, :member => { :admin => :post } do |user|
     user.resources :moderators
