@@ -6,6 +6,12 @@
 </p>
 
 <p>
+  <label for="user_identity_url"><%= _('Identity Url') %></label><br />
+  <p class="help"><%= _('Enter your OpenID Identity Url if you know it.')%></p>
+  <%= settings.text_field :identity_url %>
+</p>
+
+<p>
   <label for="user_website"><%= _('Website') %></label><br />
   <%= settings.text_field :website %> 
 	<span class="entryhelp">
