@@ -31,7 +31,7 @@ class SessionController < ApplicationController
               current_user.send(attr, registration[reg]) unless registration[reg].blank?
             end
             unless current_user.save
-              flash[:error] = "Error saving the fields from your OpenID profile: #{current_user.errors.full_messages.to_sentence}"
+              flash[:error] = "Error saving the fields from your OpenID profile at #{identity_url.inspect}: #{current_user.errors.full_messages.to_sentence}"
             end
             successful_login
           else
