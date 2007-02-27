@@ -26,7 +26,8 @@ class User < ActiveRecord::Base
   # names that start with #s really upset me for some reason
   validates_format_of     :display_name, :with => /^[a-z]{2}(?:[.'\-\w ]+)?$/i, :allow_nil => true
 
-  validates_uniqueness_of   :login, :email, :display_name, :case_sensitive => false
+  validates_uniqueness_of   :login, :email, :case_sensitive => false
+  validates_uniqueness_of   :display_name, :identity_url, :case_sensitive => false, :allow_nil => true
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
   # first user becomes admin automatically
   before_create { |u| u.admin = u.activated = true if User.count == 0 }
