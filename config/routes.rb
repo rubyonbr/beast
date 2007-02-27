@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.home '', :controller => 'forums', :action => 'index'
 
+  map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }
   map.resource :session
   
   map.resources :users, :member => { :admin => :post } do |user|

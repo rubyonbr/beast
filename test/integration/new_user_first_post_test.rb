@@ -26,7 +26,7 @@ class NewUserFirstPostTest < ActionController::IntegrationTest
     assert_template "sessions/new"
 
     # sign in?
-    post sessions_path, :login => 'jgoebel', :password => 'beast'
+    post session_path, :login => 'jgoebel', :password => 'beast'
     assert_response :success # blast!  not activated yet!
     
     activate 'jgoebel'
@@ -96,7 +96,7 @@ class NewUserFirstPostTest < ActionController::IntegrationTest
     end
     
     def login(user, password)
-      post sessions_path, :login => user, :password => password
+      post session_path, :login => user, :password => password
       assert_response :redirect
       follow_redirect!
       assert_response :success
