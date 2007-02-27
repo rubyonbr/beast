@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+class SessionController < ApplicationController
 
   def create
     self.current_user = User.authenticate(params[:login], params[:password])

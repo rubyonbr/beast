@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'sessions_controller'
+require 'session_controller'
 
 # Re-raise errors caught by the controller.
-class SessionsController; def rescue_action(e) raise e end; end
+class SessionController; def rescue_action(e) raise e end; end
 
-class SessionsControllerTest < Test::Unit::TestCase
+class SessionControllerTest < Test::Unit::TestCase
   all_fixtures
   def setup
-    @controller = SessionsController.new
+    @controller = SessionController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
