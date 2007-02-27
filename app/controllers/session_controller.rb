@@ -33,7 +33,6 @@ class SessionController < ApplicationController
             unless current_user.save
               flash[:error] = "Error saving the fields from your OpenID profile: #{current_user.errors.full_messages.to_sentence}"
             end
-            flash[:notice] = 'yooooo'
             successful_login
           else
             failed_login "Sorry, no user by the identity URL #{identity_url.inspect} exists"
