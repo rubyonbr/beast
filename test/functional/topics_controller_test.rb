@@ -74,7 +74,8 @@ class TopicsControllerTest < Test::Unit::TestCase
   uses_transaction :test_should_not_create_topic_without_body
 
   def test_should_not_create_topic_without_body
-    topic_count=Topic.count
+    counts = lambda { [Topic.count, Post.count] }
+    old = counts.call
     
     login_as :aaron
     
@@ -86,7 +87,7 @@ class TopicsControllerTest < Test::Unit::TestCase
     assert assigns(:topic).new_record?
     assert assigns(:post).new_record?
     
-    assert_equal topic_count, Topic.count
+    assert_equal old, counts.call
   end
 
   def test_should_create_topic
