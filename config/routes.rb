@@ -10,7 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :forums do |forum|
     forum.resources :topics do |topic|
-      topic.resources :posts, :monitorships
+      topic.resources :posts
+      topic.resource :monitorship, :controller => :monitorships
     end
   end
 

@@ -626,11 +626,16 @@ table tr td.lp span a { color:#369; }
 
 table.topics tr td.c1
  {	border-right:0; padding-right:2px; }
-table.topics tr td.c2
- {	border-left:0; padding-left:2px; }
+ table.topics tr td.c2
+  {	border-left:0; padding-left:2px; }
+
+
+table.topics tr td.c3 { border-left:0; }
 
 table.forums tr td.c1 {	border-right:0; padding-right:5px; padding-top:7px; }
-table.forums tr td.c2 {	border-left:0; padding-left:5px; }
+table.forums tr td.c2 {	border-width:1px 0; padding-left:5px; }
+table.forums tr td.c3 {	border-left:0; padding-left:5px; }
+
 
 table.topics tr td.c2 small a { color:#666; }
 table.topics tr td.stat { font-size:0.9em; }

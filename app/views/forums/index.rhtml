@@ -23,12 +23,12 @@
 
 <table border="0" cellspacing="0" cellpadding="0" class="wide forums">
   <tr>
-    <th class="la" width="70%" colspan="2"><%= _('Forum') %></th>
+    <th class="la" width="70%" colspan="3"><%= _('Forum') %></th>
 <!--
     <th width="5%">Topics</th>
     <th width="5%">Posts</th>
 -->
-    <th class="la" width="30%"><%= _('Last Post') %></th>
+    <th class="la" width="30%" colspan="1"><%= _('Last Post') %></th>
   </tr>
 <% for forum in @forums do %>  
   <tr>
@@ -40,9 +40,7 @@
       <%= image_tag "clearbits/comment.gif", :class => "icon grey", :title => _('No recent activity') %>
       <% end %>
     </td>
-    <td class="c2">
-      <%= link_to _('Edit'), edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
-
+    <td class="c2 vat">
       <%= link_to h(forum.name), forum_path(forum), :class => "title" %>
       <div class="posts">
         <%= number_with_delimiter(forum.topics_count) %> <%= _('topics') %>, 
@@ -50,6 +48,9 @@
       </div>
       <p class="desc"><%= forum.description_html %>
         </p>
+    </td>
+    <td class="c3">
+      <%= link_to _('Edit'), edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
     </td>
 <!--
     <td class="ca inv"><%= number_with_delimiter(forum.topics_count) %></td>
