@@ -319,6 +319,12 @@ div.asset
 	text-align:center;
 }
 
+input.primary
+{
+  font-size:1.2em;
+
+}
+
 input.submit
 {
 	margin-right:1em;

@@ -6,5 +6,5 @@
 
 <% form_for :forum, :url => forums_path do |f| -%>
 <%= render :partial => "form", :object => f %>
-<%= submit_tag _('Create') %> or <%= link_to _('Cancel'), forums_path %>
+<%= submit_tag _('Create'), :or => link_to(_('Cancel'), forums_path) %>
 <% end -%>

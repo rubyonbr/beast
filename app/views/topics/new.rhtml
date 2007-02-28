@@ -3,8 +3,10 @@
   <%= link_to h(@forum.name), forum_path(@forum) %> <span class="arrow">&rarr;</span>
 </div>
 
+
 <h1 id="new_topic"><%= _('New Topic') %></h1>
 <p class="subtitle"><%= _('by') %> <%= current_user.display_name %></p>
+
 
 <%= error_messages_for :topic %>
 <% form_for :topic,
