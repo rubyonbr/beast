@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'topics_controller'
 
 # Re-raise errors caught by the controller.
-class TopicsController; def rescue_action(e) raise e end; end
+#class TopicsController; def rescue_action(e) raise e end; end
 
 class TopicsControllerTest < Test::Unit::TestCase
   all_fixtures
@@ -69,6 +69,24 @@ class TopicsControllerTest < Test::Unit::TestCase
     post :create, :forum_id => forums(:rails).id, :topic => { :title => 'blah2', :sticky => "1", :locked => "1", :body => 'foo' }
     assert assigns(:topic).sticky?
     assert assigns(:topic).locked?
+  end
+
+  uses_transaction :test_should_not_create_topic_without_body
+
+  def test_should_not_create_topic_without_body
+    topic_count=Topic.count
+    
+    login_as :aaron
+    
+    post :create, :forum_id => forums(:rails).id, :topic => { :title => 'blah' }
+    assert assigns(:topic)
+    assert assigns(:post)
+    # both of these should be new records if the save fails so that the view can
+    # render accordingly
+    assert assigns(:topic).new_record?
+    assert assigns(:post).new_record?
+    
+    assert_equal topic_count, Topic.count
   end
 
   def test_should_create_topic

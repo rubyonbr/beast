@@ -8,7 +8,7 @@ class Post < ActiveRecord::Base
   after_create  { |r| Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', r.created_at, r.user_id, r.id], ['id = ?', r.topic_id]) }
   after_destroy { |r| t = Topic.find(r.topic_id) ; Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', t.posts.last.created_at, t.posts.last.user_id, t.posts.last.id], ['id = ?', t.id]) if t.posts.last }
 
-  validates_presence_of :user_id, :body
+  validates_presence_of :user_id, :body, :topic
   attr_accessible :body
   
   def editable_by?(user)

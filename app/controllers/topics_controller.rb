@@ -45,10 +45,12 @@ class TopicsController < ApplicationController
     Topic.transaction do
       @topic  = @forum.topics.build(params[:topic])
       assign_protected
-      @topic.save!
       @post   = @topic.posts.build(params[:topic])
+      @post.topic=@topic
       @post.user = current_user
-      @post.save!
+      # only save topic if post is valid so in the view topic will be a new record if there was an error
+      @topic.save! if @post.valid?
+      @post.save! 
     end
     respond_to do |format|
       format.html { redirect_to topic_path(@forum, @topic) }
