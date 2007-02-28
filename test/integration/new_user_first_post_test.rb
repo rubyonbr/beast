@@ -12,7 +12,7 @@ class NewUserFirstPostTest < ActionController::IntegrationTest
 
     get login_path
     assert_response :success
-    assert_template "sessions/new"
+    assert_template "session/new"
     
     get signup_path
     assert_response :success
@@ -23,7 +23,7 @@ class NewUserFirstPostTest < ActionController::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    assert_template "sessions/new"
+    assert_template "session/new"
 
     # sign in?
     post session_path, :login => 'jgoebel', :password => 'beast'

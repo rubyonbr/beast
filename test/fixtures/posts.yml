@@ -51,8 +51,8 @@ silver_surfer:
   topic_id: 6
   user_id: 2
   body: galactus oh no!
-  created_at: <%= 1.hour.ago.to_s :db %>
-  updated_at: <%= 1.hour.ago.to_s :db %>
+  created_at: <%= 1.2.hours.ago.to_s :db %>
+  updated_at: <%= 1.2.hours.ago.to_s :db %>
   forum_id: 2
 shield:
   id: 8
