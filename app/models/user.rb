@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of   :login, :email, :case_sensitive => false
   validates_uniqueness_of   :display_name, :identity_url, :case_sensitive => false, :allow_nil => true
+  before_validation { |u| u.identity_url = nil if u.identity_url.blank? }
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
   # first user becomes admin automatically
   before_create { |u| u.admin = u.activated = true if User.count == 0 }

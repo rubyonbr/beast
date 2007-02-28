@@ -37,7 +37,7 @@ class UsersController < ApplicationController
         @user.login = params[:user][:login] unless params[:user].blank?
         @user.reset_login_key! 
         UserMailer.deliver_signup(@user, request.host_with_port)
-        flash[:notice] = "#{params[:user].blank? ? "An account activation" : "A temporary login"} email has been sent to '#{CGI.escapeHTML @user.email}'."
+        flash[:notice] = "#{params[:email] ? "A temporary login" : "An account activation" } email has been sent to '#{CGI.escapeHTML @user.email}'."
         redirect_to login_path
       end
     end
