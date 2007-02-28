@@ -15,6 +15,15 @@ class ForumTest < Test::Unit::TestCase
     assert_equal posts(:il8n), forums(:rails).posts.last
   end
 
+  def test_should_find_first_topic
+    assert_equal topics(:sticky), forums(:rails).topics.first
+  end
+
+  def test_should_find_first_recent_post
+    assert_equal topics(:il8n), forums(:rails).recent_topics.first
+  end
+
+
   def test_should_format_body_html
     forum = Forum.new(:description => 'foo')
     forum.send :format_content
