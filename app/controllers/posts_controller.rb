@@ -13,7 +13,7 @@ class PostsController < ApplicationController
   end
 
   def search
-    conditions = params[:q].blank? ? nilil : Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"])
+    conditions = params[:q].blank? ? nil : Post.send(:sanitize_sql, ['LOWER(posts.body) LIKE ?', "%#{params[:q]}%"])
     @post_pages, @posts = paginate(:posts, @@query_options.merge(:conditions => conditions))
     @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
     render_posts_or_xml :index
