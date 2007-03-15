@@ -70,7 +70,8 @@
   </td>
   <td class="c2">
     <%= "Sticky: <strong>" if topic.sticky? %>
-    <%= link_to h(topic.title), topic_path(@forum, topic), :class => "entry-title", :rel => "bookmark" %>
+    <%= topic_title_link (topic), :class => "entry-title", :rel => "bookmark" %>
+    <%#= link_to h(topic.title), topic_path(@forum, topic), :class => "entry-title", :rel => "bookmark" %>
     <%= "</strong>" if topic.sticky? %>
     <% if topic.paged? -%>
     <small><%= link_to 'last', topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page) %></small>

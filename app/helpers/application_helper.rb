@@ -27,6 +27,14 @@ module ApplicationHelper
     end
   end
 
+  def topic_title_link(topic, options)
+    if topic.title =~ /\[([^\]]+)\](.*)/
+      "<span class='flag'>#{$1}</span>" + link_to(h($2.strip), topic_path(@forum, topic), options)
+    else
+      link_to(h(topic.title), topic_path(@forum, topic), options)
+    end
+  end
+
   def search_posts_path(rss = false)
     options = params[:q].blank? ? {} : {:q => params[:q]}
     prefix = rss ? 'formatted_' : ''
