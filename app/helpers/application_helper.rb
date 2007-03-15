@@ -37,6 +37,10 @@ module ApplicationHelper
     options[:q] ? all_search_posts_path(options) : send("#{prefix}all_posts_path", options)
   end
 
+  # on windows and this isn't working like you expect?
+  # check: http://beast.caboo.se/forums/1/topics/657
+  # strftime on windows doesn't seem to support %e and you'll need to 
+  # use the less cool %d in the strftime line below
   def distance_of_time_in_words(from_time, to_time = 0, include_seconds = false)
     from_time = from_time.to_time if from_time.respond_to?(:to_time)
     to_time = to_time.to_time if to_time.respond_to?(:to_time)
