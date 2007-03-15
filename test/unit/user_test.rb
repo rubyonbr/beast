@@ -26,6 +26,20 @@ class UserTest < Test::Unit::TestCase
       assert ! u.valid?
     end
   end
+
+  def test_email_address_validation
+    u = users(:sam)
+    u.email = "sam"
+    assert ! u.valid?
+    u.email = "johh.doe@google.com"
+    assert u.valid?
+    u.email = "johh_doe@mail.mx.1.google.com"
+    assert u.valid?
+    u.email = "johh_doe+crazy-iness@mail.mx.1.google.com"
+    assert u.valid?
+    u.email = "sam@@colgate.com"
+    assert ! u.valid?
+  end
   
   def test_minimum_password_length
     u = users(:sam)

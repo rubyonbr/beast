@@ -36,7 +36,16 @@ class UsersController < ApplicationController
         redirect_to login_path and return unless @user
         @user.login = params[:user][:login] unless params[:user].blank?
         @user.reset_login_key! 
-        UserMailer.deliver_signup(@user, request.host_with_port)
+        begin
+          UserMailer.deliver_signup(@user, request.host_with_port)
+        rescue Net::SMTPFatalError => e
+          flash[:notice] = "A permanent error occured while sending the signup message to '#{CGI.escapeHTML @user.email}'. Please check the e-mail address."
+          redirect_to :action => "new"
+        rescue Net::SMTPServerBusy, Net::SMTPUnknownError, \
+          Net::SMTPSyntaxError, TimeoutError => e
+          flash[:notice] = "The signup message cannot be sent to '#{CGI.escapeHTML @user.email}' at this moment. Please, try again later."
+          redirect_to :action => "new"
+        end
         flash[:notice] = "#{params[:email] ? "A temporary login" : "An account activation" } email has been sent to '#{CGI.escapeHTML @user.email}'."
         redirect_to login_path
       end
