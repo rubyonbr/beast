@@ -32,6 +32,7 @@ config.after_initialize do
       def login_required_with_basic
         respond_to do |accepts|
           accepts.html { login_required_without_basic }
+          accepts.js { login_required_without_basic }
           accepts.rss do
             access_denied_with_basic_auth unless self.current_user = User.authenticate(*get_auth_data)
           end
