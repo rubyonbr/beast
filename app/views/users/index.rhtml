@@ -1,7 +1,7 @@
 <% content_for :right do %>
 <h5><%= _('Find a User') %></h5>
 
-<% form_tag nil, :method => 'get' do -%>
+<% form_tag users_path, :method => 'get' do -%>
 <p>
 <label><%= _('Display name or login') %></label>
 <%= text_field_tag :q, params[:q] %> 
