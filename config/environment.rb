@@ -53,6 +53,16 @@ end
 # Include your application configuration below
 PASSWORD_SALT = '48e45be7d489cbb0ab582d26e2168621' unless Object.const_defined?(:PASSWORD_SALT)
 
+# monkey patch redcloth
+class RedCloth
+  def hard_break( text )
+    # found in 3.0.4
+#    text.gsub!( /(.)\n(?!\Z| *([#*=]+(\s|$)|[{|]))/, "\\1<br />" ) if hard_breaks
+    # backported from 3.0.3
+    text.gsub!( /(.)\n(?! *[#*\s|]|$)/, "\\1<br />" ) if hard_breaks
+  end
+end
+
 Module.class_eval do
   def expiring_attr_reader(method_name, value)
     class_eval(<<-EOS, __FILE__, __LINE__)
