@@ -21,6 +21,32 @@ class TopicTest < Test::Unit::TestCase
   def test_knows_last_post
     assert_equal posts(:pdi_rebuttal), topics(:pdi).posts.last
   end
+
+  def test_counts_are_valid
+    assert_equal forums(:rails).topics_count, forums(:rails).topics.size
+    assert_equal forums(:comics).topics_count, forums(:comics).topics.size
+  end
+  
+  def test_moving_topic_to_different_forum_preserves_counts
+    rails = lambda { [forums(:rails).topics_count, forums(:rails).posts_count] }
+    comics = lambda { [forums(:comics).topics_count, forums(:comics).posts_count] }
+    old_rails = rails.call
+    old_comics = comics.call
+    
+    topics(:il8n).posts.each { |post| post.forum==forums(:rails) }
+    
+    @topic=topics(:il8n)
+    @topic.forum=forums(:comics)
+    @topic.save!
+    
+    topics(:il8n).posts.each { |post| post.forum==forums(:comics) }
+    
+    forums(:rails).reload
+    forums(:comics).reload
+  
+    assert_equal old_rails.collect { |n| n - 1}, rails.call
+    assert_equal old_comics.collect { |n| n + 1}, rails.call
+  end
   
   def test_should_require_title_user_and_forum
     t=Topic.new
