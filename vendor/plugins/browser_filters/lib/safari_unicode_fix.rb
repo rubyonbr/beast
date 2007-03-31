@@ -28,9 +28,9 @@ module SafariUnicodeFix
       if headers["Content-Type"] == "text/html; charset=utf-8" && 
           request.env['HTTP_USER_AGENT'] &&
           request.env['HTTP_USER_AGENT'].include?('AppleWebKit') && 
-          String === @response.body &&
-          !@response.body.blank?
-        @response.body = @response.body.to_s.gsub(/([^\x00-\xa0])/u) { |s| "&#x%x;" % $1.unpack('U')[0] rescue $1 }
+          String === response.body &&
+          !response.body.blank?
+        response.body = response.body.to_s.gsub(/([^\x00-\xa0])/u) { |s| "&#x%x;" % $1.unpack('U')[0] rescue $1 }
       end
     end
 end
