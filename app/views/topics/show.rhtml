@@ -5,7 +5,7 @@
 
 <h5><%= _('Voices') %></h5>
 <ul class="flat talking">
-<% @voices.each do | user | %>
+<% @topic.voices.each do | user | %>
   <li><%= link_to h(user.display_name), user_path(user) %></li>
 <% end %>
 </ul>
@@ -52,7 +52,7 @@
 
 <p class="subtitle">
   <%= feed_icon_tag @topic.title, formatted_topic_path(@forum, @topic, :rss) %>
-  <%= pluralize @topic.posts.count, 'post' %>, <%= pluralize @topic.voices, 'voice' %>
+  <%= pluralize @topic.posts.count, 'post' %>, <%= pluralize @topic.voice_count, 'voice' %>
 </p>
 
 <% if @post_pages.page_count > 1 -%>

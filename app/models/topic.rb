@@ -30,8 +30,13 @@ class Topic < ActiveRecord::Base
     end
   end
 
+  def voice_count
+    posts.count(:select => "DISTINCT user_id")
+  end
+  
   def voices
-    posts.map { |p| p.user_id }.uniq.size
+    # TODO - optimize
+    posts.map { |p| p.user }.uniq
   end
   
   def hit!

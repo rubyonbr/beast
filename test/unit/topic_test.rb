@@ -48,6 +48,20 @@ class TopicTest < Test::Unit::TestCase
     assert_equal old_comics.collect { |n| n + 1}, rails.call
   end
   
+  def test_voices
+    @pdi=topics(:pdi)
+    post=@pdi.posts.build(:body => "test")
+    post.user_id=3
+    post.save!
+    post=@pdi.posts.build(:body => "test")
+    post.user_id=4
+    post.save!
+    @pdi.reload
+    assert_equal 5, @pdi.posts.count
+    assert_equal [1,2,3,4], @pdi.voices.map(&:id).sort
+    assert_equal 4, @pdi.voice_count
+  end
+  
   def test_should_require_title_user_and_forum
     t=Topic.new
     t.valid?

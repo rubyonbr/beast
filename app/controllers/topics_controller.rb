@@ -27,7 +27,6 @@ class TopicsController < ApplicationController
         # authors of topics don't get counted towards total hits
         @topic.hit! unless logged_in? and @topic.user == current_user
         @post_pages, @posts = paginate(:posts, :per_page => 25, :order => 'posts.created_at', :include => :user, :conditions => ['posts.topic_id = ?', params[:id]])
-        @voices = @posts.map(&:user) ; @voices.uniq!
         @post   = Post.new
       end
       format.xml do
