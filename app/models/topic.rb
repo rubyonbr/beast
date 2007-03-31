@@ -14,11 +14,22 @@ class Topic < ActiveRecord::Base
   
   validates_presence_of :forum, :user, :title
   before_create :set_default_replied_at_and_sticky
-  after_save    :set_post_topic_id
+  after_save    :set_post_forum_id
+  before_save   :check_for_changing_forums
 
   attr_accessible :title
   # to help with the create form
   attr_accessor :body
+
+  def check_for_changing_forums
+    return if new_record?
+    old=Topic.find(id)
+    if old.forum_id!=forum_id
+      set_post_forum_id
+      Forum.update_all ["posts_count = posts_count - ?", 1], ["id = ?", old.forum_id]
+      Forum.update_all ["posts_count = posts_count + ?", 1], ["id = ?", forum_id]
+    end
+  end
 
   def voices
     posts.map { |p| p.user_id }.uniq.size
@@ -48,7 +59,7 @@ class Topic < ActiveRecord::Base
       self.sticky   ||= 0
     end
 
-    def set_post_topic_id
+    def set_post_forum_id
       Post.update_all ['forum_id = ?', forum_id], ['topic_id = ?', id]
     end
 end
