@@ -85,6 +85,8 @@ class PostTest < Test::Unit::TestCase
       returning topic.posts.build(options) do |p|
         p.user = users(:aaron)
         p.save
+        # post should inherit the forum from the topic
+        assert_equal p.topic.forum, p.forum
       end
     end
 end

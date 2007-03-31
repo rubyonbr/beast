@@ -14,7 +14,6 @@ class Topic < ActiveRecord::Base
   
   validates_presence_of :forum, :user, :title
   before_create :set_default_replied_at_and_sticky
-  after_save    :set_post_forum_id
   before_save   :check_for_changing_forums
 
   attr_accessible :title
@@ -26,8 +25,8 @@ class Topic < ActiveRecord::Base
     old=Topic.find(id)
     if old.forum_id!=forum_id
       set_post_forum_id
-      Forum.update_all ["posts_count = posts_count - ?", 1], ["id = ?", old.forum_id]
-      Forum.update_all ["posts_count = posts_count + ?", 1], ["id = ?", forum_id]
+      Forum.update_all ["posts_count = posts_count - ?", posts_count], ["id = ?", old.forum_id]
+      Forum.update_all ["posts_count = posts_count + ?", posts_count], ["id = ?", forum_id]
     end
   end
 
