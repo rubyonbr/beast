@@ -13,6 +13,21 @@ class ForumsControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
+  # test remembering pages
+  
+  def test_forum_index_resets_page_variable
+    @request.session[:forum_page]=Hash.new(1)
+    get :index, :id => 1
+    assert_equal nil, session[:forum_page]
+  end
+  
+  def test_forum_view_sets_page_variable
+    get :show, :id =>1, :page =>3 
+    assert_equal 3, session[:forum_page][1]
+  end
+
+
+
   def test_remember_me_logs_into_home
     @request.cookies['login_token'] = CGI::Cookie.new('login_token', [users(:sam).id.to_s, users(:sam).login_key].join(';'))
     get :index
@@ -27,7 +42,6 @@ class ForumsControllerTest < Test::Unit::TestCase
     get :edit, :id => users(:aaron).id
     assert_equal users(:aaron).id, session[:user_id]
   end
-
 
   def test_should_get_index
     get :index

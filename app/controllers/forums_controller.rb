@@ -4,6 +4,8 @@ class ForumsController < ApplicationController
 
   def index
     @forums = Forum.find(:all, :order => "position")
+    # reset the page of each forum we have visited when we go back to index
+    session[:forum_page]=nil
     respond_to do |format|
       format.html
       format.xml { render :xml => @forums.to_xml }
@@ -15,6 +17,7 @@ class ForumsController < ApplicationController
       format.html do
         # keep track of when we last viewed this forum for activity indicators
         (session[:forums] ||= {})[@forum.id] = Time.now.utc if logged_in?
+        (session[:forum_page] ||= Hash.new(1))[@forum.id] = params[:page].to_i if params[:page]
         @topic_pages, @topics = paginate(:topics, :per_page => 25, :conditions => ['forum_id = ?', params[:id]], :include => :replied_by_user, :order => 'sticky desc, replied_at desc')
       end
       

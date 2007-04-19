@@ -30,7 +30,15 @@
 
 <div class="crumbs">
   <%= link_to "Forums", home_path %> <span class="arrow">&rarr;</span>
-  <%= link_to h(@topic.forum.name), forum_path(@topic.forum) %> <span class="arrow">&rarr;</span>
+  <%= link_to h(@topic.forum.name), forum_path(@topic.forum) %> 
+  <% 
+  page=session[:forum_page] ? session[:forum_page][@topic.forum.id] : nil
+  if page and page!=1 %>
+  <small style="color:#ccc">
+  (<%= link_to _('page') + " #{page}", forum_path(:id => @topic.forum, :page => page) %>)
+  </small>
+  <% end %>
+  <span class="arrow">&rarr;</span>
 </div>
 
 <h1 id="topic-title" style="margin-top:0.5em;"<%= %( onmouseover="$('topic_mod').show();" onmouseout="$('topic_mod').hide();") if logged_in? %>>

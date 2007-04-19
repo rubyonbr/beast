@@ -13,6 +13,16 @@ class TopicsControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
+  # page sure we have a special page link back to the last page
+  # of the forum we're currently viewing
+  def test_should_have_page_link_to_forum
+    @request.session[:forum_page]=Hash.new(1)
+    @request.session[:forum_page][1]=911
+    get :show, :forum_id => forums(:rails).id, :id => topics(:pdi).id
+    assert_tag :tag => "a", :content => "page 911"
+  end
+
+
   def test_should_get_index
     get :index, :forum_id => 1
     assert_redirected_to forum_path(1)

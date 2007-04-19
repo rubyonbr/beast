@@ -643,7 +643,9 @@ table.forums tr td.c2 {	border-width:1px 0; padding-left:5px; }
 table.forums tr td.c3 {	border-left:0; padding-left:5px; }
 
 
-table.topics tr td.c2 small a { color:#666; }
+table.topics tr td.c2 small a,
+.crumbs small a
+{ color:#666; }
 table.topics tr td.stat { font-size:0.9em; }
 
 table.topics tr td .flag {
