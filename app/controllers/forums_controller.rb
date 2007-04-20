@@ -1,5 +1,5 @@
 class ForumsController < ApplicationController
-  before_filter :login_required, :only => [:new, :create, :edit, :update, :destroy]
+  before_filter :login_required, :except => [ :index, :show ]
   before_filter :find_or_initialize_forum, :except => :index
 
   def index
@@ -18,12 +18,9 @@ class ForumsController < ApplicationController
         # keep track of when we last viewed this forum for activity indicators
         (session[:forums] ||= {})[@forum.id] = Time.now.utc if logged_in?
         (session[:forum_page] ||= Hash.new(1))[@forum.id] = params[:page].to_i if params[:page]
-        @topic_pages, @topics = paginate(:topics, :per_page => 25, :conditions => ['forum_id = ?', params[:id]], :include => :replied_by_user, :order => 'sticky desc, replied_at desc')
+        @topic_pages, @topics = paginate(:topics, :per_page => 25, :conditions => ['forum_id = ?', @forum.id], :include => :replied_by_user, :order => 'sticky desc, replied_at desc')
       end
-      
-      format.xml do
-        render :xml => @forum.to_xml
-      end
+      format.xml { render :xml => @forum.to_xml }
     end
   end
 
@@ -39,8 +36,7 @@ class ForumsController < ApplicationController
   end
 
   def update
-    @forum.attributes = params[:forum]
-    @forum.save!
+    @forum.update_attributes!(params[:forum])
     respond_to do |format|
       format.html { redirect_to forums_path }
       format.xml  { head 200 }
