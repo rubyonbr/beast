@@ -193,6 +193,12 @@ class PostsControllerTest < Test::Unit::TestCase
     get :monitored, :user_id => users(:aaron).id
     assert_models_equal [posts(:pdi_reply)], assigns(:posts)
   end
+  
+  def test_should_not_view_unmonitored_posts
+    get :monitored, :user_id => users(:sam).id
+    assert_models_equal [], assigns(:posts)
+  end
+  
 
   def test_should_search_recent_posts
     get :search, :q => 'pdi'

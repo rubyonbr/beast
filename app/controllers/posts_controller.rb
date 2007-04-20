@@ -21,7 +21,7 @@ class PostsController < ApplicationController
 
   def monitored
     @user = User.find params[:user_id]
-    options = @@query_options.merge(:conditions => ['monitorships.user_id = ? and posts.user_id != ?', params[:user_id], @user.id])
+    options = @@query_options.merge(:conditions => ['monitorships.user_id = ? and posts.user_id != ? and monitorships.active = ?', params[:user_id], @user.id, true])
     options[:joins] += ' inner join monitorships on monitorships.topic_id = topics.id'
     @post_pages, @posts = paginate(:posts, options)
     render_posts_or_xml
