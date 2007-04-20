@@ -5,7 +5,7 @@ class PostsController < ApplicationController
 
   def index
     conditions = []
-    [:user_id, :forum_id].each { |attr| conditions << Post.send(:sanitize_sql, ["posts.#{attr} = ?", params[attr]]) if params[attr] }
+    [:user_id, :forum_id, :topic_id].each { |attr| conditions << Post.send(:sanitize_sql, ["posts.#{attr} = ?", params[attr]]) if params[attr] }
     conditions = conditions.any? ? conditions.collect { |c| "(#{c})" }.join(' AND ') : nil
     @post_pages, @posts = paginate(:posts, @@query_options.merge(:conditions => conditions))
     @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
