@@ -90,6 +90,15 @@
 
     <%= avatar_for post.user %>
     <span class="fn"><%= link_to truncate(h(post.user.display_name), 15), user_path(post.user), :class => (post.user == @posts.first.user ? "admin" : nil) %></span>
+    <% if post.user.admin? or post.forum.moderators.include?(post.user) %>
+    <span class="admin">
+      <% if post.user.admin? %>
+      Administator
+      <% elsif post.forum.moderators.include?(post.user) %>
+      Moderator
+      <% end %>
+    </span>
+    <% end %>
     <span class="posts"><%= pluralize post.user.posts_count, 'post' %></span>
 
     <% if logged_in? && post.editable_by?(current_user) -%>

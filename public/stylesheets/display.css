@@ -753,7 +753,8 @@ table.posts tr.spacer td
 	vertical-align:top;
 }
 
-.post .author .posts
+.post .author .posts,
+.post .author .admin
 {
 	display:block;
 	font-size:0.75em;
