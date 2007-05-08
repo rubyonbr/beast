@@ -1,36 +1,35 @@
 <% content_for :right do %>
-<h5><%= _('Find a User') %></h5>
+<h5><%= 'Find a User'[] %></h5>
 
 <% form_tag users_path, :method => 'get' do -%>
 <p>
-<label><%= _('Display name or login') %></label>
+<label><%= 'Display name or login'[] %></label>
 <%= text_field_tag :q, params[:q] %> 
-<%= submit_tag _("Search") %></p>
+<%= submit_tag "Search"[:search_title] %></p>
 <% end -%>
 
 <% end -%>
 
-<h1 style="margin-top:0;"><%= _('Users') %></h1>
+<h1 style="margin-top:0;"><%= 'Users'[:users_title] %></h1>
 <p class="subtitle">
-<%= number_with_delimiter(@user_count) %> <%= _('users') %>, <%= @active %> <%= _('active') %>, <%= @user_count-@active %> <%= _('lurking') %>
+<%= number_with_delimiter(@user_count) %> <%= 'users'[] %>, <%= @active %> <%= 'active'[] %>, <%= @user_count-@active %> <%= 'lurking'[] %>
 </p>
 
 <% if @user_pages.page_count > 1 -%>
-<p class="pages"><%= _('Pages:') %> <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
 <table border="0" cellspacing="0" cellpadding="0" class="wide forums">
   <tr>
-    <th class="la" width="88%"><%= _('Name / Login') %></th>
-    <th><%= _('Website') %></th>
-    <th width="1%"><%= _('Posts') %></th>
+    <th class="la" width="88%"><%= 'Name / Login'[:name_or_login] %></th>
+    <th><%= 'Website'[:website_title] %></th>
+    <th width="1%"><%= 'Posts'[:posts_title] %></th>
   </tr>
 <% @users.each do |user|-%>  
   <tr>
     <td><%= link_to h(user.display_name), user_path(user), :class => (user.admin? ? "admin" : nil) %>
       <span style="color:#666">
-      <%= _("(admin)") if user.admin? %>
-      <%#= "(moderator)" unless user.moderatorships.empty? %>
+      <%= "(admin)"[:admin_in_parens] if user.admin? %>
       </span>
       </td>
     <td class="la">
@@ -44,10 +43,10 @@
 </table>
 
 <% if @user_pages and @user_pages.current.next %>
-<p style="float:right;"><%= link_to _("Next page"), { :page => @user_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
+<p style="float:right;"><%= link_to "Next page"[], { :page => @user_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
 <% end %>
 
 <% if @user_pages.page_count > 1 -%>
-<p class="pages"><%= _('Pages:') %> <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
 <% end -%>
 

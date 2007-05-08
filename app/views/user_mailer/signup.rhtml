@@ -1,5 +1,5 @@
-<%= _('Welcome to Beast,') %> <%= @user.display_name -%>!
+<%= 'Welcome to Beast'[:beast_welcome] %>, <%= @user.display_name -%>!
 
-<%= _('Please visit the link below to activate your account.') %>
+<%= 'Please visit the link below to activate your account.'[:activation] %>
 
 http://<%= @domain -%>/activate/<%= @user.login_key -%>

@@ -1,25 +1,25 @@
-<h3><%= _('User Profile') %></h3>
+<h3><%= 'User Profile'[] %></h3>
 
 <p>
-  <label for="display_name"><%= _('Display Name') %></label><br />
+  <label for="display_name"><%= 'Display Name'[:display_name_title] %></label><br />
   <%= settings.text_field :display_name %>
 </p>
 
 <p>
-  <label for="user_identity_url"><%= _('Identity Url') %></label><br />
-  <p class="help"><%= _('Enter your OpenID Identity Url if you know it.')%></p>
+  <label for="user_identity_url"><%= 'Identity Url'[:identity_url_title] %></label><br />
+  <p class="help"><%= 'Enter your OpenID Identity Url if you know it'[:open_id_field ]%>.</p>
   <%= settings.text_field :identity_url %>
 </p>
 
 <p>
-  <label for="user_website"><%= _('Website') %></label><br />
+  <label for="user_website"><%= 'Website'[:website_title] %></label><br />
   <%= settings.text_field :website %> 
 	<span class="entryhelp">
-	(<%= _('without http://') %>)
+	(<%= 'without http://'[:without_http] %>)
 	</span>
 </p>
 
 <p>
-  <label for="user_bio"><%= _('Bio') %></label><br />
+  <label for="user_bio"><%= 'Bio'[:bio_title] %></label><br />
   <%= settings.text_area :bio, :rows => 10, :style => "width:99%" %>
 </p>

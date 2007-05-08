@@ -5,7 +5,7 @@
 <hr />
 <% end %>
 
-<h5 style="margin-bottom:1.0em;"><%= _('Moderators') %></h5>
+<h5 style="margin-bottom:1.0em;"><%= 'Moderators'[:Moderators] %></h5>
 
 <% if @forum.moderators.any? -%>
 <ul class="flat" style="margin-top:1em;">
@@ -14,8 +14,8 @@
 <% end -%>
 </ul>
 <% else -%>
-<p><%= _('This forum is currently unmoderated.') %></p>
-<p><%= _('Please always be courteous.') %></p>
+<p><%= 'This forum is currently unmoderated.'[:forum_is_unmoderated] %></p>
+<p><%= 'Please always be courteous.'[:please_be_courteous] %></p>
 <% end -%>
 
 <% end %>
@@ -23,7 +23,7 @@
 <% @page_title = @forum.name %>
 
 <div class="crumbs">
-<%= link_to _('Forums'), home_path %> <span class="arrow">&rarr;</span>
+<%= link_to 'Forums'[:forums_title], home_path %> <span class="arrow">&rarr;</span>
 </div>
 <h1 style="margin-top:0.5em">
   <%= h @forum.name %>
@@ -31,7 +31,8 @@
 
 <p class="subtitle">
   <%= feed_icon_tag @forum.name, formatted_forum_posts_path(@forum, :rss) %> 
-  <%= pluralize @forum.topics_count, _('topic') %>, <%= pluralize @forum.posts_count, _('post') %>
+  <%= '{count} topic(s)'[:topics_count, @forum.topics_count] %>, 
+  <%= '{count} post(s)'[:posts_count, @forum.posts_count] %>
 </p>
 
 
@@ -40,15 +41,15 @@
 <% if logged_in? %>
 <p style="float:right; margin-top:0;"><%= link_to 'New topic', new_topic_path(@forum), :class => "utility" %></p>
 <% end %>
-<p class="pages"><%= _('Pages:') %> <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
 <table border="0" cellspacing="0" cellpadding="0" class="wide topics">
 <tr>
-  <th class="la" colspan="2"><%= _('Topic') %></th>
-  <th width="1%"><%= _('Posts') %></th>
-  <th width="1%"><%= _('Views') %></th>
-  <th class="la"><%= _('Last post') %></th>
+  <th class="la" colspan="2"><%= 'Topic'[:topic_title] %></th>
+  <th width="1%"><%= 'Posts'[:posts_title] %></th>
+  <th width="1%"><%= 'Views'[:views_title] %></th>
+  <th class="la"><%= 'Last post'[:last_post] %></th>
 </tr>
 <% for topic in @topics %>
 <tr class="hentry">
@@ -89,13 +90,13 @@
 </table>
 
 <% if @topic_pages and @topic_pages.current.next %>
-<p style="float:right;"><%= link_to _('Next page'), { :page => @topic_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
+<p style="float:right;"><%= link_to 'Next page'[:next_page], { :page => @topic_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
 <% end %>
 
 <% if @topic_pages.page_count > 1 -%>
-<p class="pages"><%= _('Pages:') %> <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @topic_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
 <% if logged_in? %>
-<p><%= link_to _('New topic'), new_topic_path(@forum), :class => "utility" %></p>
+<p><%= link_to 'New topic'[:new_topic], new_topic_path(@forum), :class => "utility" %></p>
 <% end%>

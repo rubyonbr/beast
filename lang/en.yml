@@ -1,0 +1,127 @@
+beast_title: "Beast"
+beast_sidebar_title: "What is Beast?"
+beast_sidebar_body: A small, light-weight forum in Rails with a scary name and a goal of around 500 lines of code when we're done.
+beast_welcome: Welcome to Beast
+
+forum_title: Forum
+forums_title: Forums
+new_forum: New forum
+edit_forum: Edit forum
+save_forum: Save forum
+create_new_forum: Create new forum
+
+forum_is_unmoderated: This forum is currently unmoderated.
+please_be_courteous: Please always be courteous.
+
+topic_title: Topic
+Topics_title: Topics
+edit_topic: Edit topic
+new_topic: New topic
+topic_posted_by: "{title} posted by {user} @ {date}"
+topic_replied_by: "{title} replied by {user} @ {date}"
+locked_topic: This topic is locked
+monitoring_topic: Monitoring topic
+monitor_topic: Monitor topic
+post_topic: Post topic
+reply_to_topic: Reply to topic
+save_reply: Save Reply
+
+post_title: Post
+posts_title: Posts
+edit_post: Edit post
+delete_post: Delete post
+last_post: Last Post
+recent_posts: Recent Posts
+
+voices_title: Voices
+monitor_title: Monitor
+users_title: Users
+recent_activity: Recent Activity
+no_recent_activity: No recent activity
+users_online: Users Online
+change_login: Please change your login
+gravatar_notice: To have your very own avatar displayed on this forum visit {gravatar} and sign up for a free gravatar.
+change_email_or_password: Change e-mail or password
+name_or_login: Name / Login
+reset_password: Reset Password
+user_profile: User Profile
+update_profile: Update Profile
+find_a_user: Find a User
+display_name_or_login: Display name or login
+users: users
+active: active
+lurking: lurking
+add_as_moderator: Add as moderator
+user_is_an_administrator: User is an administrator
+monitored: monitored
+user_since: User since
+
+pages_title: Pages
+next_page: Next Page
+topics_count: "{count} topic(s)"
+posts_count: "{count} post(s)"
+voices_count: "{count} voice(s)"
+posts_count_found: "{count} post(s) found"
+cancel: cancel
+page: "page {page}"
+
+# field titles
+admin_title: Admin
+title_title: Title
+position_title: Position
+description_title: Description
+edit_title: Edit
+moderators_title: Moderators
+views_title: Views
+settings_title: Settings
+logout_title: Logout
+signup_title: Signup
+login_title: Login
+save_title: Save
+password_title: Password
+sticky_title: Sticky
+locked_title: Locked
+body_title: Body
+display_name_title: Display Name
+identity_url_title: Identity Url
+website_title: Website
+bio_title: Bio
+email_title: Email
+basics_title: Basics
+avatars_title: Avatars
+search_title: Search
+
+by: by
+save_changes: Save Changes
+remember_me: Remember me on this computer
+delete_conf: "Delete this {thing} forever?"
+email_directions: Enter your email, and a brand new login key will be sent to you.  Click the link in the email to log in, and then change your password.
+email_submit: E-mail me the link
+powered_by: Powered by
+and: and
+users_monitored_topics: "{name}'s Monitored Topics"
+delete: delete
+activation: Please visit the link below to activate your account.
+without_http: without http://
+admin_in_parens: '(admin)'
+admin_and_moderation: Admin &amp; Moderation
+remove_moderated_forum: This user can moderate the following forums.  Click one to remove.
+remove_user_as_moderator: Remove user as moderator for
+searching_for: Searching for
+locked: locked
+edit: edit
+delete: delete
+login: login
+once: once
+and_again: and again
+
+open_id_field: Enter your OpenID Identity Url if you know it
+open_id_field_extended: Enter your OpenID Identity Url if you know it.  If your Identity Url supports the {sreg} extension, you can {login_link} and create your account automatically
+login_field: Logins should start with least 2 characters and may consist of letters, numbers, or the underscore.
+password_field: Enter your desired password twice.  It must be at least 5 characters.
+
+formatting_help: Formatting Help
+formatting_bold: "*bold*"
+formatting_italics: "_italics_"
+formatting_blockquote: "bq. <span>(quotes)</span>"
+formatting_list: "* or # <span>(lists)</span>"

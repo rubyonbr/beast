@@ -1,36 +1,34 @@
-<p class="help"><%= _('Logins should start with least 2 characters and may consist of letters, numbers, or the underscore.') %></p>
+<p class="help"><%= 'Logins should start with least 2 characters and may consist of letters, numbers, or the underscore.'[:login_field] %></p>
 
 <p>
-  <label for="user_login"><%= _('Login') %></label><br />
+  <label for="user_login"><%= 'Login'[:login_title] %></label><br />
   <%= form.text_field :login, :onkeypress => 'LoginForm.checkLogin(this)' %>
 </p>
 
 <p>
-  <label for="user_email"><%= _('Email') %></label><br />
+  <label for="user_email"><%= 'Email'[:email_title] %></label><br />
   <%= form.text_field :email %>
 </p>
 
 <p>
   <p class="help">
-    <%= _('Enter your OpenID Identity Url if you know it.  If your Identity Url supports the') %>
-    <acronym title="Simple Registration">sreg</acronym>
-    <%= _('extension, you can ')%><%= link_to _('login'), login_path %><%= _(' and create your account automatically.') %>
+    <%= 'Enter your OpenID Identity Url if you know it.  If your Identity Url supports the {sreg} extension, you can {login_link} and create your account automatically'[:open_id_field_extended, %(<acronym title="Simple Registration">sreg</acronym>), link_to('login'[], login_path)] %>
   </p>
-  <label for="user_identity_url"><%= _('Identity Url') %></label><br />
+  <label for="user_identity_url"><%= 'Identity Url'[:identity_url_title] %></label><br />
   <%= form.text_field :identity_url %>
 </p>
 
 <p>
-  <label for="display_name"><%= _('Display Name (optional)') %></label><br />
+  <label for="display_name"><%= 'Display Name (optional)'[:display_name_title] %></label><br />
   <%= form.text_field :display_name %>
 </p>
 
 <div id="password_fields">
-	  <label for="user_password"><%= _('Password') %></label><br />
-	<p class="help"><%= _('Enter your desired password twice.  It must be at least 5 characters.') %></span></p>
+	  <label for="user_password"><%= 'Password'[:password_title] %></label><br />
+	<p class="help"><%= 'Enter your desired password twice.  It must be at least 5 characters.'[:password_field] %></span></p>
 
   <%= form.password_field :password %>
-<span class="entryhelp">(<%= _('once') %>)</span><br />
+<span class="entryhelp">(<%= 'once'[] %>)</span><br />
   <%= form.password_field :password_confirmation %>
-<span class="entryhelp">(<%= _('and then again') %>)</span>
+<span class="entryhelp">(<%= 'and then again'[] %>)</span>
 </div>

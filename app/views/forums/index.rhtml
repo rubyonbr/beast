@@ -1,56 +1,57 @@
 <% content_for :right do %>
 
-<h5><%= _('What is Beast?') %></h5>
+<h5><%= 'What is Beast?'[:beast_sidebar_title] %></h5>
 
 <p>
-  <%= _('A small, light-weight forum in Rails with a scary name and a goal of around 500 lines of code when we\'re done.') %>
+  <%= 'A small, light-weight forum in Rails with a scary name and a goal of around 500 lines of code when we\'re done.'[:beast_sidebar_body] %>
 </p>
 
 <% if admin? %>
-<h6><%= _('Admin') %></h6>
-<p><%= link_to _('Create New Forum'), new_forum_path, :class => "utility" %></p>
+<h6><%= 'Admin'[:admin_title] %></h6>
+<p><%= link_to 'Create New Forum'[:create_new_forum], new_forum_path, :class => "utility" %></p>
 <% end %>
 
 <% end %>
 
-<h1 style="margin-top:0;"><%= _('Forums') %></h1>
+<h1 style="margin-top:0;"><%= 'Forums'[:forums_title] %></h1>
 <p class="subtitle">
-<%= feed_icon_tag _("Recent Posts"), formatted_all_posts_path(:format => 'rss') %>
-<%= number_with_delimiter(Topic.count) %> <%= _('topics') %>, <%= number_with_delimiter(Post.count) %> <%= _('posts') %>, 
-<%= number_with_delimiter(User.count(:conditions => "posts_count>0")) %> <%= _('voices') %>
+<%= feed_icon_tag "Recent Posts"[:recent_posts], formatted_all_posts_path(:format => 'rss') %>
+<%= '{count} topic(s)'[:topics_count, number_with_delimiter(Topic.count)] %>, 
+<%= '{count} post(s)'[:posts_count, number_with_delimiter(Post.count)] %>, 
+<%= '{count} voice(s)'[:voices_count, number_with_delimiter(User.count(:conditions => "posts_count > 0"))] %>
   
 </p>
 
 <table border="0" cellspacing="0" cellpadding="0" class="wide forums">
   <tr>
-    <th class="la" width="70%" colspan="3"><%= _('Forum') %></th>
+    <th class="la" width="70%" colspan="3"><%= 'Forum'[:forum_title] %></th>
 <!--
     <th width="5%">Topics</th>
     <th width="5%">Posts</th>
 -->
-    <th class="la" width="30%" colspan="1"><%= _('Last Post') %></th>
+    <th class="la" width="30%" colspan="1"><%= 'Last Post'[:last_post] %></th>
   </tr>
 <% for forum in @forums do %>  
   <tr>
     <td class="vat c1">
     
       <% if recent_forum_activity(forum) %>
-      <%= image_tag "clearbits/comment.gif", :class => "icon green", :title => _('Recent activity') %>
+      <%= image_tag "clearbits/comment.gif", :class => "icon green", :title => 'Recent activity'[:recent_activity] %>
       <% else %>
-      <%= image_tag "clearbits/comment.gif", :class => "icon grey", :title => _('No recent activity') %>
+      <%= image_tag "clearbits/comment.gif", :class => "icon grey", :title => 'No recent activity'[:no_recent_activity] %>
       <% end %>
     </td>
     <td class="c2 vat">
       <%= link_to h(forum.name), forum_path(forum), :class => "title" %>
       <div class="posts">
-        <%= number_with_delimiter(forum.topics_count) %> <%= _('topics') %>, 
-        <%= number_with_delimiter(forum.posts_count) %> <%= _('posts') %>
+        <%= number_with_delimiter(forum.topics_count) %> <%= 'topics'[:topics] %>, 
+        <%= number_with_delimiter(forum.posts_count) %> <%= 'posts'[:posts] %>
       </div>
       <p class="desc"><%= forum.description_html %>
         </p>
     </td>
     <td class="c3">
-      <%= link_to _('Edit'), edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
+      <%= link_to 'Edit'[:edit_title], edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
     </td>
 <!--
     <td class="ca inv"><%= number_with_delimiter(forum.topics_count) %></td>
@@ -69,7 +70,7 @@
 </table>
 
 <p>
-  <%= link_to _('Recent posts'), all_posts_path %>
+  <%= link_to 'Recent posts'[:recent_posts], all_posts_path %>
 </p>
 
 <% online_users = User.currently_online -%>
@@ -77,7 +78,7 @@
 <div class="stats">
 <div class="users">
 <% unless online_users.empty? %>
-<%= _('Users online:') %> <%= online_users.map { |u| link_to "<strong>#{h u.display_name}</strong>", user_path(u) } * ", " %><br />
+<%= 'Users online:'[:users_online] %> <%= online_users.map { |u| link_to "<strong>#{h u.display_name}</strong>", user_path(u) } * ", " %><br />
 <% end %>
 </div>
 </div>
