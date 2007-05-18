@@ -9,7 +9,7 @@
 </h1>
 <p class="subtitle">
   <%= feed_icon_tag @page_title, search_posts_path(true) %>
-  <%= pluralize(@post_pages.item_count,"post") %> found
+  <%= '{count} post(s) found'[(count=@post_pages.item_count)==1 ? :post_count_found : :posts_count_found, number_with_delimiter(count)] %>
 </p>
 
 <% if @post_pages.page_count > 1 -%>
@@ -28,20 +28,20 @@
     <div class="date">
       <abbr class="updated" title="<%= post.created_at.xmlschema %>">
       <% if post.created_at > Time.now.utc-24.hours%>
-      <%= time_ago_in_words(post.created_at).sub(/about /, '') %> ago
+      <%= time_ago_in_words(post.created_at).sub(/about /, '') %>
       <% else %>
-      <%= post.created_at.strftime("%b %e, %Y")%>
+      <%= post.created_at.strftime("%b %e, %Y"[:date_format])%>
       <% end %>
       </abbr>
     </div>
 
     <%= avatar_for @users[post.user_id] %>
     <span class="fn"><%= link_to truncate(h(@users[post.user_id].display_name), 15), user_path(post.user_id) %></span>
-    <span class="posts"><%= pluralize @users[post.user_id].posts_count, 'post' %></span>
+    <span class="posts"><%= '{count} posts'[(count=@users[post.user_id].posts_count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %></span>
   </td>
   <td class="body entry-content">
     <p class="topic">
-      Topic: <%= link_to h(post.forum_name), forum_path(post.forum_id) %> / 
+      <%= "Topic"[:topic_title] %>: <%= link_to h(post.forum_name), forum_path(post.forum_id) %> / 
       <%= link_to h(post.topic_title), topic_path(post.forum_id, post.topic_id) %>
     </p>
     

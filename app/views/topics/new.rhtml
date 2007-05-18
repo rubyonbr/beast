@@ -5,7 +5,7 @@
 
 
 <h1 id="new_topic"><%= 'New Topic'[] %></h1>
-<p class="subtitle"><%= 'by'[] %> <%= current_user.display_name %></p>
+<p class="subtitle"><%= 'by {user}'[:by_user, current_user.display_name] %></p>
 
 
 <%= error_messages_for :topic %>

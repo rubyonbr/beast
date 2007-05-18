@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   # names that start with #s really upset me for some reason
   validates_format_of     :display_name, :with => /^[a-z]{2}(?:[.'\-\w ]+)?$/i, :allow_nil => true
 
-  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :message => "Please check the e-mail address"
+  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :message => "Please check the e-mail address"[:check_email_message]
 
   validates_uniqueness_of   :login, :email, :case_sensitive => false
   validates_uniqueness_of   :display_name, :identity_url, :case_sensitive => false, :allow_nil => true

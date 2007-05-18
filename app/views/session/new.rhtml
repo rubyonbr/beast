@@ -15,7 +15,7 @@
 <p><label><%= check_box_tag "remember_me", "1", true %> <%= 'Remember me on this computer'[:remember_me] %></label></p>
 </div>
 
-<p><%= submit_tag 'Login'[:login_title], :or => link_to_function('reset password'[], "$('reset-password').toggle();") %></p>
+<p><%= submit_tag 'Login'[:login_action], :or => link_to_function('reset password'[], "$('reset-password').toggle();") %></p>
 <% end -%>
 
 <% form_tag users_path, :id => 'reset-password', :style => 'display:none' do -%>

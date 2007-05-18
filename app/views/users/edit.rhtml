@@ -8,7 +8,7 @@
 
 <h1><%= 'Settings'[:settings_title] %></h1>
 
-<p class="subtitle"><%= 'for'[] %> <%= @user.display_name %> 
+<p class="subtitle"><%= 'for {user}'[:for_user, @user.display_name] %>
 	<% if @user.login!=@user.display_name %>
 	(<%= @user.login %>)
 	<% end %>

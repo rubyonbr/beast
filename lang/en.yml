@@ -125,3 +125,75 @@ formatting_bold: "*bold*"
 formatting_italics: "_italics_"
 formatting_blockquote: "bq. <span>(quotes)</span>"
 formatting_list: "* or # <span>(lists)</span>"
+
+# additions by Raimonds Simanovskis on 2007-05-11
+or: or
+by_user: by {user}
+in_forum: in {forum}
+a_few_seconds_ago: "a few seconds ago"
+1_minute_ago: "1 minute ago"
+minutes_ago: "{minutes} minutes ago"
+1_hour_ago: "1 hour ago"
+hours_ago: "{hours} hours ago"
+1_day_ago: "1 day ago"
+days_ago: "{days} days ago"
+
+topics: topics
+posts: posts
+topic_count: "{count} topic"
+post_count: "{count} post"
+voice_count: "{count} voice"
+post_count_found: "{count} post found"
+
+comma_locked_topic: ", this topic is locked."
+
+view: view
+last: last
+
+administrator_title: Administrator
+moderator_title: Moderator
+
+topic_locked_title: Topic locked
+
+recent_posts_in_topic: "Recent Posts in '{topic}' | Beast"
+
+delete_post_conf: "Delete this post?  Are you sure?"
+delete_topic_conf: "Delete this topic?  Are you sure?"
+
+date_format: "%b %e, %Y"
+datetime_format: "%b %e, %Y  %l:%M%p"
+
+posts_feed_title: "{search_posts_title} | Beast"
+
+feed_language: en-us
+posts_user_is_monitoring: "Posts that {user} is monitoring"
+
+view_all: all
+
+for_user: for {user}
+
+signup: Signup
+signup_action: Signup
+login_action: Login
+
+check_email_message: "Please check the e-mail address"
+post_something_message: "Please post something at least..."
+error_occured_message: "An error occurred"
+post_deleted_message: "Post of '{title}' was deleted."
+logged_out_message: "You have been logged out."
+openid_not_found_message: "Sorry, the OpenID server couldn't be found"
+openid_canceled_message: "OpenID verification was canceled"
+openid_failed_message: "Sorry, the OpenID verification failed"
+openid_saving_error_message: "Error saving the fields from your OpenID profile at {identity_url}: {errors}"
+openid_no_user_message: "Sorry, no user by the identity URL {identity_url} exists"
+invalid_login_message: "Invalid login or password, try again please."
+topic_deleted_message: "Topic '{title}' was deleted."
+could_not_find_account_message: "I could not find an account with the email address '{email}'. Did you type it correctly?"
+signup_permanent_error_message: "A permanent error occured while sending the signup message to '{email}'. Please check the e-mail address."
+signup_cannot_sent_message: "The signup message cannot be sent to '{email}' at this moment. Please, try again later."
+temporary_login_message: "A temporary login email has been sent to '{email}'."
+account_activation_message: "An account activation email has been sent to '{email}'."
+signup_complete_message: "Signup complete!"
+settings_saved_message: "Your settings have been saved."
+
+footer_message: "Two's company. Three's a forum. More's a Beast."

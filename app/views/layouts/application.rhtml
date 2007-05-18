@@ -25,15 +25,15 @@
         <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
       <% end -%>
     </li>
-    <li><%= link_to_function :Search, "$('search').toggle(); $('search_box').focus();", :href => home_path %></li>
+    <li><%= link_to_function 'Search'[:search_title], "$('search').toggle(); $('search_box').focus();", :href => home_path %></li>
 
     <% if logged_in? %>
     <li class="login"><%=  link_to current_user.login, user_path(current_user) %></li>
     <li class="logout"><%= link_to 'Settings'[:settings_title], settings_path %></li>
     <li class="logout"><%= link_to 'Logout'[:logout_title], logout_path %></li>
     <% else %>
-    <li><%= link_to 'Signup'[:signup_title], signup_path %></li>
-    <li><%= link_to 'Login'[:login_title], login_path %></li>
+    <li><%= link_to 'Signup'[:signup_action], signup_path %></li>
+    <li><%= link_to 'Login'[:login_action], login_path %></li>
     <% end %>
     
   </ul>
@@ -69,7 +69,7 @@
 <p class="disclaim">
 <strong>
   <%
-  footers=["Two's company. Three's a forum. More's a Beast."
+  footers=["Two's company. Three's a forum. More's a Beast."[:footer_message]
   ]
   %>
   <%= footers[rand(footers.size)]%>

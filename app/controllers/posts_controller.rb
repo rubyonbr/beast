@@ -39,11 +39,11 @@ class PostsController < ApplicationController
     if @topic.locked?
       respond_to do |format|
         format.html do
-          flash[:notice] = 'This topic is locked.'
+          flash[:notice] = 'This topic is locked.'[:locked_topic]
           redirect_to(topic_path(:forum_id => params[:forum_id], :id => params[:topic_id]))
         end
         format.xml do
-          render :text => 'This topic is locked.', :status => 400
+          render :text => 'This topic is locked.'[:locked_topic], :status => 400
         end
       end
       return
@@ -59,7 +59,7 @@ class PostsController < ApplicationController
       format.xml { head :created, :location => formatted_post_url(:forum_id => params[:forum_id], :topic_id => params[:topic_id], :id => @post, :format => :xml) }
     end
   rescue ActiveRecord::RecordInvalid
-    flash[:bad_reply] = 'Please post something at least...'
+    flash[:bad_reply] = 'Please post something at least...'[:post_something_message]
     respond_to do |format|
       format.html do
         redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :anchor => 'reply-form', :page => params[:page] || '1')
@@ -79,7 +79,7 @@ class PostsController < ApplicationController
     @post.attributes = params[:post]
     @post.save!
   rescue ActiveRecord::RecordInvalid
-    flash[:bad_reply] = 'An error occurred'
+    flash[:bad_reply] = 'An error occurred'[:error_occured_message]
   ensure
     respond_to do |format|
       format.html do
@@ -92,7 +92,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    flash[:notice] = "Post of '#{CGI::escapeHTML @post.topic.title}' was deleted."
+    flash[:notice] = "Post of '{title}' was deleted."[:post_deleted_message, CGI::escapeHTML(@post.topic.title)]
     # check for posts_count == 1 because its cached and counting the currently deleted post
     @post.topic.destroy and redirect_to forum_path(params[:forum_id]) if @post.topic.posts_count == 1
     respond_to do |format|

@@ -1,9 +1,9 @@
 require 'md5'
 
 module ApplicationHelper
-  def submit_tag(value = "Save Changes", options={} )
+  def submit_tag(value = "Save Changes"[], options={} )
     or_option = options.delete(:or)
-    return super + "<span class='button_or'>or " + or_option + "</span>" if or_option
+    return super + "<span class='button_or'>"+"or"[]+" " + or_option + "</span>" if or_option
     super
   end
 
@@ -21,9 +21,9 @@ module ApplicationHelper
   end
 
   def search_posts_title
-    returning(params[:q].blank? ? 'Recent Posts' : "Searching for '#{h params[:q]}'") do |title|
-      title << " by #{h User.find(params[:user_id]).display_name}" if params[:user_id]
-      title << " in #{h Forum.find(params[:forum_id]).name}"       if params[:forum_id]
+    returning(params[:q].blank? ? 'Recent Posts'[] : "Searching for"[] + " '#{h params[:q]}'") do |title|
+      title << " "+'by {user}'[:by_user,h(User.find(params[:user_id]).display_name)] if params[:user_id]
+      title << " "+'in {forum}'[:in_forum,h(Forum.find(params[:forum_id]).name)] if params[:forum_id]
     end
   end
 
@@ -55,13 +55,13 @@ module ApplicationHelper
     distance_in_minutes = (((to_time - from_time).abs)/60).round
   
     case distance_in_minutes
-      when 0..1           then (distance_in_minutes==0) ? 'a few seconds ago' : '1 minute ago'
-      when 2..59          then "#{distance_in_minutes} minutes ago"
-      when 60..90         then "1 hour ago"
-      when 90..1440       then "#{(distance_in_minutes.to_f / 60.0).round} hours ago"
-      when 1440..2160     then '1 day ago' # 1 day to 1.5 days
-      when 2160..2880     then "#{(distance_in_minutes.to_f / 1440.0).round} days ago" # 1.5 days to 2 days
-      else from_time.strftime("%b %e, %Y  %l:%M%p").gsub(/([AP]M)/) { |x| x.downcase }
+      when 0..1           then (distance_in_minutes==0) ? 'a few seconds ago'[] : '1 minute ago'[]
+      when 2..59          then "{minutes} minutes ago"[:minutes_ago, distance_in_minutes]
+      when 60..90         then "1 hour ago"[]
+      when 90..1440       then "{hours} hours ago"[:hours_ago, (distance_in_minutes.to_f / 60.0).round]
+      when 1440..2160     then '1 day ago'[] # 1 day to 1.5 days
+      when 2160..2880     then "{days} days ago"[:days_ago, (distance_in_minutes.to_f / 1440.0).round] # 1.5 days to 2 days
+      else from_time.strftime("%b %e, %Y  %l:%M%p"[:datetime_format]).gsub(/([AP]M)/) { |x| x.downcase }
     end
   end
 end

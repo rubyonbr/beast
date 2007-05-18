@@ -19,7 +19,7 @@
 <div>
   <input id="monitor_checkbox" type="checkbox" <%= "checked='checked'" if @monitoring %> 
     onclick="if (this.checked) {<%= remote_function :url => monitorship_path(@forum, @topic) %>} else {<%= remote_function :url => monitorship_path(@forum, @topic), :method => :delete %>}" />
-  <label id="monitor_label" for="monitor_checkbox"><%= 'Monitor'[:monitor_title] %><%= "ing"[] if @monitoring %> <%= 'topic'[] %></label>
+  <label id="monitor_label" for="monitor_checkbox"><%= @monitoring ? 'Monitoring topic'[] : 'Monitor topic'[] %></label>
   <%= hidden_field_tag '_method', 'delete' if @monitoring %>
   <%= submit_tag :Set, :id => 'monitor_submit' %>
 </div>
@@ -29,7 +29,7 @@
 
 
 <div class="crumbs">
-  <%= link_to "Forums", home_path %> <span class="arrow">&rarr;</span>
+  <%= link_to "Forums"[:forums_title], home_path %> <span class="arrow">&rarr;</span>
   <%= link_to h(@topic.forum.name), forum_path(@topic.forum) %> 
   <% 
   page=session[:forum_page] ? session[:forum_page][@topic.forum.id] : nil
@@ -52,7 +52,7 @@
     <span style="display:none;" id="topic_mod">
       <% if @topic.editable_by?(current_user) -%>
         <%= link_to('edit'[], edit_topic_path(@forum, @topic), :class => "utility") %> |
-        <%= link_to('delete'[], topic_path(@forum, @topic), :class => "utility", :method => :delete, :confirm => 'Delete this topic forever?'[:delete_conf]) %>
+        <%= link_to('delete'[], topic_path(@forum, @topic), :class => "utility", :method => :delete, :confirm => 'Delete this topic forever?'[:delete_topic_conf]) %>
       <% end -%>
     </span>
   <% end %>
@@ -60,7 +60,8 @@
 
 <p class="subtitle">
   <%= feed_icon_tag @topic.title, formatted_topic_path(@forum, @topic, :rss) %>
-  <%= pluralize @topic.posts.count, 'post' %>, <%= pluralize @topic.voice_count, 'voice' %>
+  <%= '{count} post(s)'[(count=@topic.posts.count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>, 
+  <%= '{count} voice(s)'[(count=@topic.voice_count)==1 ? :voice_count : :voices_count, number_with_delimiter(count)] %>
 </p>
 
 <% if @post_pages.page_count > 1 -%>
@@ -93,13 +94,14 @@
     <% if post.user.admin? or post.forum.moderators.include?(post.user) %>
     <span class="admin">
       <% if post.user.admin? %>
-      Administator
+      <%= 'Administator'[:administrator_title] %>
       <% elsif post.forum.moderators.include?(post.user) %>
-      Moderator
+      <%= 'Moderator'[:moderator_title] %>
       <% end %>
     </span>
     <% end %>
-    <span class="posts"><%= pluralize post.user.posts_count, 'post' %></span>
+    <span class="posts"><%= '{count} post(s)'[(count=post.user.posts_count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %></span>
+
 
     <% if logged_in? && post.editable_by?(current_user) -%>
     <p>
@@ -127,18 +129,18 @@
 </table>
 
 <% if @post_pages and @post_pages.current.next %>
-<p style="float:right;"><%= link_to "Next page", { :page => @post_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
+<p style="float:right;"><%= link_to "Next page"[], { :page => @post_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
 <% end %>
 
 <% if @post_pages.page_count > 1 -%>
-<p class="pages">Pages: <strong><%= pagination_links @post_pages, :window_size => 10 %></strong></p>
+<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @post_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
 <% if logged_in? %>
 <div id="edit"></div>
 <% if @topic.locked? %>
 <p>
-    <%= image_tag "clearbits/lock.gif", :class => "icon grey", :title => "Topic locked" %> 
+    <%= image_tag "clearbits/lock.gif", :class => "icon grey", :title => "Topic locked"[:topic_locked_title] %> 
     <label>
     <%= 'This topic is locked'[:locked_topic] %>.</label>
 </p>

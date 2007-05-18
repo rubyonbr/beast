@@ -237,6 +237,6 @@ class PostsControllerTest < Test::Unit::TestCase
     login_as :aaron
     post :create, :forum_id => forums(:comics).id, :topic_id => topics(:galactus).id, :post => { :body => 'blah' }
     assert_redirected_to topic_path(:forum_id => forums(:comics), :id => topics(:galactus))
-    assert_equal 'This topic is locked.', flash[:notice]
+    assert_equal 'This topic is locked', flash[:notice]
   end
 end
