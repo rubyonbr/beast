@@ -9,9 +9,9 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.resources :forums do |forum|
-    forum.resources :topics do |topic|
-      topic.resources :posts
-      topic.resource :monitorship, :controller => :monitorships
+    forum.resources :topics, :name_prefix => nil do |topic|
+      topic.resources :posts, :name_prefix => nil
+      topic.resource :monitorship, :controller => :monitorships, :name_prefix => nil
     end
   end
 
