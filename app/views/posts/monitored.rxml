@@ -8,7 +8,7 @@ xml.rss "version" => "2.0",
     xml.link monitored_posts_url(@user)
     xml.language "en-us"[:feed_language]
     xml.ttl "60"
-    xml.tag! "atom:link", :rel => 'search', :type => 'application/opensearchdescription+xml', :href => "http://#{request.host_with_port}/open_search.xml"
+    xml.tag! "atom:link", :rel => 'search', :type => 'application/opensearchdescription+xml', :href => "http://#{request.host_with_port+request.relative_url_root}/open_search.xml"
 
     render :partial => "layouts/post", :collection => @posts, :locals => {:xm => xml}
   end
