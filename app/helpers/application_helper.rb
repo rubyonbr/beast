@@ -1,4 +1,4 @@
-Årequire 'md5'
+require 'md5'
 
 module ApplicationHelper
   def submit_tag(value = "Save Changes"[], options={} )
