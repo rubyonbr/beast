@@ -1,4 +1,4 @@
-require 'md5'
+Årequire 'md5'
 
 module ApplicationHelper
   def submit_tag(value = "Save Changes"[], options={} )
@@ -28,8 +28,9 @@ module ApplicationHelper
   end
 
   def topic_title_link(topic, options)
-    if topic.title =~ /\[([^\]]{1,15})\](.*)/
-      "<span class='flag'>#{$1}</span>" + link_to(h($2.strip), topic_path(@forum, topic), options)
+    if topic.title =~ /^\[([^\]]{1,15})\]((\s+)\w+.*)/
+      "<span class='flag'>#{$1}</span>" + 
+      link_to(h($2.strip), topic_path(@forum, topic), options)
     else
       link_to(h(topic.title), topic_path(@forum, topic), options)
     end
