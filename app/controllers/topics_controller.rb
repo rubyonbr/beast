@@ -48,6 +48,7 @@ class TopicsController < ApplicationController
       @post.topic=@topic
       @post.user = current_user
       # only save topic if post is valid so in the view topic will be a new record if there was an error
+      @topic.body = @post.body # incase save fails and we go back to the form
       @topic.save! if @post.valid?
       @post.save! 
     end

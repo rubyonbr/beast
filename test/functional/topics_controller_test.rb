@@ -99,6 +99,23 @@ class TopicsControllerTest < Test::Unit::TestCase
     
     assert_equal old, counts.call
   end
+  
+  def test_should_not_create_topic_without_title
+    counts = lambda { [Topic.count, Post.count] }
+    old = counts.call
+    
+    login_as :aaron
+    
+    post :create, :forum_id => forums(:rails).id, :topic => { :body => 'blah' }
+    assert_equal "blah", assigns(:topic).body2
+    assert assigns(:post)
+    # both of these should be new records if the save fails so that the view can
+    # render accordingly
+    assert assigns(:topic).new_record?
+    assert assigns(:post).new_record?
+    
+    assert_equal old, counts.call
+  end
 
   def test_should_create_topic
     counts = lambda { [Topic.count, Post.count, forums(:rails).topics_count, forums(:rails).posts_count,  users(:aaron).posts_count] }
