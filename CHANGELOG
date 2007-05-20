@@ -1,3 +1,11 @@
+1.0
+05.19.2007
+
+* New translation framework (gibberish)
+* update routes so they don't break in Edge rails
+* user correct urls if Beast is not at the domain root
+* A few small bug fixes
+
 1.0pre
 04.20.2007
 
