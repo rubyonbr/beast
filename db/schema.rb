@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 49) do
+ActiveRecord::Schema.define(:version => 50) do
 
   create_table "forums", :force => true do |t|
     t.column "name",             :string
@@ -35,6 +35,25 @@ ActiveRecord::Schema.define(:version => 49) do
     t.column "topic_id", :integer
     t.column "user_id",  :integer
     t.column "active",   :boolean, :default => true
+  end
+
+  create_table "open_id_authentication_associations", :force => true do |t|
+    t.column "server_url", :binary
+    t.column "handle",     :string
+    t.column "secret",     :binary
+    t.column "issued",     :integer
+    t.column "lifetime",   :integer
+    t.column "assoc_type", :string
+  end
+
+  create_table "open_id_authentication_nonces", :force => true do |t|
+    t.column "nonce",   :string
+    t.column "created", :integer
+  end
+
+  create_table "open_id_authentication_settings", :force => true do |t|
+    t.column "setting", :string
+    t.column "value",   :binary
   end
 
   create_table "posts", :force => true do |t|
