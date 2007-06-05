@@ -92,7 +92,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    flash[:notice] = "Post of '{title}' was deleted."[:post_deleted_message, CGI::escapeHTML(@post.topic.title)]
+    flash[:notice] = "Post of '{title}' was deleted."[:post_deleted_message, @post.topic.title]
     # check for posts_count == 1 because its cached and counting the currently deleted post
     @post.topic.destroy and redirect_to forum_path(params[:forum_id]) if @post.topic.posts_count == 1
     respond_to do |format|
@@ -114,8 +114,8 @@ class PostsController < ApplicationController
     
     def render_posts_or_xml(template_name = action_name)
       respond_to do |format|
-        format.html { render :action => "#{template_name}.rhtml" }
-        format.rss  { render :action => "#{template_name}.rxml", :layout => false }
+        format.html { render :action => template_name }
+        format.rss  { render :action => template_name, :layout => false }
         format.xml  { render :xml => @posts.to_xml }
       end
     end

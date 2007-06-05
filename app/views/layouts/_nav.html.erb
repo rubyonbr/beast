@@ -1,0 +1,19 @@
+  <ul id="nav">
+    <li><%= link_to 'Forums'[:forums_title], home_path, :rel => 'home' %></li>
+    <li><%= link_to 'Users'[:users_title], users_path %></li>
+    <li id="search">
+      <% form_tag all_search_posts_path, :method => 'get' do -%>
+        <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
+      <% end -%>
+    </li>
+    <li><%= link_to_function 'Search'[:search_title], "$('search').toggle(); $('search_box').focus();", :href => home_path %></li>
+
+    <% if logged_in? -%>
+    <li class="login"><%=  link_to current_user.login, user_path(current_user) %></li>
+    <li class="logout"><%= link_to 'Settings'[:settings_title], settings_path %></li>
+    <li class="logout"><%= link_to 'Logout'[:logout_title], logout_path %></li>
+    <% else -%>
+    <li><%= link_to 'Signup'[:signup_action], signup_path %></li>
+    <li><%= link_to 'Login'[:login_action], login_path %></li>
+    <% end -%>
+  </ul>

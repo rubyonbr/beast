@@ -24,7 +24,7 @@ class ForumsController < ApplicationController
     end
   end
 
-  # new renders new.rhtml
+  # new renders new.html.erb
   
   def create
     @forum.attributes = params[:forum]

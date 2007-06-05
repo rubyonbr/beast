@@ -34,7 +34,7 @@ class TopicsController < ApplicationController
       end
       format.rss do
         @posts = @topic.posts.find(:all, :order => 'created_at desc', :limit => 25)
-        render :action => 'show.rxml', :layout => false
+        render :action => 'show', :layout => false
       end
     end
   end
@@ -44,9 +44,9 @@ class TopicsController < ApplicationController
     Topic.transaction do
       @topic  = @forum.topics.build(params[:topic])
       assign_protected
-      @post   = @topic.posts.build(params[:topic])
-      @post.topic=@topic
-      @post.user = current_user
+      @post       = @topic.posts.build(params[:topic])
+      @post.topic = @topic
+      @post.user  = current_user
       # only save topic if post is valid so in the view topic will be a new record if there was an error
       @topic.body = @post.body # incase save fails and we go back to the form
       @topic.save! if @post.valid?
@@ -70,7 +70,7 @@ class TopicsController < ApplicationController
   
   def destroy
     @topic.destroy
-    flash[:notice] = "Topic '{title}' was deleted."[:topic_deleted_message, CGI::escapeHTML(@topic.title)]
+    flash[:notice] = "Topic '{title}' was deleted."[:topic_deleted_message, @topic.title]
     respond_to do |format|
       format.html { redirect_to forum_path(@forum) }
       format.xml  { head 200 }

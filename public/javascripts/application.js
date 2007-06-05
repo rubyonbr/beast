@@ -29,7 +29,7 @@ var EditForm = {
   // sets the current post id we're editing
   setReplyId: function(postId) {
     $('edit').setAttribute('post_id', postId.toString());
-    $('posts-' + postId + '-row').addClassName('editing');
+    $('post_' + postId + '-row').addClassName('editing');
     if($('reply')) $('reply').hide();
   },
   
@@ -38,7 +38,7 @@ var EditForm = {
     var currentId = this.currentReplyId()
     if(!currentId || currentId == '') return;
 
-    var row = $('posts-' + currentId + '-row');
+    var row = $('post_' + currentId + '-row');
     if(row) row.removeClassName('editing');
     $('edit').setAttribute('post_id', '');
   },
