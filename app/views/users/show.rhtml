@@ -10,7 +10,7 @@
 	<p><%= 'This user can moderate the following forums.  Click one to remove.'[:remove_moderated_forum] %></p>
 
   <ul class="flat">
-  <% @user.forums.find(:all, :select => 'forums.*, moderatorships.id as moderatorship_id').each do |forum| -%>
+  <% @user.forums.find(:all, :select => "#{Forum.table_name}.*, #{Moderatorship.table_name}.id as moderatorship_id").each do |forum| -%>
     <li>
       <%#= link_to forum.name, forum_path(forum), :class => "hidden" %>
       <%#= link_to 'remove', moderator_path(@user, forum.moderatorship_id), :method => :delete %>

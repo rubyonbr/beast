@@ -4,7 +4,7 @@ class Forum < ActiveRecord::Base
   validates_presence_of :name
 
   has_many :moderatorships, :dependent => :destroy
-  has_many :moderators, :through => :moderatorships, :source => :user, :order => 'users.login'
+  has_many :moderators, :through => :moderatorships, :source => :user, :order => "#{User.table_name}.login"
 
   has_many :topics, :order => 'sticky desc, replied_at desc', :dependent => :destroy do
     def first
@@ -20,7 +20,7 @@ class Forum < ActiveRecord::Base
     end 
   end
 
-  has_many :posts, :order => 'posts.created_at desc' do
+  has_many :posts, :order => "#{Post.table_name}.created_at desc" do
     def last
       @last_post ||= find(:first, :include => :user)
     end

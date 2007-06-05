@@ -26,7 +26,7 @@ class TopicsController < ApplicationController
         (session[:topics] ||= {})[@topic.id] = Time.now.utc if logged_in?
         # authors of topics don't get counted towards total hits
         @topic.hit! unless logged_in? and @topic.user == current_user
-        @post_pages, @posts = paginate(:posts, :per_page => 25, :order => 'posts.created_at', :include => :user, :conditions => ['posts.topic_id = ?', params[:id]])
+        @post_pages, @posts = paginate(:posts, :per_page => 25, :order => "#{Post.table_name}.created_at", :include => :user, :conditions => ["#{Post.table_name}.topic_id = ?", params[:id]])
         @post   = Post.new
       end
       format.xml do

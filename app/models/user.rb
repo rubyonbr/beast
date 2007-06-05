@@ -2,12 +2,12 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   has_many :moderatorships, :dependent => :destroy
-  has_many :forums, :through => :moderatorships, :order => 'forums.name'
+  has_many :forums, :through => :moderatorships, :order => "#{Forum.table_name}.name"
 
   has_many :posts
   has_many :topics
   has_many :monitorships
-  has_many :monitored_topics, :through => :monitorships, :conditions => ['monitorships.active = ?', true], :order => 'topics.replied_at desc', :source => :topic
+  has_many :monitored_topics, :through => :monitorships, :conditions => ["#{Monitorship.table_name}.active = ?", true], :order => "#{Topic.table_name}.replied_at desc", :source => :topic
 
   validates_presence_of     :login, :email
   validates_length_of       :login, :minimum => 2
