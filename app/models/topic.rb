@@ -1,5 +1,5 @@
 class Topic < ActiveRecord::Base
-  belongs_to :forum, :counter_cache => true
+  belongs_to :forum
   belongs_to :user
   has_many :monitorships
   has_many :monitors, :through => :monitorships, :conditions => ["#{Monitorship.table_name}.active = ?", true], :source => :user, :order => "#{User.table_name}.login"
@@ -18,6 +18,7 @@ class Topic < ActiveRecord::Base
   before_create :set_default_replied_at_and_sticky
   before_update :check_for_changing_forums
   after_save    :update_forum_counter_cache
+  after_destroy :update_forum_counter_cache
 
   attr_accessible :title
   # to help with the create form
@@ -63,14 +64,21 @@ class Topic < ActiveRecord::Base
 
     def check_for_changing_forums
       old = Topic.find(id)
-      if old.forum_id != forum_id
-        set_post_forum_id
-        Forum.update_all ["posts_count = ?", Post.count(:all, :conditions => {:forum_id => old.forum_id})], ["id = ?", old.forum_id]
-        Forum.update_all ["posts_count = ?", Post.count(:all, :conditions => {:forum_id =>     forum_id})], ["id = ?", forum_id]
-      end
+      @old_forum_id = old.forum_id if old.forum_id != forum_id
+      true
     end
     
     def update_forum_counter_cache
-      Forum.update_all ['topics_count = ?', Topic.count(:all, :conditions => {:forum_id => forum_id})], ['id = ?', forum_id]
+      forum_conditions = ['topics_count = ?', Topic.count(:all, :conditions => {:forum_id => forum_id})]
+      if !frozen? && @old_forum_id && @old_forum_id != forum_id
+        set_post_forum_id
+        Forum.update_all ['topics_count = ?, posts_count = ?', 
+          Topic.count(:all, :conditions => {:forum_id => @old_forum_id}),
+          Post.count(:all,  :conditions => {:forum_id => @old_forum_id})], ['id = ?', @old_forum_id]
+        forum_conditions.first << ", posts_count = ?"
+        forum_conditions       << Post.count(:all, :conditions => {:forum_id => forum_id})
+      end
+      Forum.update_all forum_conditions, ['id = ?', forum_id]
+      @old_forum_id = nil
     end
 end
