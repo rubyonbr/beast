@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title><%= "#{h @page_title} - " if @page_title %>Beast</title>
+  <title><%= "#{h @page_title} - " if @page_title %><%= 'Beast'[:beast_title] %></title>
   <%= stylesheet_link_tag 'display' %>
-  <%= javascript_include_tag "prototype", "effects", "lowpro", "application" %>
+  <%= javascript_include_tag "prototype", "effects", "lowpro", "application", :cache => 'beast' %>
 <% unless @feed_icons.blank? -%>
   <% @feed_icons.each do |feed| -%>
   <%= auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'" %>
