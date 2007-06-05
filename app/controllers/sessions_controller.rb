@@ -1,5 +1,4 @@
-class SessionController < ApplicationController
-
+class SessionsController < ApplicationController
   def create
     if using_open_id?
       open_id_authentication params[:login]

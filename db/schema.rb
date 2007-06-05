@@ -5,92 +5,92 @@
 ActiveRecord::Schema.define(:version => 50) do
 
   create_table "forums", :force => true do |t|
-    t.column "name",             :string
-    t.column "description",      :string
-    t.column "topics_count",     :integer, :default => 0
-    t.column "posts_count",      :integer, :default => 0
-    t.column "position",         :integer
-    t.column "description_html", :text
+    t.string  "name"
+    t.string  "description"
+    t.integer "topics_count",     :default => 0
+    t.integer "posts_count",      :default => 0
+    t.integer "position"
+    t.text    "description_html"
   end
 
   create_table "logged_exceptions", :force => true do |t|
-    t.column "exception_class", :string
-    t.column "controller_name", :string
-    t.column "action_name",     :string
-    t.column "message",         :string
-    t.column "backtrace",       :text
-    t.column "environment",     :text
-    t.column "request",         :text
-    t.column "created_at",      :datetime
+    t.string   "exception_class"
+    t.string   "controller_name"
+    t.string   "action_name"
+    t.string   "message"
+    t.text     "backtrace"
+    t.text     "environment"
+    t.text     "request"
+    t.datetime "created_at"
   end
 
   create_table "moderatorships", :force => true do |t|
-    t.column "forum_id", :integer
-    t.column "user_id",  :integer
+    t.integer "forum_id"
+    t.integer "user_id"
   end
 
   add_index "moderatorships", ["forum_id"], :name => "index_moderatorships_on_forum_id"
 
   create_table "monitorships", :force => true do |t|
-    t.column "topic_id", :integer
-    t.column "user_id",  :integer
-    t.column "active",   :boolean, :default => true
+    t.integer "topic_id"
+    t.integer "user_id"
+    t.boolean "active",   :default => true
   end
 
   create_table "open_id_authentication_associations", :force => true do |t|
-    t.column "server_url", :binary
-    t.column "handle",     :string
-    t.column "secret",     :binary
-    t.column "issued",     :integer
-    t.column "lifetime",   :integer
-    t.column "assoc_type", :string
+    t.binary  "server_url"
+    t.string  "handle"
+    t.binary  "secret"
+    t.integer "issued"
+    t.integer "lifetime"
+    t.string  "assoc_type"
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.column "nonce",   :string
-    t.column "created", :integer
+    t.string  "nonce"
+    t.integer "created"
   end
 
   create_table "open_id_authentication_settings", :force => true do |t|
-    t.column "setting", :string
-    t.column "value",   :binary
+    t.string "setting"
+    t.binary "value"
   end
 
   create_table "posts", :force => true do |t|
-    t.column "user_id",    :integer
-    t.column "topic_id",   :integer
-    t.column "body",       :text
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "forum_id",   :integer
-    t.column "body_html",  :text
+    t.integer  "user_id"
+    t.integer  "topic_id"
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "forum_id"
+    t.text     "body_html"
   end
 
   add_index "posts", ["forum_id", "created_at"], :name => "index_posts_on_forum_id"
   add_index "posts", ["user_id", "created_at"], :name => "index_posts_on_user_id"
 
   create_table "sessions", :force => true do |t|
-    t.column "session_id", :string
-    t.column "data",       :text
-    t.column "updated_at", :datetime
-    t.column "user_id",    :integer
+    t.string   "session_id"
+    t.text     "data"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
 
   create_table "topics", :force => true do |t|
-    t.column "forum_id",     :integer
-    t.column "user_id",      :integer
-    t.column "title",        :string
-    t.column "created_at",   :datetime
-    t.column "updated_at",   :datetime
-    t.column "hits",         :integer,  :default => 0
-    t.column "sticky",       :integer,  :default => 0
-    t.column "posts_count",  :integer,  :default => 0
-    t.column "replied_at",   :datetime
-    t.column "locked",       :boolean,  :default => false
-    t.column "replied_by",   :integer
-    t.column "last_post_id", :integer
+    t.integer  "forum_id"
+    t.integer  "user_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "hits",         :default => 0
+    t.integer  "sticky",       :default => 0
+    t.integer  "posts_count",  :default => 0
+    t.datetime "replied_at"
+    t.boolean  "locked",       :default => false
+    t.integer  "replied_by"
+    t.integer  "last_post_id"
   end
 
   add_index "topics", ["forum_id"], :name => "index_topics_on_forum_id"
@@ -98,23 +98,23 @@ ActiveRecord::Schema.define(:version => 50) do
   add_index "topics", ["forum_id", "replied_at"], :name => "index_topics_on_forum_id_and_replied_at"
 
   create_table "users", :force => true do |t|
-    t.column "login",                :string
-    t.column "email",                :string
-    t.column "password_hash",        :string
-    t.column "created_at",           :datetime
-    t.column "last_login_at",        :datetime
-    t.column "admin",                :boolean
-    t.column "posts_count",          :integer,  :default => 0
-    t.column "last_seen_at",         :datetime
-    t.column "display_name",         :string
-    t.column "updated_at",           :datetime
-    t.column "website",              :string
-    t.column "login_key",            :string
-    t.column "login_key_expires_at", :datetime
-    t.column "activated",            :boolean,  :default => false
-    t.column "bio",                  :string
-    t.column "bio_html",             :text
-    t.column "identity_url",         :string
+    t.string   "login"
+    t.string   "email"
+    t.string   "password_hash"
+    t.datetime "created_at"
+    t.datetime "last_login_at"
+    t.boolean  "admin"
+    t.integer  "posts_count",          :default => 0
+    t.datetime "last_seen_at"
+    t.string   "display_name"
+    t.datetime "updated_at"
+    t.string   "website"
+    t.string   "login_key"
+    t.datetime "login_key_expires_at"
+    t.boolean  "activated",            :default => false
+    t.string   "bio"
+    t.text     "bio_html"
+    t.string   "identity_url"
   end
 
   add_index "users", ["last_seen_at"], :name => "index_users_on_last_seen_at"
