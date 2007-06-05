@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
 
   def moderator_of?(forum)
-    moderatorships.count(:all, :conditions => ['forum_id = ?', (forum.is_a?(Forum) ? forum.id : forum)]) == 1
+    moderatorships.count("#{Moderatorship.table_name}.id", :conditions => ['forum_id = ?', (forum.is_a?(Forum) ? forum.id : forum)]) == 1
   end
 
   def to_xml(options = {})

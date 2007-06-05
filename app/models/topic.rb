@@ -68,15 +68,16 @@ class Topic < ActiveRecord::Base
       true
     end
     
+    # using count isn't ideal but it gives us correct caches each time
     def update_forum_counter_cache
-      forum_conditions = ['topics_count = ?', Topic.count(:all, :conditions => {:forum_id => forum_id})]
+      forum_conditions = ['topics_count = ?', Topic.count(:id, :conditions => {:forum_id => forum_id})]
       if !frozen? && @old_forum_id && @old_forum_id != forum_id
         set_post_forum_id
         Forum.update_all ['topics_count = ?, posts_count = ?', 
-          Topic.count(:all, :conditions => {:forum_id => @old_forum_id}),
-          Post.count(:all,  :conditions => {:forum_id => @old_forum_id})], ['id = ?', @old_forum_id]
+          Topic.count(:id, :conditions => {:forum_id => @old_forum_id}),
+          Post.count(:id,  :conditions => {:forum_id => @old_forum_id})], ['id = ?', @old_forum_id]
         forum_conditions.first << ", posts_count = ?"
-        forum_conditions       << Post.count(:all, :conditions => {:forum_id => forum_id})
+        forum_conditions       << Post.count(:id, :conditions => {:forum_id => forum_id})
       end
       Forum.update_all forum_conditions, ['id = ?', forum_id]
       @old_forum_id = nil
