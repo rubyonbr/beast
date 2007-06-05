@@ -9,6 +9,8 @@ class Topic < ActiveRecord::Base
       @last_post ||= find(:first, :order => "#{Post.table_name}.created_at desc")
     end
   end
+  
+  has_many :voices, :through => :posts, :source => :user, :uniq => true
 
   belongs_to :replied_by_user, :foreign_key => "replied_by", :class_name => "User"
   
@@ -28,15 +30,6 @@ class Topic < ActiveRecord::Base
       Forum.update_all ["posts_count = posts_count - ?", posts_count], ["id = ?", old.forum_id]
       Forum.update_all ["posts_count = posts_count + ?", posts_count], ["id = ?", forum_id]
     end
-  end
-
-  def voice_count
-    posts.count(:select => "DISTINCT user_id")
-  end
-  
-  def voices
-    # TODO - optimize
-    posts.map { |p| p.user }.uniq
   end
   
   def hit!

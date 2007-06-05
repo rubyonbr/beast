@@ -61,28 +61,28 @@
 <p class="subtitle">
   <%= feed_icon_tag @topic.title, formatted_topic_path(@forum, @topic, :rss) %>
   <%= '{count} post(s)'[(count=@topic.posts.count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>, 
-  <%= '{count} voice(s)'[(count=@topic.voice_count)==1 ? :voice_count : :voices_count, number_with_delimiter(count)] %>
+  <%= '{count} voice(s)'[(count=@topic.voices.size)==1 ? :voice_count : :voices_count, number_with_delimiter(count)] %>
 </p>
 
 <% if @post_pages.page_count > 1 -%>
 <p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @post_pages, :window_size => 10 %></strong></p>
 <% end -%>
 
-<a name="<%= @posts.first.dom_id %>" id="<%= @posts.first.dom_id %>">&nbsp;</a>
+<a name="<%= dom_id @posts.first %>" id="<%= dom_id @posts.first %>">&nbsp;</a>
 
 <table border="0" cellspacing="0" cellpadding="0" class="posts wide">
 <% for post in @posts do %>
 <% unless post == @posts.first %>
 <tr class="spacer">
   <td colspan="2">
-    <a name="<%= post.dom_id %>" id="<%= post.dom_id %>">&nbsp;</a>
+    <a name="<%= dom_id post %>" id="<%= dom_id post %>">&nbsp;</a>
   </td>
 </tr>
 <% end %>
-<tr class="post hentry" id="<%= post.dom_id %>-row">
+<tr class="post hentry" id="<%= dom_id post %>-row">
   <td class="author vcard">
     <div class="date">
-      <a href="#<%= post.dom_id %>" rel="bookmark">
+      <a href="#<%= dom_id post %>" rel="bookmark">
       <abbr class="updated" title="<%= post.created_at.xmlschema %>">
       <%= time_ago_in_words(post.created_at) %>
       </abbr>

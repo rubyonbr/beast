@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 51) do
+ActiveRecord::Schema.define(:version => 52) do
 
   create_table "forums", :force => true do |t|
     t.string  "name"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 51) do
 
   add_index "posts", ["forum_id", "created_at"], :name => "index_posts_on_forum_id"
   add_index "posts", ["user_id", "created_at"], :name => "index_posts_on_user_id"
+  add_index "posts", ["topic_id", "created_at"], :name => "index_posts_on_topic_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id"
@@ -118,5 +119,6 @@ ActiveRecord::Schema.define(:version => 51) do
   end
 
   add_index "users", ["last_seen_at"], :name => "index_users_on_last_seen_at"
+  add_index "users", ["posts_count"], :name => "index_users_on_posts_count"
 
 end

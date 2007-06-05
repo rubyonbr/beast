@@ -59,7 +59,7 @@ class TopicTest < Test::Unit::TestCase
     @pdi.reload
     assert_equal 5, @pdi.posts.count
     assert_equal [1,2,3,4], @pdi.voices.map(&:id).sort
-    assert_equal 4, @pdi.voice_count
+    assert_equal 4, @pdi.voices.size
   end
   
   def test_should_require_title_user_and_forum
