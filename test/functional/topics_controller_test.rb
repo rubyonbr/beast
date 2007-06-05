@@ -107,7 +107,7 @@ class TopicsControllerTest < Test::Unit::TestCase
     login_as :aaron
     
     post :create, :forum_id => forums(:rails).id, :topic => { :body => 'blah' }
-    assert_equal "blah", assigns(:topic).body2
+    assert_equal "blah", assigns(:topic).body
     assert assigns(:post)
     # both of these should be new records if the save fails so that the view can
     # render accordingly
