@@ -1,8 +1,10 @@
 class SessionsController < ApplicationController
   def create
     if using_open_id?
-      open_id_authentication params[:login]
+      cookies[:use_open_id] = {:value => '1', :expires => 1.year.from_now.utc}
+      open_id_authentication
     else
+      cookies[:use_open_id] = {:value => '0', :expires => 1.year.ago.utc}
       password_authentication params[:login], params[:password]
     end
   end
@@ -15,24 +17,16 @@ class SessionsController < ApplicationController
   end
 
   protected
-    def open_id_authentication(identity_url)
-      authenticate_with_open_id identity_url do |result, identity_url|
-        case result
-        when :missing
-          failed_login "Sorry, the OpenID server couldn't be found"[:openid_not_found_message]
-        when :canceled
-          failed_login "OpenID verification was canceled"[:openid_canceled_message]
-        when :failed
-          failed_login "Sorry, the OpenID verification failed"[:openid_failed_message]
-        when :successful
-          if self.current_user = User.find_or_initialize_by_identity_url(identity_url)
-            unless current_user.save
-              flash[:error] = "Error saving the fields from your OpenID profile at {identity_url}: {errors}"[:openid_saving_error_message, identity_url.inspect, current_user.errors.full_messages.to_sentence]
-            end
+    def open_id_authentication
+      authenticate_with_open_id params[:openid_url] do |result, openid_url|
+        if result.successful?
+          if self.current_user = User.find_by_openid_url(openid_url)
             successful_login
           else
-            failed_login "Sorry, no user by the identity URL {identity_url} exists"[:openid_no_user_message, identity_url.inspect]
+            failed_login "Sorry, no user by the identity URL {openid_url} exists"[:openid_no_user_message, openid_url.inspect]
           end
+        else
+          failed_login result.message
         end
       end
     end

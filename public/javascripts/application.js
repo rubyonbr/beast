@@ -8,12 +8,14 @@ var TopicForm = {
 }
 
 var LoginForm = {
-  checkLogin: function(txt) {
-    if(txt.value.match(/^https?:\/\//)) {
-      $('password_fields').hide();
-    } else {
-      $('password_fields').show();
-    }
+  setToPassword: function() {
+    $('openid_fields').hide();
+    $('password_fields').show();
+  },
+  
+  setToOpenID: function() {
+    $('password_fields').hide();
+    $('openid_fields').show();
   }
 }
 

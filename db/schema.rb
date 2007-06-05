@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 50) do
+ActiveRecord::Schema.define(:version => 51) do
 
   create_table "forums", :force => true do |t|
     t.string  "name"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(:version => 50) do
     t.boolean  "activated",            :default => false
     t.string   "bio"
     t.text     "bio_html"
-    t.string   "identity_url"
+    t.string   "openid_url"
   end
 
   add_index "users", ["last_seen_at"], :name => "index_users_on_last_seen_at"

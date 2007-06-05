@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
 
   # names that start with #s really upset me for some reason
   validates_format_of       :login, :with => /^[a-z]{2}(?:\w+)?$/i
-  validates_format_of       :identity_url, :with => /^https?:\/\//i, :allow_nil => true
 
   # names that start with #s really upset me for some reason
   validates_format_of     :display_name, :with => /^[a-z]{2}(?:[.'\-\w ]+)?$/i, :allow_nil => true
@@ -29,8 +28,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :message => "Please check the e-mail address"[:check_email_message]
 
   validates_uniqueness_of   :login, :email, :case_sensitive => false
-  validates_uniqueness_of   :display_name, :identity_url, :case_sensitive => false, :allow_nil => true
-  before_validation { |u| u.identity_url = nil if u.identity_url.blank? }
+  validates_uniqueness_of   :display_name, :openid_url, :case_sensitive => false, :allow_nil => true
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
   # first user becomes admin automatically
   before_create { |u| u.admin = u.activated = true if User.count == 0 }
@@ -65,6 +63,10 @@ class User < ActiveRecord::Base
     @password = value
   end
   
+  def openid_url=(value)
+    write_attribute :openid_url, value.blank? ? nil : OpenIdAuthentication.normalize_url(value)
+  end
+  
   def reset_login_key!
     self.login_key = Digest::SHA1.hexdigest(Time.now.to_s + password_hash.to_s + rand(123456789).to_s).to_s
     # this is not currently honored
@@ -79,11 +81,11 @@ class User < ActiveRecord::Base
 
   def to_xml(options = {})
     options[:except] ||= []
-    options[:except] << :email << :login_key << :login_key_expires_at << :password_hash << :identity_url
+    options[:except] << :email << :login_key << :login_key_expires_at << :password_hash << :openid_url
     super
   end
   
   def password_required?
-    identity_url.nil?
+    openid_url.nil?
   end
 end

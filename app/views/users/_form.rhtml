@@ -12,10 +12,10 @@
 
 <p>
   <p class="help">
-    <%= 'Enter your OpenID Identity Url if you know it.  If your Identity Url supports the {sreg} extension, you can {login_link} and create your account automatically'[:open_id_field_extended, %(<acronym title="Simple Registration">sreg</acronym>), link_to('login'[], login_path)] %>
+    <%= 'Enter your OpenID Identity Url if you know it.'[:open_id_field_extended] %>
   </p>
-  <label for="user_identity_url"><%= 'Identity Url'[:identity_url_title] %></label><br />
-  <%= form.text_field :identity_url %>
+  <label for="user_openid_url"><%= 'Identity Url'[:openid_url_title] %></label><br />
+  <%= form.text_field :openid_url %>
 </p>
 
 <p>

@@ -1,19 +1,30 @@
 <h1><%= 'Login'[:login_title] %></h1>
 
 <% form_tag session_path do -%>
+<div id="password_fields"<%= %( style="display:none") if cookies['use_open_id'].value.to_s == '1' %>>
 <p>
-  <label for="login"><%= 'Login or OpenID URL (starts with http://)'[:open_id_directions] %></label><br />
-  <%= text_field_tag :login, params[:login], :onkeypress => 'LoginForm.checkLogin(this)' %>
+  <label for="login"><%= 'Login'[:Login] %> or <%= link_to_function "login with OpenID", "LoginForm.setToOpenID()" %></label>
+  <br />
+  <%= text_field_tag :login, params[:login] %>
 </p>
 
-<div id="password_fields">
 <p>
   <label for="password"><%= 'Password'[:password_title] %></label><br />
   <%= password_field_tag :password %>
 </p>
+</div>
+
+<div id="openid_fields"<%= %( style="display:none") if cookies['use_open_id'].value.to_s != '1' %>>
+<p>
+  <label for="openid_url"><%= 'OpenID'[:open_id_directions] %>
+  or <%= link_to_function "login with your password", "LoginForm.setToPassword()" %></label>
+  <br />
+  <%= text_field_tag :openid_url, params[:openid_url] %>
+</p>
+</div>
 
 <p><label><%= check_box_tag "remember_me", "1", true %> <%= 'Remember me on this computer'[:remember_me] %></label></p>
-</div>
+
 
 <p><%= submit_tag 'Login'[:login_action], :or => link_to_function('reset password'[], "$('reset-password').toggle();") %></p>
 <% end -%>

@@ -95,7 +95,7 @@ class UserTest < Test::Unit::TestCase
   end
   
   def test_open_id_login
-    u = User.new(:identity_url => 'http://foo', :email => 'zoe@girl.com')
+    u = User.new(:openid_url => 'http://foo', :email => 'zoe@girl.com')
     u.login = 'zoegirl'
     assert_valid u
   end
