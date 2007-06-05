@@ -156,7 +156,7 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_not_equal 2004, users(:sam).reload.updated_at.year
     assert_not_equal 2005, users(:sam).last_seen_at
     assert_equal 'sam', users(:sam).login
-    assert_equal 2, users(:sam).posts_count
+    assert_equal 5, users(:sam).posts_count
     assert !users(:sam).admin?
   end
 

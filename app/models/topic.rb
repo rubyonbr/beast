@@ -16,21 +16,12 @@ class Topic < ActiveRecord::Base
   
   validates_presence_of :forum, :user, :title
   before_create :set_default_replied_at_and_sticky
-  before_save   :check_for_changing_forums
+  before_update :check_for_changing_forums
+  after_save    :update_forum_counter_cache
 
   attr_accessible :title
   # to help with the create form
   attr_accessor :body
-
-  def check_for_changing_forums
-    return if new_record?
-    old=Topic.find(id)
-    if old.forum_id!=forum_id
-      set_post_forum_id
-      Forum.update_all ["posts_count = posts_count - ?", posts_count], ["id = ?", old.forum_id]
-      Forum.update_all ["posts_count = posts_count + ?", posts_count], ["id = ?", forum_id]
-    end
-  end
   
   def hit!
     self.class.increment_counter :hits, id
@@ -50,6 +41,16 @@ class Topic < ActiveRecord::Base
     user && (user.id == user_id || user.admin? || user.moderator_of?(forum_id))
   end
   
+  def update_cached_post_fields(post)
+    # these fields are not accessible to mass assignment
+    last_post = post.frozen? ? posts.last : post
+    if last_post
+      self.class.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?, posts_count = ?', last_post.created_at, last_post.user_id, last_post.id, posts.count], ['id = ?', id])
+    else
+      self.class.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?, posts_count = ?', nil, nil, nil, 0], ['id = ?', id])
+    end
+  end
+  
   protected
     def set_default_replied_at_and_sticky
       self.replied_at = Time.now.utc
@@ -58,5 +59,18 @@ class Topic < ActiveRecord::Base
 
     def set_post_forum_id
       Post.update_all ['forum_id = ?', forum_id], ['topic_id = ?', id]
+    end
+
+    def check_for_changing_forums
+      old = Topic.find(id)
+      if old.forum_id != forum_id
+        set_post_forum_id
+        Forum.update_all ["posts_count = ?", Post.count(:all, :conditions => {:forum_id => old.forum_id})], ["id = ?", old.forum_id]
+        Forum.update_all ["posts_count = ?", Post.count(:all, :conditions => {:forum_id =>     forum_id})], ["id = ?", forum_id]
+      end
+    end
+    
+    def update_forum_counter_cache
+      Forum.update_all ['topics_count = ?', Topic.count(:all, :conditions => {:forum_id => forum_id})], ['id = ?', forum_id]
     end
 end

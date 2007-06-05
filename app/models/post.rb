@@ -1,12 +1,12 @@
 class Post < ActiveRecord::Base
-  belongs_to :forum, :counter_cache => true
-  belongs_to :user,  :counter_cache => true
-  belongs_to :topic, :counter_cache => true
+  belongs_to :forum
+  belongs_to :user
+  belongs_to :topic
 
   format_attribute :body
   before_create { |r| r.forum_id = r.topic.forum_id }
-  after_create  { |r| Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', r.created_at, r.user_id, r.id], ['id = ?', r.topic_id]) }
-  after_destroy { |r| t = Topic.find(r.topic_id) ; Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', t.posts.last.created_at, t.posts.last.user_id, t.posts.last.id], ['id = ?', t.id]) if t.posts.last }
+  after_create  :update_cached_fields
+  after_destroy :update_cached_fields
 
   validates_presence_of :user_id, :body, :topic
   attr_accessible :body
@@ -20,4 +20,11 @@ class Post < ActiveRecord::Base
     options[:except] << :topic_title << :forum_name
     super
   end
+  
+  protected
+    def update_cached_fields
+      Forum.update_all ['posts_count = ?', Post.count(:all, :conditions => {:forum_id => forum_id})], ['id = ?', forum_id]
+      User.update_all  ['posts_count = ?', Post.count(:all, :conditions => {:user_id => user_id})],   ['id = ?', user_id]
+      topic.update_cached_post_fields(self)
+    end
 end

@@ -4,7 +4,7 @@ aaron:
   email: aaron@email.com
   password_hash: 4c426caff6b43918711cc94d7a0044bb60eee108 # testy
   created_at: <%= 5.days.ago.to_s :db %>
-  posts_count: 2
+  posts_count: 5
   last_login_at: <%= 5.minutes.ago.to_s :db %>
   last_seen_at: <%= 5.minutes.ago.to_s :db %>
   activated: true
@@ -17,7 +17,7 @@ sam:
   email: sam@email.com
   password_hash: 4c426caff6b43918711cc94d7a0044bb60eee108 # testy
   created_at: <%= 4.days.ago.to_s :db %>
-  posts_count: 2
+  posts_count: 5
   last_login_at: <%= 4.minutes.ago.to_s :db %>
   last_seen_at: <%= 4.minutes.ago.to_s :db %>
   activated: true
