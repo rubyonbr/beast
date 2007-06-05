@@ -1,7 +1,7 @@
 <h1><%= 'Login'[:login_title] %></h1>
 
 <% form_tag session_path do -%>
-<div id="password_fields"<%= %( style="display:none") if cookies['use_open_id'].value.to_s == '1' %>>
+<div id="password_fields"<%= %( style="display:none") unless cookies['use_open_id'].blank? %>>
 <p>
   <label for="login"><%= 'Login'[:Login] %> or <%= link_to_function "login with OpenID", "LoginForm.setToOpenID()" %></label>
   <br />
@@ -14,7 +14,7 @@
 </p>
 </div>
 
-<div id="openid_fields"<%= %( style="display:none") if cookies['use_open_id'].value.to_s != '1' %>>
+<div id="openid_fields"<%= %( style="display:none") if cookies['use_open_id'].blank? %>>
 <p>
   <label for="openid_url"><%= 'OpenID'[:open_id_directions] %>
   or <%= link_to_function "login with your password", "LoginForm.setToPassword()" %></label>
