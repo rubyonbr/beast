@@ -1,5 +1,5 @@
 xm.item do
-  key = post.topic.posts_count == 1 ? :topic_posted_by : :topic_replied_by
+  key = post.topic.posts.size == 1 ? :topic_posted_by : :topic_replied_by
   xm.title "{title} posted by {user} @ {date}"[key, h(post.respond_to?(:topic_title) ? post.topic_title : post.topic.title), h(post.user.login), post.created_at.rfc822]
   xm.description post.body_html
   xm.pubDate post.created_at.rfc822

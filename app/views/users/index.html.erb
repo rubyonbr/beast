@@ -37,7 +37,7 @@
       <%= white_list link_to(user.website.gsub("http://",""), "http://" + user.website.gsub("http://","")) %>
       <% end %>
     </td>
-    <td class="ca inv"><%= user.posts_count %></td>
+    <td class="ca inv"><%= user.posts.size %></td>
   </tr>
 <% end %>
 </table>

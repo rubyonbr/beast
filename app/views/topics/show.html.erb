@@ -60,7 +60,7 @@
 
 <p class="subtitle">
   <%= feed_icon_tag @topic.title, formatted_topic_path(@forum, @topic, :rss) %>
-  <%= '{count} post(s)'[(count=@topic.posts.count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>, 
+  <%= '{count} post(s)'[(count=@topic.posts.size)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>, 
   <%= '{count} voice(s)'[(count=@topic.voices.size)==1 ? :voice_count : :voices_count, number_with_delimiter(count)] %>
 </p>
 
@@ -100,7 +100,7 @@
       <% end %>
     </span>
     <% end %>
-    <span class="posts"><%= '{count} post(s)'[(count=post.user.posts_count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %></span>
+    <span class="posts"><%= '{count} post(s)'[(count=post.user.posts.size)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %></span>
 
 
     <% if logged_in? && post.editable_by?(current_user) -%>

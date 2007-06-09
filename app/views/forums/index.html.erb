@@ -43,8 +43,8 @@
     <td class="c2 vat">
       <%= link_to h(forum.name), forum_path(forum), :class => "title" %>
       <div class="posts">
-        <%= '{count} topics'[(count=forum.topics_count)==1 ? :topic_count : :topics_count, number_with_delimiter(count)] %>, 
-        <%= '{count} posts'[(count=forum.posts_count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>
+        <%= '{count} topics'[(count=forum.topics.size)==1 ? :topic_count : :topics_count, number_with_delimiter(count)] %>, 
+        <%= '{count} posts'[(count=forum.posts.size)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>
       </div>
       <p class="desc"><%= forum.description_html %>
         </p>
@@ -52,10 +52,6 @@
     <td class="c3">
       <%= link_to 'Edit'[:edit_title], edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
     </td>
-<!--
-    <td class="ca inv"><%= number_with_delimiter(forum.topics_count) %></td>
-    <td class="ca inv"><%= number_with_delimiter(forum.posts_count) %></td>
--->
 
     <td class="inv lp">
       <% if forum.posts.last %>

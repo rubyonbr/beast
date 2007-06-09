@@ -14,7 +14,7 @@
     <li>
       <%#= link_to forum.name, forum_path(forum), :class => "hidden" %>
       <%#= link_to 'remove', moderator_path(@user, forum.moderatorship_id), :method => :delete %>
-      <%= link_to forum.name, moderator_path(@user, forum.moderatorship_id), :method => :delete, :confirm => "#{'Remove user as moderator for'[:remove_user_as_moderator]} #{forum.name}?" %>
+      <%= link_to forum.name, user_moderator_path(@user, forum.moderatorship_id), :method => :delete, :confirm => "#{'Remove user as moderator for'[:remove_user_as_moderator]} #{forum.name}?" %>
     </li>
   <% end -%>
   </ul>
@@ -41,8 +41,8 @@
 <p class="subtitle">
   <%= feed_icon_tag @user.display_name, formatted_user_posts_path(:user_id => @user, :format => :rss) %>
   <span>
-    <%= '{count} topics'[(count=@user.topics.count)==1 ? :topic_count : :topics_count, number_with_delimiter(count)] %>, 
-    <%= '{count} posts'[(count=@user.posts_count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>
+    <%= '{count} topics'[(count=@user.topics.size)==1 ? :topic_count : :topics_count, number_with_delimiter(count)] %>, 
+    <%= '{count} posts'[(count=@user.posts.size)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>
     (<%= 'view'[] %> <%= link_to 'all'[:view_all], user_posts_path(@user) %> | 
     <%= link_to 'monitored'[], monitored_posts_path(@user) %> <%= 'posts'[] %>)<br />
   </span>

@@ -31,8 +31,8 @@
 
 <p class="subtitle">
   <%= feed_icon_tag @forum.name, formatted_forum_posts_path(@forum, :rss) %> 
-  <%= '{count} topic(s)'[(count=@forum.topics_count)==1 ? :topic_count : :topics_count, number_with_delimiter(count)] %>, 
-  <%= '{count} post(s)'[(count=@forum.posts_count)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>
+  <%= '{count} topic(s)'[(count=@forum.topics.size)==1 ? :topic_count : :topics_count, number_with_delimiter(count)] %>, 
+  <%= '{count} post(s)'[(count=@forum.posts.size)==1 ? :post_count : :posts_count, number_with_delimiter(count)] %>
 </p>
 
 
