@@ -1,6 +1,10 @@
 require 'md5'
 
 module ApplicationHelper
+  # convenient plugin point
+  def head_extras
+  end
+
   def submit_tag(value = "Save Changes"[], options={} )
     or_option = options.delete(:or)
     return super + "<span class='button_or'>"+"or"[]+" " + or_option + "</span>" if or_option

@@ -1,24 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title><%= "#{h @page_title} - " if @page_title %><%= 'Beast'[:beast_title] %></title>
-  <%= stylesheet_link_tag 'display' %>
-  <%= javascript_include_tag "prototype", "effects", "lowpro", "application", :cache => 'beast' %>
-<% unless @feed_icons.blank? -%>
-  <% @feed_icons.each do |feed| -%>
-  <%= auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'" %>
-  <% end -%>
-<% end -%>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://<%= request.host_with_port %>/open_search.xml" />
-</head>
-<body>
-
-<div id="header">
-<%= render :partial => "layouts/nav" %>
-  <h1><%= link_to 'Beast'[:beast_title], home_path %></h1>
-</div>
+<%= render :partial => "layouts/head" %>
 
 <div id="container">
 
@@ -27,11 +7,11 @@
 <%= content_tag 'p', h(flash[:notice]), :class => 'notice' if flash[:notice] %>
 <%= content_tag 'p', h(flash[:error]), :class => 'notice error' if flash[:error] %>
   
-<%= @content_for_layout %>
+<%= yield %>
 </div>
 
 <div id="right">
-  <%= @content_for_right %>
+  <%= yield :right %>
 </div>
 
 <br style="clear:both;" />
