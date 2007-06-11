@@ -1,11 +1,13 @@
 class LoggedException < ActiveRecord::Base
   class << self
-    def create_from_exception(controller, exception)
+    def create_from_exception(controller, exception, data)
+      message = exception.message.inspect
+      message << "\n* Extra Data\n\n#{data}" unless data.blank?
       create! \
         :exception_class => exception.class.name,
         :controller_name => controller.controller_name,
         :action_name     => controller.action_name,
-        :message         => exception.message.inspect,
+        :message         => message,
         :backtrace       => exception.backtrace,
         :request         => controller.request
     end
@@ -24,12 +26,8 @@ class LoggedException < ActiveRecord::Base
   end
 
   def backtrace=(backtrace)
-    if backtrace.is_a?(String)
-      write_attribute :backtrace, backtrace
-    else
-      re = Regexp.new(/^#{Regexp.escape(rails_root)}/)
-      write_attribute(:backtrace, backtrace.collect { |line| Pathname.new(line.gsub(re, "[RAILS_ROOT]")).cleanpath.to_s } * "\n")
-    end
+    backtrace = sanitize_backtrace(backtrace) * "\n" unless backtrace.is_a?(String)
+    write_attribute :backtrace, backtrace
   end
 
   def request=(request)
@@ -43,7 +41,8 @@ class LoggedException < ActiveRecord::Base
       write_attribute(:environment, (env << "* Process: #{$$}" << "* Server : #{self.class.host_name}") * "\n")
       
       write_attribute(:request, [
-        "* URL: #{request.protocol}#{request.env["HTTP_HOST"]}#{request.request_uri}",
+        "* URL:#{" #{request.method.to_s.upcase}" unless request.get?} #{request.protocol}#{request.env["HTTP_HOST"]}#{request.request_uri}",
+        "* Format: #{request.format.to_s}",
         "* Parameters: #{request.parameters.inspect}",
         "* Rails Root: #{rails_root}"
       ] * "\n")
@@ -51,16 +50,18 @@ class LoggedException < ActiveRecord::Base
   end
 
   def controller_action
-    "#{controller_name.camelcase}/#{action_name}"
+    @controller_action ||= "#{controller_name.camelcase}/#{action_name}"
   end
 
   private
+    @@rails_root      = Pathname.new(RAILS_ROOT).cleanpath.to_s
+    @@backtrace_regex = /^#{Regexp.escape(@@rails_root)}/
+
     def sanitize_backtrace(trace)
-      re = Regexp.new(/^#{Regexp.escape(rails_root)}/)
-      trace.map { |line| Pathname.new(line.gsub(re, "[RAILS_ROOT]")).cleanpath.to_s }
+      trace.collect { |line| Pathname.new(line.gsub(@@backtrace_regex, "[RAILS_ROOT]")).cleanpath.to_s }
     end
 
     def rails_root
-      @rails_root ||= Pathname.new(RAILS_ROOT).cleanpath.to_s
+      @@rails_root
     end
 end

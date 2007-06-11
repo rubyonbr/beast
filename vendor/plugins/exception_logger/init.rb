@@ -1,1 +1,1 @@
-LoggedExceptionsController.template_root = File.join(directory, 'views')
+LoggedExceptionsController.view_paths = [File.join(directory, 'views')]
