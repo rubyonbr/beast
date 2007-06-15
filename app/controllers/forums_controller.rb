@@ -2,6 +2,8 @@ class ForumsController < ApplicationController
   before_filter :login_required, :except => [ :index, :show ]
   before_filter :find_or_initialize_forum, :except => :index
 
+  cache_sweeper :posts_sweeper, :only => [:create, :update, :destroy]
+
   def index
     @forums = Forum.find(:all, :order => "position")
     # reset the page of each forum we have visited when we go back to index

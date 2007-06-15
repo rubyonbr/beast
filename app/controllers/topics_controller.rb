@@ -1,7 +1,9 @@
 class TopicsController < ApplicationController
   before_filter :find_forum_and_topic, :except => :index
   before_filter :login_required, :only => [:new, :create, :edit, :update, :destroy]
-#  before_filter :update_last_seen_at, :only => :show
+
+  caches_formatted_page :rss, :show
+  cache_sweeper :posts_sweeper, :only => [:create, :update, :destroy]
 
   def index
     respond_to do |format|

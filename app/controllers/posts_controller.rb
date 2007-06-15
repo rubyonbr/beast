@@ -3,6 +3,9 @@ class PostsController < ApplicationController
   before_filter :login_required, :except => [:index, :monitored, :search, :show]
   @@query_options = { :per_page => 25, :select => "#{Post.table_name}.*, #{Topic.table_name}.title as topic_title, #{Forum.table_name}.name as forum_name", :joins => "inner join #{Topic.table_name} on #{Post.table_name}.topic_id = #{Topic.table_name}.id inner join #{Forum.table_name} on #{Topic.table_name}.forum_id = #{Forum.table_name}.id", :order => "#{Post.table_name}.created_at desc" }
 
+  caches_formatted_page :rss, :index, :monitored
+  cache_sweeper :posts_sweeper, :only => [:create, :update, :destroy]
+
   def index
     conditions = []
     [:user_id, :forum_id, :topic_id].each { |attr| conditions << Post.send(:sanitize_sql, ["#{Post.table_name}.#{attr} = ?", params[attr]]) if params[attr] }
