@@ -8,6 +8,8 @@
   <%= text_field_tag :login, params[:login] %>
 </p>
 
+  <%= hidden_field_tag :to, params[:to] if params[:to] %>
+
 <p>
   <label for="password"><%= 'Password'[:password_title] %></label><br />
   <%= password_field_tag :password %>

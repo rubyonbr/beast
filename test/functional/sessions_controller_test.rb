@@ -20,6 +20,11 @@ class SessionsControllerTest < Test::Unit::TestCase
     assert old != users(:aaron).reload.last_seen_at
     assert_equal old, @controller.send(:last_active)
   end
+  
+  def test_should_login_and_remember_url
+    post :create, :login => 'aaron', :password => 'testy', :to => '%2Fforums%2F1'
+    assert_redirected_to forum_path(1)
+  end
 
   def test_remember_me
     post :create, :login => 'aaron', :password => 'testy', :remember_me => "1"
@@ -61,6 +66,13 @@ class SessionsControllerTest < Test::Unit::TestCase
     login_as :aaron
     get :destroy
     assert_redirected_to home_path
+    assert_nil session[:user_id]
+  end
+  
+  def test_should_logout_and_remember_url
+    login_as :aaron
+    get :destroy, :to => '%2Fforums%2F1'
+    assert_redirected_to forum_path(1)
     assert_nil session[:user_id]
   end
 
