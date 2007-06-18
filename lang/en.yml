@@ -58,6 +58,8 @@ user_since: User since
 
 pages_title: Pages
 next_page: Next Page
+next: "Next &raquo;"
+previous: "&laquo; Previous"
 topics_count: "{count} topic(s)"
 posts_count: "{count} post(s)"
 voices_count: "{count} voice(s)"

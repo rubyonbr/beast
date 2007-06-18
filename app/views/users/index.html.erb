@@ -15,9 +15,7 @@
 <%= number_with_delimiter(@user_count) %> <%= 'users'[] %>, <%= @active %> <%= 'active'[] %>, <%= @user_count-@active %> <%= 'lurking'[] %>
 </p>
 
-<% if @user_pages.page_count > 1 -%>
-<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
-<% end -%>
+<%= pagination @users %>
 
 <table border="0" cellspacing="0" cellpadding="0" class="wide forums">
   <tr>
@@ -42,11 +40,5 @@
 <% end %>
 </table>
 
-<% if @user_pages and @user_pages.current.next %>
-<p style="float:right;"><%= link_to "Next page"[], { :page => @user_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
-<% end %>
-
-<% if @user_pages.page_count > 1 -%>
-<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @user_pages, :window_size => 10 %></strong></p>
-<% end -%>
-
+<%= next_page @users %>
+<%= pagination @users %>

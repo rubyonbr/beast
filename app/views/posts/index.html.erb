@@ -9,12 +9,10 @@
 </h1>
 <p class="subtitle">
   <%= feed_icon_tag @page_title, search_posts_path(true) %>
-  <%= '{count} post(s) found'[(count=@post_pages.item_count)==1 ? :post_count_found : :posts_count_found, number_with_delimiter(count)] %>
+  <%= '{count} post(s) found'[(count=@posts.total_entries)==1 ? :post_count_found : :posts_count_found, number_with_delimiter(count)] %>
 </p>
 
-<% if @post_pages.page_count > 1 -%>
-<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @post_pages, :window_size => 10, :params => params %></strong></p>
-<% end -%>
+<%= pagination @posts %>
 
 <table border="0" cellspacing="0" cellpadding="0" class="posts wide">
 <% for post in @posts do %>
@@ -52,10 +50,5 @@
 <% end %>
 </table>
 
-<% if @post_pages and @post_pages.current.next %>
-<p style="float:right;"><%= link_to 'Next page'[], { :page => @post_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
-<% end %>
-
-<% if @post_pages.page_count > 1 -%>
-<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @post_pages, :window_size => 10, :params => params %></strong></p>
-<% end -%>
+<%= next_page @posts %>
+<%= pagination @posts %>

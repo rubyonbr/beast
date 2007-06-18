@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @user_pages, @users = paginate(:users, :per_page => 50, :order => "display_name", :conditions => User.build_search_conditions(params[:q]))
+        @users = User.paginate :page => params[:page], :per_page => 50, :order => "display_name", :conditions => User.build_search_conditions(params[:q])
         @user_count = User.count
         @active     = User.count(:id, :conditions => "posts_count > 0")
       end

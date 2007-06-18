@@ -64,9 +64,7 @@
   <%= '{count} voice(s)'[(count=@topic.voices.size)==1 ? :voice_count : :voices_count, number_with_delimiter(count)] %>
 </p>
 
-<% if @post_pages.page_count > 1 -%>
-<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @post_pages, :window_size => 10 %></strong></p>
-<% end -%>
+<%= pagination @posts %>
 
 <a name="<%= dom_id @posts.first %>" id="<%= dom_id @posts.first %>">&nbsp;</a>
 
@@ -127,14 +125,9 @@
 
 <% end %>
 </table>
-
-<% if @post_pages and @post_pages.current.next %>
-<p style="float:right;"><%= link_to "Next page"[], { :page => @post_pages.current.next }.merge(params.reject{|k,v| k=="page"})  %></p>
-<% end %>
-
-<% if @post_pages.page_count > 1 -%>
-<p class="pages"><%= 'Pages'[:pages_title] %>: <strong><%= pagination_links @post_pages, :window_size => 10 %></strong></p>
-<% end -%>
+       
+<%= next_page @posts %>
+<%= pagination @posts %>
 
 <% if logged_in? %>
 <div id="edit"></div>
