@@ -47,7 +47,7 @@ module ApplicationHelper
     [[:user, :user_id], [:forum, :forum_id]].each do |(route_key, param_key)|
       return send("#{prefix}#{route_key}_posts_path", options.update(param_key => params[param_key])) if params[param_key]
     end
-    options[:q] ? all_search_posts_path(options) : send("#{prefix}all_posts_path", options)
+    options[:q] ? search_all_posts_path(options) : send("#{prefix}all_posts_path", options)
   end
 
   # on windows and this isn't working like you expect?

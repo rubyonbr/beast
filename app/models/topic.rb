@@ -32,10 +32,11 @@ class Topic < ActiveRecord::Base
 
   def views() hits end
 
-  def paged?() posts_count > 25 end
+  def paged?() posts_count > Post.per_page end
   
   def last_page
-    (posts_count.to_f / 25.0).ceil.to_i
+    debugger
+    (posts_count.to_f / Post.per_page).ceil.to_i
   end
 
   def editable_by?(user)

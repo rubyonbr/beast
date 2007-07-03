@@ -21,7 +21,7 @@
     <li><%= link_to 'Forums'[:forums_title], home_path, :rel => 'home' %></li>
     <li><%= link_to 'Users'[:users_title], users_path %></li>
     <li id="search">
-      <% form_tag all_search_posts_path, :method => 'get' do -%>
+      <% form_tag search_all_posts_path, :method => 'get' do -%>
         <%= text_field_tag :q, params[:q], :size => 15, :id => :search_box %>
       <% end -%>
     </li>

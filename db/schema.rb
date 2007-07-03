@@ -13,24 +13,6 @@ ActiveRecord::Schema.define(:version => 52) do
     t.text    "description_html"
   end
 
-  create_table "installs", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "license_id"
-    t.string   "domain"
-    t.datetime "created_at"
-    t.text     "custom"
-  end
-
-  create_table "licenses", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "key"
-    t.string   "domain"
-    t.datetime "created_at"
-  end
-
-  add_index "licenses", ["key"], :name => "idx_licenses_on_key"
-  add_index "licenses", ["user_id"], :name => "idx_licenses_on_user_id"
-
   create_table "logged_exceptions", :force => true do |t|
     t.string   "exception_class"
     t.string   "controller_name"
@@ -134,11 +116,9 @@ ActiveRecord::Schema.define(:version => 52) do
     t.string   "bio"
     t.text     "bio_html"
     t.string   "openid_url"
-    t.integer  "licenses_count"
   end
 
   add_index "users", ["last_seen_at"], :name => "index_users_on_last_seen_at"
   add_index "users", ["posts_count"], :name => "index_users_on_posts_count"
-  add_index "users", ["email"], :name => "idx_users_on_email"
 
 end
