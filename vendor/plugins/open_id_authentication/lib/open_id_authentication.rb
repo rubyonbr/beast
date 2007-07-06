@@ -10,6 +10,13 @@ module OpenIdAuthentication
   end
   
   self.store = :db
+  
+  def store
+    OpenIdAuthentication.store
+  end
+
+  class InvalidOpenId < StandardError
+  end
 
   class Result
     ERROR_MESSAGES = {
@@ -62,7 +69,7 @@ module OpenIdAuthentication
     when %r{^[.\d\w-]+$}
       "http://" + url + "/"
     else
-      raise "#{url} is not a correctly formatted OpenID address"
+      raise InvalidOpenId.new("#{url} is not an OpenID URL")
     end
   end
 
@@ -137,7 +144,7 @@ module OpenIdAuthentication
     def open_id_redirect_url(open_id_response)
       open_id_response.redirect_url(
         request.protocol + request.host_with_port + "/",
-        open_id_response.return_to("#{request.url}?open_id_complete=1")
+        open_id_response.return_to("#{request.protocol + request.host_with_port + request.path}?open_id_complete=1")
       )     
     end
 
