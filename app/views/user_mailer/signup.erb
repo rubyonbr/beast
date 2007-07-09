@@ -2,4 +2,4 @@
 
 <%= 'Please visit the link below to activate your account.'[:activation] %>
 
-http://<%= @domain -%>/activate/<%= @user.login_key -%>
+http://<%= @domain -%>/activate/<%= @user.login_key -%><%= "?to=#{@redirect_path}" unless @redirect_path.blank? %>

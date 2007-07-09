@@ -32,7 +32,7 @@
     <li class="logout"><%= link_to 'Settings'[:settings_title], settings_path %></li>
     <li class="logout"><%= link_to 'Logout'[:logout_title], logout_path(:to => CGI.escape(request.request_uri)) %></li>
     <% else -%>
-    <li><%= link_to 'Signup'[:signup_action], signup_path %></li>
+    <li><%= link_to 'Signup'[:signup_action], signup_path(:to => CGI.escape(request.request_uri)) %></li>
     <li><%= link_to 'Login'[:login_action], login_path(:to => CGI.escape(request.request_uri)) %></li>
     <% end -%>
   </ul>

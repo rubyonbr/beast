@@ -18,7 +18,7 @@ class UserMailerTest < Test::Unit::TestCase
   end
 
   def test_signup
-    response = UserMailer.create_signup(@user, 'localhost') 
+    response = UserMailer.create_signup(@user, 'localhost', nil) 
     assert_equal("Welcome to Beast", response.subject) 
     assert_equal(@user.email, response.to[0]) 
     assert_match(@user.login_key, response.body) 

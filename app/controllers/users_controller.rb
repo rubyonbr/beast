@@ -37,7 +37,7 @@ class UsersController < ApplicationController
         @user.login = params[:user][:login] unless params[:user].blank?
         @user.reset_login_key! 
         begin
-          UserMailer.deliver_signup(@user, request.host_with_port)
+          UserMailer.deliver_signup(@user, request.host_with_port, params[:to])
         rescue Net::SMTPFatalError => e
           flash[:notice] = "A permanent error occured while sending the signup message to '{email}'. Please check the e-mail address."[:signup_permanent_error_message, @user.email]
           redirect_to :action => "new"
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
           redirect_to :action => "new"
         end
         flash[:notice] = params[:email] ? "A temporary login email has been sent to '{email}'."[:temporary_login_message, @user.email] : "An account activation email has been sent to '{email}'."[:account_activation_message, @user.email]
-        redirect_to login_path
+        redirect_to CGI.unescape(login_path)
       end
     end
   end
@@ -60,7 +60,7 @@ class UsersController < ApplicationController
           current_user.toggle! :activated
           flash[:notice] = "Signup complete!"[:signup_complete_message]
         end
-        redirect_to home_path
+        redirect_to CGI.unescape(params[:to] || home_path)
       end
     end
   end

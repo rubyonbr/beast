@@ -31,4 +31,5 @@
 <span class="entryhelp">(<%= 'once'[] %>)</span><br />
   <%= form.password_field :password_confirmation %>
 <span class="entryhelp">(<%= 'and then again'[] %>)</span>
+  <%= hidden_field_tag :to, params[:to] unless params[:to].blank? %>
 </div>

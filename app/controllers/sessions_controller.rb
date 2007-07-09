@@ -13,11 +13,7 @@ class SessionsController < ApplicationController
     session.delete
     cookies.delete :login_token
     flash[:notice] = "You have been logged out."[:logged_out_message]
-    if params[:to]
-      redirect_to CGI.unescape(params[:to]) and return
-    else
-      redirect_to home_path
-    end
+    redirect_to CGI.unescape(params[:to] || home_path)
   end
 
   protected
@@ -45,11 +41,7 @@ class SessionsController < ApplicationController
 
     def successful_login
       cookies[:login_token] = {:value => "#{current_user.id};#{current_user.reset_login_key!}", :expires => 1.year.from_now.utc} if params[:remember_me] == "1"
-      if params[:to]
-        redirect_to CGI.unescape(params[:to]) and return
-      else
-        redirect_to home_path
-      end
+      redirect_to CGI.unescape(params[:to] || home_path)
     end
 
     def failed_login(message)
@@ -58,4 +50,14 @@ class SessionsController < ApplicationController
     end
     
     def root_url() home_url; end
+    
+  private
+    def open_id_redirect_url(open_id_response)
+      return_to = "#{request.protocol + request.host_with_port + request.path}?open_id_complete=1"
+      return_to << "&to=#{params[:to]}" unless params[:to].blank?
+      open_id_response.redirect_url(
+        request.protocol + request.host_with_port + "/",
+        open_id_response.return_to(return_to)
+      )     
+    end
 end
