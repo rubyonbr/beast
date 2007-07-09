@@ -135,14 +135,14 @@ class TopicTest < Test::Unit::TestCase
   end
   
   def test_should_return_correct_last_page
-    require 'ruby-debug'
-    Debugger.start
     t = Topic.new
     t.posts_count = 51
     assert_equal 3, t.last_page
     t.posts_count = 26
     assert_equal 2, t.last_page
     t.posts_count = 1
+    assert_equal 1, t.last_page
+    t.posts_count = 0
     assert_equal 1, t.last_page
   end
 end

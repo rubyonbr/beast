@@ -34,9 +34,13 @@ class Topic < ActiveRecord::Base
 
   def paged?() posts_count > Post.per_page end
   
+  # don't ask me why.  Tests don't pass without this.  w-t-f
+  def posts_count
+    read_attribute :posts_count
+  end
+  
   def last_page
-    debugger
-    (posts_count.to_f / Post.per_page).ceil.to_i
+    [(posts_count.to_f / Post.per_page).ceil.to_i, 1].max
   end
 
   def editable_by?(user)
