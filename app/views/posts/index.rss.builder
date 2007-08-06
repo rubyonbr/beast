@@ -10,9 +10,9 @@ xml.rss "version" => "2.0",
     xml.ttl "60"
     xml.tag! "atom:link", :rel => 'search', :type => 'application/opensearchdescription+xml', :href => "http://#{request.host_with_port+request.relative_url_root}/open_search.xml"
     unless params[:q].blank?
-      xml.tag! "opensearch:totalResults", @post_pages.item_count
-      xml.tag! "opensearch:startIndex", (((params[:page] || 1).to_i - 1) * @post_pages.items_per_page)
-      xml.tag! "opensearch:itemsPerPage", @post_pages.items_per_page
+    	xml.tag! "opensearch:totalResults", @posts.total_entries
+    	xml.tag! "opensearch:startIndex", (((params[:page] || 1).to_i - 1) * @posts.per_page)
+    	xml.tag! "opensearch:itemsPerPage", @posts.per_page
       xml.tag! "opensearch:Query", :role => 'request', :searchTerms => params[:q], :startPage => (params[:page] || 1)
     end
     render :partial => "layouts/post", :collection => @posts, :locals => {:xm => xml}
