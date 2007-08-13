@@ -35,19 +35,22 @@ class UsersController < ApplicationController
         flash[:error] = "I could not find an account with the email address '{email}'. Did you type it correctly?"[:could_not_find_account_message, params[:email]] if params[:email] and not @user
         redirect_to login_path and return unless @user
         @user.login = params[:user][:login] unless params[:user].blank?
-        @user.reset_login_key! 
+        @user.reset_login_key
+        @user.save! unless @user.valid? # kinda backwards, but trigger an ActiveRecord::RecordInvalid error if its not valid before attempting to send email
         begin
           UserMailer.deliver_signup(@user, request.host_with_port, params[:to])
         rescue Net::SMTPFatalError => e
           flash[:notice] = "A permanent error occured while sending the signup message to '{email}'. Please check the e-mail address."[:signup_permanent_error_message, @user.email]
-          redirect_to :action => "new"
+          render :action => "new"
         rescue Net::SMTPServerBusy, Net::SMTPUnknownError, \
           Net::SMTPSyntaxError, TimeoutError => e
           flash[:notice] = "The signup message cannot be sent to '{email}' at this moment. Please, try again later."[:signup_cannot_sent_message, @user.email]
-          redirect_to :action => "new"
+          render :action => "new"
+        else
+          @user.save(false)
+          flash[:notice] = params[:email] ? "A temporary login email has been sent to '{email}'."[:temporary_login_message, @user.email] : "An account activation email has been sent to '{email}'."[:account_activation_message, @user.email]
+          redirect_to CGI.unescape(login_path)
         end
-        flash[:notice] = params[:email] ? "A temporary login email has been sent to '{email}'."[:temporary_login_message, @user.email] : "An account activation email has been sent to '{email}'."[:account_activation_message, @user.email]
-        redirect_to CGI.unescape(login_path)
       end
     end
   end

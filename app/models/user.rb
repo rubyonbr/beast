@@ -67,10 +67,14 @@ class User < ActiveRecord::Base
     write_attribute :openid_url, value.blank? ? nil : OpenIdAuthentication.normalize_url(value)
   end
   
-  def reset_login_key!
-    self.login_key = Digest::SHA1.hexdigest(Time.now.to_s + password_hash.to_s + rand(123456789).to_s).to_s
+  def reset_login_key
     # this is not currently honored
     self.login_key_expires_at = Time.now.utc+1.year
+    self.login_key = Digest::SHA1.hexdigest(Time.now.to_s + password_hash.to_s + rand(123456789).to_s).to_s
+  end
+  
+  def reset_login_key!
+    reset_login_key
     save!
     login_key
   end

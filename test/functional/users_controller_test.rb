@@ -53,6 +53,16 @@ class UsersControllerTest < Test::Unit::TestCase
 #    assert_redirected_to user_path(assigns(:user))
   end
 
+  [Net::SMTPFatalError, Net::SMTPServerBusy, Net::SMTPUnknownError, Net::SMTPSyntaxError].each do |exc|
+    define_method "test_should_not_save_user_when_email_raising_#{exc.name.demodulize.underscore}" do
+      UserMailer.expects(:deliver_signup).raises(exc)
+      assert_difference User, :count, 0 do 
+        post :create, :user => { :login => 'nico', :email => 'nico@email.com', :password => 'fooey', :password_confirmation => 'fooey' }
+      end
+      assert_template 'new'
+    end
+  end
+
   def test_should_reset_login_key_for_forgotten_password
     old_key = users(:sam).login_key
     assert_difference User, :count, 0 do
