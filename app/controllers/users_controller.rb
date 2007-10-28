@@ -31,10 +31,11 @@ class UsersController < ApplicationController
   def create
     respond_to do |format|
       format.html do
+        user_login = params.key?(:user) ? params[:user].delete(:login) : nil
         @user = params[:user].blank? ? User.find_by_email(params[:email]) : User.new(params[:user])
         flash[:error] = "I could not find an account with the email address '{email}'. Did you type it correctly?"[:could_not_find_account_message, params[:email]] if params[:email] and not @user
         redirect_to login_path and return unless @user
-        @user.login = params[:user][:login] unless params[:user].blank?
+        @user.login = user_login
         @user.reset_login_key
         @user.save! unless @user.valid? # kinda backwards, but trigger an ActiveRecord::RecordInvalid error if its not valid before attempting to send email
         begin
