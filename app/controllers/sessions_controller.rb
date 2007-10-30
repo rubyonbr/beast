@@ -40,7 +40,7 @@ class SessionsController < ApplicationController
     end
 
     def successful_login
-      cookies[:login_token] = {:value => "#{current_user.id};#{current_user.reset_login_key!}", :expires => 1.year.from_now.utc} if params[:remember_me] == "1"
+      cookies[:login_token] = {:value => "#{current_user.id};#{current_user.active_login_key}", :expires => 1.year.from_now.utc} if params[:remember_me] == "1"
       redirect_to CGI.unescape(params[:to] || home_path)
     end
 

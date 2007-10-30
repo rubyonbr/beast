@@ -44,7 +44,7 @@ class SessionsControllerTest < Test::Unit::TestCase
     old = users(:aaron).clone
     post :create, :login => 'aaron', :password => 'testy', :remember_me => "1"
     users(:aaron).reload
-    assert_not_equal(old.login_key, users(:aaron).login_key)
+    assert_equal old.login_key, users(:aaron).login_key
     assert_not_equal(old.login_key_expires_at, users(:aaron).login_key_expires_at)
   end
 

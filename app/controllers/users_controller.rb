@@ -32,10 +32,16 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         user_login = params.key?(:user) ? params[:user].delete(:login) : nil
-        @user = params[:user].blank? ? User.find_by_email(params[:email]) : User.new(params[:user])
+        @user = if !params[:user].blank?
+          User.new(params[:user])
+        elsif !params[:email].blank?
+          User.find_by_email(params[:email])
+        else
+          nil
+        end
         flash[:error] = "I could not find an account with the email address '{email}'. Did you type it correctly?"[:could_not_find_account_message, params[:email]] if params[:email] and not @user
         redirect_to login_path and return unless @user
-        @user.login = user_login
+        @user.login ||= user_login
         @user.reset_login_key
         @user.save! unless @user.valid? # kinda backwards, but trigger an ActiveRecord::RecordInvalid error if its not valid before attempting to send email
         begin
@@ -59,7 +65,7 @@ class UsersController < ApplicationController
   def activate
     respond_to do |format|
       format.html do
-        self.current_user = User.find_by_login_key(params[:key])
+        self.current_user = params[:key].blank? ? nil : User.find_by_login_key(params[:key])
         if logged_in? && !current_user.activated?
           current_user.toggle! :activated
           flash[:notice] = "Signup complete!"[:signup_complete_message]

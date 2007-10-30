@@ -37,7 +37,7 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   config.active_record.default_timezone = :utc
-  
+  config.active_record.whiny_protected_attributes = false
   # See Rails::Configuration for more options
 end
 
