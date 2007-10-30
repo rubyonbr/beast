@@ -11,6 +11,7 @@ ActionController::Routing::Routes.draw do |map|
       topic.resources :posts, :name_prefix => nil
       topic.resource :monitorship, :name_prefix => nil
     end
+    forum.resources :posts, :name_prefix => 'forum_'
   end
 
   map.resources :posts, :name_prefix => 'all_', :collection => { :search => :get }

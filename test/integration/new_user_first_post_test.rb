@@ -6,6 +6,8 @@ class NewUserFirstPostTest < ActionController::IntegrationTest
   ## PLEASE
   ## don't refactor this code - it's me learning integration testing, and I plan
   ## on improving it myself over the next few days / weeks
+  #
+  # ha, fat chance of that happening!  -- rick
 
   def test_signup_and_post_edit_and_topic
     go_home
