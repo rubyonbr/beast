@@ -12,15 +12,15 @@ class ForumTest < Test::Unit::TestCase
   end
 
   def test_should_find_last_post
-    assert_equal posts(:il8n), forums(:rails).posts.last
+    assert_equal posts(:il8n), forums(:rails).last_post
   end
 
   def test_should_find_first_topic
-    assert_equal topics(:sticky), forums(:rails).topics.first
+    assert_equal topics(:sticky), forums(:rails).first_topic
   end
 
   def test_should_find_first_recent_post
-    assert_equal topics(:il8n), forums(:rails).recent_topics.first
+    assert_equal topics(:il8n), forums(:rails).recent_topic
   end
 
 

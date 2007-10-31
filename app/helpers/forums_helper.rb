@@ -8,8 +8,8 @@ module ForumsHelper
   
   # used to know if a forum has changed since we read it last
   def recent_forum_activity(forum)
-    return false unless logged_in? && forum.topics.first
-    return forum.recent_topics.first.replied_at > (session[:forums][forum.id] || last_active)
+    return false unless logged_in? && forum.first_topic
+    return forum.first_topic.replied_at > (session[:forums][forum.id] || last_active)
   end
   
 end

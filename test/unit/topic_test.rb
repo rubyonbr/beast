@@ -19,7 +19,7 @@ class TopicTest < Test::Unit::TestCase
   end
 
   def test_knows_last_post
-    assert_equal posts(:pdi_rebuttal), topics(:pdi).posts.last
+    assert_equal posts(:pdi_rebuttal), topics(:pdi).last_post
   end
 
   def test_counts_are_valid

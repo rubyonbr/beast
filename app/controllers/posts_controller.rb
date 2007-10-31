@@ -98,11 +98,11 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     flash[:notice] = "Post of '{title}' was deleted."[:post_deleted_message, @post.topic.title]
-    # check for posts_count == 1 because its cached and counting the currently deleted post
-    @post.topic.destroy and redirect_to forum_path(params[:forum_id]) if @post.topic.posts.size == 1
     respond_to do |format|
       format.html do
-        redirect_to topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :page => params[:page]) unless performed?
+        redirect_to(@post.topic.frozen? ? 
+          forum_path(params[:forum_id]) :
+          topic_path(:forum_id => params[:forum_id], :id => params[:topic_id], :page => params[:page]))
       end
       format.xml { head 200 }
     end

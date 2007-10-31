@@ -3,6 +3,12 @@ PASSWORD_SALT = 'beast'
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 require 'mocha'
+begin
+  require 'ruby-debug'
+  Debugger.start
+rescue LoadError
+  puts "no debugger: #{$!.inspect}"
+end
 
 class Test::Unit::TestCase
   self.use_transactional_fixtures = true

@@ -4,11 +4,8 @@ class Topic < ActiveRecord::Base
   has_many :monitorships
   has_many :monitors, :through => :monitorships, :conditions => ["#{Monitorship.table_name}.active = ?", true], :source => :user, :order => "#{User.table_name}.login"
 
-  has_many :posts, :order => "#{Post.table_name}.created_at", :dependent => :destroy do
-    def last
-      @last_post ||= find(:first, :order => "#{Post.table_name}.created_at desc")
-    end
-  end
+  has_many :posts,     :order => "#{Post.table_name}.created_at", :dependent => :destroy
+  has_one  :last_post, :order => "#{Post.table_name}.created_at DESC", :class_name => 'Post'
   
   has_many :voices, :through => :posts, :source => :user, :uniq => true
 
@@ -34,11 +31,6 @@ class Topic < ActiveRecord::Base
 
   def paged?() posts_count > Post.per_page end
   
-  # don't ask me why.  Tests don't pass without this.  w-t-f
-  def posts_count
-    read_attribute :posts_count
-  end
-  
   def last_page
     [(posts_count.to_f / Post.per_page).ceil.to_i, 1].max
   end
@@ -49,11 +41,12 @@ class Topic < ActiveRecord::Base
   
   def update_cached_post_fields(post)
     # these fields are not accessible to mass assignment
-    last_post = post.frozen? ? posts.last : post
-    if last_post
-      self.class.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?, posts_count = ?', last_post.created_at, last_post.user_id, last_post.id, posts.count], ['id = ?', id])
+    remaining_post = post.frozen? ? last_post : post
+    if remaining_post
+      self.class.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?, posts_count = ?', 
+        remaining_post.created_at, remaining_post.user_id, remaining_post.id, posts.count], ['id = ?', id])
     else
-      self.class.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?, posts_count = ?', nil, nil, nil, 0], ['id = ?', id])
+      self.destroy
     end
   end
   

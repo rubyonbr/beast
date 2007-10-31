@@ -8,8 +8,8 @@ class TopicsCacheLastRepliedUser < ActiveRecord::Migration
     add_column "topics", "last_post_id", :integer
     Topic.find(:all).each do |topic|
       next if topic.posts.count.zero?
-      topic.replied_by   = topic.posts.last.user_id
-      topic.last_post_id = topic.posts.last.id
+      topic.replied_by   = topic.last_post.user_id
+      topic.last_post_id = topic.last_post.id
       topic.save!
     end
   end

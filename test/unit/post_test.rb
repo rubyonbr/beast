@@ -47,6 +47,13 @@ class PostTest < Test::Unit::TestCase
     assert_equal posts(:pdi_reply).user_id, topics(:pdi).replied_by
     assert_equal posts(:pdi_reply).created_at.to_i, topics(:pdi).replied_at.to_i
   end
+  
+  def test_should_delete_only_remaining_post_and_clear_topic
+    posts(:sticky).destroy
+    assert_raises ActiveRecord::RecordNotFound do
+      topics(:sticky)
+    end
+  end
 
   def test_should_create_reply_and_set_forum_from_topic
     p = create_post topics(:pdi), :body => 'blah'
