@@ -14,7 +14,7 @@ class Post < ActiveRecord::Base
   attr_accessible :body
   
   def editable_by?(user)
-    user && (user.id == user_id || user.admin? || user.moderator_of?(topic.forum_id))
+    user && (user.id == user_id || user.admin? || user.moderator_of?(forum_id))
   end
   
   def to_xml(options = {})

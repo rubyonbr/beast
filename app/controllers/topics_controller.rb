@@ -9,7 +9,7 @@ class TopicsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to forum_path(params[:forum_id]) }
       format.xml do
-        @topics = Topic.find_all_by_forum_id(params[:forum_id], :order => 'sticky desc, replied_at desc', :limit => 25)
+        @topics = Topic.paginate_by_forum_id(params[:forum_id], :order => 'sticky desc, replied_at desc', :page => params[:page])
         render :xml => @topics.to_xml
       end
     end
