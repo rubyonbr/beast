@@ -29,23 +29,25 @@ class UsersController < ApplicationController
   end
   
   def create
+    user_login = params.key?(:user) ? params[:user].delete(:login) : nil
+    @user = if !params[:user].blank?
+      User.new(params[:user])
+    elsif !params[:email].blank?
+      User.find_by_email(params[:email])
+    else
+      nil
+    end
+    if @user
+      @user.login ||= user_login
+      @user.reset_login_key
+    end
+  
     respond_to do |format|
       format.html do
-        user_login = params.key?(:user) ? params[:user].delete(:login) : nil
-        @user = if !params[:user].blank?
-          User.new(params[:user])
-        elsif !params[:email].blank?
-          User.find_by_email(params[:email])
-        else
-          nil
-        end
-        flash[:error] = "I could not find an account with the email address '{email}'. Did you type it correctly?"[:could_not_find_account_message, params[:email]] if params[:email] and not @user
+        flash[:error] = "I could not find an account with the email address '{email}'. Did you type it correctly?"[:could_not_find_account_message, params[:email]] if params[:email] and !@user
         redirect_to login_path and return unless @user
-        @user.login ||= user_login
-        @user.reset_login_key
-        @user.save! unless @user.valid? # kinda backwards, but trigger an ActiveRecord::RecordInvalid error if its not valid before attempting to send email
         begin
-          UserMailer.deliver_signup(@user, request.host_with_port, params[:to])
+          UserMailer.deliver_signup(@user, request.host_with_port, params[:to]) if @user.new_record? && @user.valid?
         rescue Net::SMTPFatalError => e
           flash[:notice] = "A permanent error occured while sending the signup message to '{email}'. Please check the e-mail address."[:signup_permanent_error_message, @user.email]
           render :action => "new"
@@ -54,10 +56,16 @@ class UsersController < ApplicationController
           flash[:notice] = "The signup message cannot be sent to '{email}' at this moment. Please, try again later."[:signup_cannot_sent_message, @user.email]
           render :action => "new"
         else
-          @user.save(false)
-          flash[:notice] = params[:email] ? "A temporary login email has been sent to '{email}'."[:temporary_login_message, @user.email] : "An account activation email has been sent to '{email}'."[:account_activation_message, @user.email]
-          redirect_to CGI.unescape(login_path)
+          if @user.save
+            flash[:notice] = params[:email] ? "A temporary login email has been sent to '{email}'."[:temporary_login_message, @user.email] : "An account activation email has been sent to '{email}'."[:account_activation_message, @user.email]
+            redirect_to CGI.unescape(login_path)
+          else
+            render :action => (@user.new_record? ? 'new' : 'sessions/new')
+          end
         end
+      end
+      format.xml do
+        head :created, :location => formatted_user_url(@user, :xml)
       end
     end
   end

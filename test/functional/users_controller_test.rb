@@ -35,11 +35,6 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_response :success
   end
   
-  def test_should_not_allow_user_creation_with_xml
-    post :create, :user => { :login => 'nico', :email => 'nico@email.com', :password => 'fooey', :password_confirmation => 'fooey' }, :format => 'xml'
-    assert_response 406
-  end
-  
   def test_should_create_user
     assert_difference User, :count do 
       post :create, :user => { :login => 'nico', :email => 'nico@email.com', :password => 'fooey', :password_confirmation => 'fooey' }

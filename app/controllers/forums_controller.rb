@@ -33,14 +33,14 @@ class ForumsController < ApplicationController
     @forum.save!
     respond_to do |format|
       format.html { redirect_to forums_path }
-      format.xml  { head :created, :location => formatted_forum_url(:id => @forum, :format => :xml) }
+      format.xml  { head :created, :location => formatted_forum_url(@forum, :xml) }
     end
   end
 
   def update
     @forum.update_attributes!(params[:forum])
     respond_to do |format|
-      format.html { redirect_to forums_path }
+      format.html { redirect_to forum_path(@forum) }
       format.xml  { head 200 }
     end
   end

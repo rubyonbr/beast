@@ -115,7 +115,7 @@ class ForumsControllerTest < Test::Unit::TestCase
   def test_should_update_forum
     login_as :aaron
     put :update, :id => 1, :forum => { }
-    assert_redirected_to forums_path
+    assert_redirected_to forum_path(1)
   end
 
   def test_should_update_forum_with_xml
