@@ -21,6 +21,4 @@ else
   end
 end
 
-%w(action_pack active_record action_controller active_record/fixtures).each {|f| require f}
-
 $:.unshift "#{plugin_root}/lib"
