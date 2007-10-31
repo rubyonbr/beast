@@ -5,12 +5,12 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @users = User.paginate :page => params[:page], :per_page => 50, :order => "display_name", :conditions => User.build_search_conditions(params[:q])
-        @user_count = User.count
+        @users      = User.paginate :page => params[:page], :order => "display_name", :conditions => User.build_search_conditions(params[:q])
+        @user_count = @users.total_entries
         @active     = User.count(:id, :conditions => "posts_count > 0")
       end
       format.xml do
-        @users = User.search(params[:q], :limit => 25)
+        @users = User.search(params[:q])
         render :xml => @users.to_xml
       end
     end

@@ -1,6 +1,9 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  def self.per_page
+    50
+  end
   has_many :moderatorships, :dependent => :destroy
   has_many :forums, :through => :moderatorships, :order => "#{Forum.table_name}.name"
 
@@ -49,7 +52,8 @@ class User < ActiveRecord::Base
 
   def self.search(query, options = {})
     with_scope :find => { :conditions => build_search_conditions(query) } do
-      find :all, options
+      options[:page] ||= nil
+      paginate options
     end
   end
 
