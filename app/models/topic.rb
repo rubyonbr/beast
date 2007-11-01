@@ -1,21 +1,22 @@
 class Topic < ActiveRecord::Base
+  validates_presence_of :forum, :user, :title
+  before_create  :set_default_replied_at_and_sticky
+  before_update  :check_for_changing_forums
+  after_save     :update_forum_counter_cache
+  before_destroy :update_post_user_counts
+  after_destroy  :update_forum_counter_cache
+
   belongs_to :forum
   belongs_to :user
   has_many :monitorships
   has_many :monitors, :through => :monitorships, :conditions => ["#{Monitorship.table_name}.active = ?", true], :source => :user, :order => "#{User.table_name}.login"
 
-  has_many :posts,     :order => "#{Post.table_name}.created_at", :dependent => :destroy
+  has_many :posts,     :order => "#{Post.table_name}.created_at", :dependent => :delete_all
   has_one  :last_post, :order => "#{Post.table_name}.created_at DESC", :class_name => 'Post'
   
   has_many :voices, :through => :posts, :source => :user, :uniq => true
 
   belongs_to :replied_by_user, :foreign_key => "replied_by", :class_name => "User"
-  
-  validates_presence_of :forum, :user, :title
-  before_create :set_default_replied_at_and_sticky
-  before_update :check_for_changing_forums
-  after_save    :update_forum_counter_cache
-  after_destroy :update_forum_counter_cache
 
   attr_accessible :title
   # to help with the create form
@@ -69,15 +70,24 @@ class Topic < ActiveRecord::Base
     # using count isn't ideal but it gives us correct caches each time
     def update_forum_counter_cache
       forum_conditions = ['topics_count = ?', Topic.count(:id, :conditions => {:forum_id => forum_id})]
+      # if the topic moved forums
       if !frozen? && @old_forum_id && @old_forum_id != forum_id
         set_post_forum_id
         Forum.update_all ['topics_count = ?, posts_count = ?', 
           Topic.count(:id, :conditions => {:forum_id => @old_forum_id}),
           Post.count(:id,  :conditions => {:forum_id => @old_forum_id})], ['id = ?', @old_forum_id]
+      end
+      # if the topic moved forums or was deleted
+      if frozen? || (@old_forum_id && @old_forum_id != forum_id)
         forum_conditions.first << ", posts_count = ?"
         forum_conditions       << Post.count(:id, :conditions => {:forum_id => forum_id})
       end
+      @voices.each &:update_posts_count if @voices
       Forum.update_all forum_conditions, ['id = ?', forum_id]
-      @old_forum_id = nil
+      @old_forum_id = @voices = nil
+    end
+    
+    def update_post_user_counts
+      @voices = voices.to_a
     end
 end

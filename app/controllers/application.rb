@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :admin?, :last_active
   before_filter :login_by_token
-  #around_filter :set_context
+  around_filter :set_context
 
   protected
     def set_context
