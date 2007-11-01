@@ -1,0 +1,20 @@
+ActiveRecordContext
+===================
+
+Simple ActiveRecord context for caching AR objects.  It caches all records from #find queries
+that aren't readonly, and that don't have eagerly loaded associations. It only looks in the context
+on simple Foo.find(id) queries with no conditions.  It's designed to work as an alternative to eager
+loading associations.  It will also help all the extra find calls for models that access their associations
+in callbacks/validations.
+
+It only uses the context when it's activated.  To activate, you can set a controller around_filter:
+
+  around_filter :set_context
+  
+  def set_context
+    ActiveRecord::Base.with_context do
+      yield
+    end
+  end
+  
+Set Technoweenie::ActiveRecordContext.log_context_activity = true to turn on debug logging.
