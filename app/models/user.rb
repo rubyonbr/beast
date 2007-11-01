@@ -12,8 +12,8 @@ class User < ActiveRecord::Base
   has_many :monitorships
   has_many :monitored_topics, :through => :monitorships, :conditions => ["#{Monitorship.table_name}.active = ?", true], :order => "#{Topic.table_name}.replied_at desc", :source => :topic
 
-  validates_presence_of     :login, :email
-  validates_length_of       :login, :minimum => 2
+  validates_presence_of :login, :email
+  validates_length_of   :login, :minimum => 2
   
   with_options :if => :password_required? do |u|
     u.validates_presence_of     :password_hash
@@ -30,11 +30,13 @@ class User < ActiveRecord::Base
 
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :message => "Please check the e-mail address"[:check_email_message]
 
-  validates_uniqueness_of   :login, :email, :case_sensitive => false
-  validates_uniqueness_of   :display_name, :openid_url, :case_sensitive => false, :allow_nil => true
+  validates_uniqueness_of :email
+  validates_uniqueness_of :login, :case_sensitive => false
+  validates_uniqueness_of :display_name, :openid_url, :case_sensitive => false, :allow_nil => true
   before_validation { |u| u.display_name = u.login if u.display_name.blank? }
   # first user becomes admin automatically
   before_create { |u| u.admin = u.activated = true if User.count == 0 }
+  before_save   { |u| u.email.downcase! if u.email }
   format_attribute :bio
 
   attr_reader :password
@@ -93,7 +95,7 @@ class User < ActiveRecord::Base
 
   def to_xml(options = {})
     options[:except] ||= []
-    options[:except] << :email << :login_key << :login_key_expires_at << :password_hash << :openid_url
+    options[:except] << :email << :login_key << :login_key_expires_at << :password_hash << :openid_url << :activated << :admin
     super
   end
   

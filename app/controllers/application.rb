@@ -6,8 +6,15 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :admin?, :last_active
   before_filter :login_by_token
+  #around_filter :set_context
 
   protected
+    def set_context
+      ActiveRecord::Base.with_context do
+        yield
+      end
+    end
+
     def last_active
       session[:last_active] ||= Time.now.utc
     end

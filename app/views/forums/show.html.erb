@@ -7,7 +7,7 @@
 
 <h5 style="margin-bottom:1.0em;"><%= 'Moderators'[:moderators] %></h5>
 
-<% if @forum.moderators.any? -%>
+<% unless @forum.moderators.empty? -%>
 <ul class="flat" style="margin-top:1em;">
 <% @forum.moderators.each do |user| -%>
   <li><%= link_to user.display_name, user_path(user) %></li>

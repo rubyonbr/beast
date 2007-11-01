@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   before_filter :find_post,      :except => [:index, :create, :monitored, :search]
   before_filter :login_required, :except => [:index, :monitored, :search, :show]
-  @@query_options = { :select => "#{Post.table_name}.*, #{Topic.table_name}.title as topic_title, #{Forum.table_name}.name as forum_name", :joins => "inner join #{Topic.table_name} on #{Post.table_name}.topic_id = #{Topic.table_name}.id inner join #{Forum.table_name} on #{Topic.table_name}.forum_id = #{Forum.table_name}.id", :order => "#{Post.table_name}.created_at desc" }
+  @@query_options = { :select => "#{Post.table_name}.*, #{Topic.table_name}.title as topic_title, #{Forum.table_name}.name as forum_name", :joins => "inner join #{Topic.table_name} on #{Post.table_name}.topic_id = #{Topic.table_name}.id inner join #{Forum.table_name} on #{Topic.table_name}.forum_id = #{Forum.table_name}.id" }
 
   caches_formatted_page :rss, :index, :monitored
   cache_sweeper :posts_sweeper, :only => [:create, :update, :destroy]
@@ -9,15 +9,15 @@ class PostsController < ApplicationController
   def index
     conditions = []
     [:user_id, :forum_id, :topic_id].each { |attr| conditions << Post.send(:sanitize_sql, ["#{Post.table_name}.#{attr} = ?", params[attr]]) if params[attr] }
-    conditions = conditions.any? ? conditions.collect { |c| "(#{c})" }.join(' AND ') : nil
-    @posts = Post.paginate @@query_options.merge(:conditions => conditions, :page => params[:page], :count => {:select => "#{Post.table_name}.id"})
+    conditions = conditions.empty? ? nil : conditions.collect { |c| "(#{c})" }.join(' AND ')
+    @posts = Post.paginate @@query_options.merge(:conditions => conditions, :page => params[:page], :count => {:select => "#{Post.table_name}.id"}, :order => post_order)
     @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
     render_posts_or_xml
   end
 
   def search
     conditions = params[:q].blank? ? nil : Post.send(:sanitize_sql, ["LOWER(#{Post.table_name}.body) LIKE ?", "%#{params[:q]}%"])
-    @posts = Post.paginate @@query_options.merge(:conditions => conditions, :page => params[:page], :count => {:select => "#{Post.table_name}.id"})
+    @posts = Post.paginate @@query_options.merge(:conditions => conditions, :page => params[:page], :count => {:select => "#{Post.table_name}.id"}, :order => post_order)
     @users = User.find(:all, :select => 'distinct *', :conditions => ['id in (?)', @posts.collect(&:user_id).uniq]).index_by(&:id)
     render_posts_or_xml :index
   end
@@ -25,6 +25,7 @@ class PostsController < ApplicationController
   def monitored
     @user = User.find params[:user_id]
     options = @@query_options.merge(:conditions => ["#{Monitorship.table_name}.user_id = ? and #{Post.table_name}.user_id != ? and #{Monitorship.table_name}.active = ?", params[:user_id], @user.id, true])
+    options[:order]  = post_order
     options[:joins] += " inner join #{Monitorship.table_name} on #{Monitorship.table_name}.topic_id = #{Topic.table_name}.id"
     options[:page]   = params[:page]
     options[:count]  = {:select => "#{Post.table_name}.id"}
@@ -40,7 +41,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @topic = Topic.find_by_id_and_forum_id(params[:topic_id],params[:forum_id], :include => :forum)
+    @topic = Topic.find_by_id_and_forum_id(params[:topic_id],params[:forum_id])
     if @topic.locked?
       respond_to do |format|
         format.html do
@@ -111,6 +112,10 @@ class PostsController < ApplicationController
   protected
     def authorized?
       action_name == 'create' || @post.editable_by?(current_user)
+    end
+    
+    def post_order
+      "#{Post.table_name}.created_at#{params[:forum_id] && params[:topic_id] ? nil : " desc"}"
     end
     
     def find_post

@@ -5,7 +5,7 @@
 <% form_for :user, :url => admin_user_path(@user), :html => {:class => "xdialog"} do |f| -%>
   <h6><%= 'Admin &amp; Moderation'[:admin_and_moderation] %></h6>
 
-  <% if @user.forums.any? -%>
+  <% unless @user.forums.empty? -%>
 
 	<p><%= 'This user can moderate the following forums.  Click one to remove.'[:remove_moderated_forum] %></p>
 
