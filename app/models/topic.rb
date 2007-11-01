@@ -8,11 +8,12 @@ class Topic < ActiveRecord::Base
 
   belongs_to :forum
   belongs_to :user
+  belongs_to :last_post, :class_name => "Post", :foreign_key => 'last_post_id'
   has_many :monitorships
   has_many :monitors, :through => :monitorships, :conditions => ["#{Monitorship.table_name}.active = ?", true], :source => :user, :order => "#{User.table_name}.login"
 
   has_many :posts,     :order => "#{Post.table_name}.created_at", :dependent => :delete_all
-  has_one  :last_post, :order => "#{Post.table_name}.created_at DESC", :class_name => 'Post'
+  has_one  :recent_post, :order => "#{Post.table_name}.created_at DESC", :class_name => 'Post'
   
   has_many :voices, :through => :posts, :source => :user, :uniq => true
 
@@ -42,7 +43,7 @@ class Topic < ActiveRecord::Base
   
   def update_cached_post_fields(post)
     # these fields are not accessible to mass assignment
-    remaining_post = post.frozen? ? last_post : post
+    remaining_post = post.frozen? ? recent_post : post
     if remaining_post
       self.class.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?, posts_count = ?', 
         remaining_post.created_at, remaining_post.user_id, remaining_post.id, posts.count], ['id = ?', id])

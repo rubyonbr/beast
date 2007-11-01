@@ -43,7 +43,7 @@ class PostTest < Test::Unit::TestCase
 
   def test_should_delete_last_post_and_fix_topic_cached_data
     posts(:pdi_rebuttal).destroy
-    assert_equal posts(:pdi_reply).id, topics(:pdi).last_post_id
+    assert_equal posts(:pdi_reply), topics(:pdi).last_post
     assert_equal posts(:pdi_reply).user_id, topics(:pdi).replied_by
     assert_equal posts(:pdi_reply).created_at.to_i, topics(:pdi).replied_at.to_i
   end

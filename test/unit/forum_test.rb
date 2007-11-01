@@ -11,12 +11,12 @@ class ForumTest < Test::Unit::TestCase
     assert_models_equal [posts(:il8n), posts(:ponies), posts(:pdi_rebuttal), posts(:pdi_reply), posts(:pdi),posts(:sticky) ], forums(:rails).posts
   end
 
-  def test_should_find_last_post
-    assert_equal posts(:il8n), forums(:rails).last_post
+  def test_should_find_recent_post
+    assert_equal posts(:il8n), forums(:rails).recent_post
   end
 
-  def test_should_find_first_topic
-    assert_equal topics(:sticky), forums(:rails).first_topic
+  def test_should_find_recent_topic
+    assert_equal topics(:il8n), forums(:rails).recent_topic
   end
 
   def test_should_find_first_recent_post
