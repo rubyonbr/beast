@@ -19,9 +19,15 @@ module AuthenticationSystem
       current_user.last_seen_at = Time.now.utc
     end
     
-    def login_required
+    def attempt_login
+      return if @attempted_login
       login_by_token      unless logged_in?
       login_by_basic_auth unless logged_in?
+      @attempted_login = true
+    end
+    
+    def login_required
+      attempt_login
       respond_to do |format| 
         format.html { redirect_to login_path }
         format.js   { render(:update) { |p| p.redirect_to login_path } }
@@ -36,11 +42,8 @@ module AuthenticationSystem
       self.current_user = User.find_by_id_and_login_key(*cookies[:login_token].split(";")) if cookies[:login_token] and not logged_in?
     end
     
-    @@http_auth_headers = %w(X-HTTP_AUTHORIZATION HTTP_AUTHORIZATION Authorization)
     def login_by_basic_auth
-      auth_key  = @@http_auth_headers.detect { |h| request.env.has_key?(h) }
-      auth_data = request.env[auth_key].to_s.split unless auth_key.blank?
-      self.current_user = User.authenticate *Base64.decode64(auth_data[1]).split(':')[0..1] if auth_data && auth_data[0] == 'Basic'
+      self.current_user = authenticate_with_http_basic { |u, p| User.authenticate(u, p) }
     end
     
     def authorized?() true end
