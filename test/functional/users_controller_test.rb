@@ -221,7 +221,7 @@ class UsersControllerTest < Test::Unit::TestCase
     assert !users(:sam).moderator_of?(forums(:comics))
     
     login_as :aaron
-    post :admin, :id => users(:sam).id, :user => { :admin => '1' }, :moderator => forums(:comics)
+    post :admin, :id => users(:sam).id, :user => { :admin => '1' }, :moderator => forums(:comics).id
     assert_redirected_to user_path(users(:sam))
     
     assert users(:sam).moderator_of?(forums(:comics))
