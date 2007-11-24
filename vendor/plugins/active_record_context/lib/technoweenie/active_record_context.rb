@@ -3,6 +3,7 @@ module Technoweenie
     def self.included(base)
       base.extend ClassMethods
       base.alias_method_chain :reload, :context
+      base.alias_method_chain :destroy_without_callbacks, :context
       base.cattr_accessor :context_cache
     end
 
@@ -72,6 +73,11 @@ module Technoweenie
     def reload_with_context(options = nil)
       self.class.cached[id.to_i] = nil
       reload_without_context(options)
+    end
+    
+    def destroy_without_callbacks_with_context
+      self.class.cached[id.to_i] = nil
+      destroy_without_callbacks_without_context
     end
   end
 end
