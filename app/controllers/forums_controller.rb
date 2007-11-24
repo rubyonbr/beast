@@ -1,16 +1,16 @@
 class ForumsController < ApplicationController
-  before_filter :login_required, :except => [ :index, :show ]
+  before_filter :login_required, :except => [:index, :show]
   before_filter :find_or_initialize_forum, :except => :index
 
   cache_sweeper :posts_sweeper, :only => [:create, :update, :destroy]
 
   def index
-    @forums = Forum.find(:all, :order => "position")
+    @forums = Forum.find_ordered
     # reset the page of each forum we have visited when we go back to index
-    session[:forum_page]=nil
+    session[:forum_page] = nil
     respond_to do |format|
       format.html
-      format.xml { render :xml => @forums.to_xml }
+      format.xml { render :xml => @forums }
     end
   end
 
@@ -20,10 +20,11 @@ class ForumsController < ApplicationController
         # keep track of when we last viewed this forum for activity indicators
         (session[:forums] ||= {})[@forum.id] = Time.now.utc if logged_in?
         (session[:forum_page] ||= Hash.new(1))[@forum.id] = params[:page].to_i if params[:page]
+
         @topics = @forum.topics.paginate :page => params[:page]
         User.find(:all, :conditions => ['id IN (?)', @topics.collect { |t| t.replied_by }.uniq]) unless @topics.blank?
       end
-      format.xml { render :xml => @forum.to_xml }
+      format.xml { render :xml => @forum }
     end
   end
 
@@ -33,7 +34,7 @@ class ForumsController < ApplicationController
     @forum.attributes = params[:forum]
     @forum.save!
     respond_to do |format|
-      format.html { redirect_to forums_path }
+      format.html { redirect_to @forum }
       format.xml  { head :created, :location => formatted_forum_url(@forum, :xml) }
     end
   end
@@ -41,7 +42,7 @@ class ForumsController < ApplicationController
   def update
     @forum.update_attributes!(params[:forum])
     respond_to do |format|
-      format.html { redirect_to forum_path(@forum) }
+      format.html { redirect_to @forum }
       format.xml  { head 200 }
     end
   end

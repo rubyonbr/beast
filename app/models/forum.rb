@@ -18,4 +18,9 @@ class Forum < ActiveRecord::Base
   has_one  :recent_post, :order => "#{Post.table_name}.created_at DESC", :class_name => 'Post'
 
   format_attribute :description
+  
+  # retrieves forums ordered by position
+  def self.find_ordered(options = {})
+    find :all, options.update(:order => 'position')
+  end
 end

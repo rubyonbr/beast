@@ -75,7 +75,7 @@ class ForumsControllerTest < Test::Unit::TestCase
       post :create, :forum => { :name => 'yeah' }
     end
     
-    assert_redirected_to forums_path
+    assert_redirected_to forum_path(assigns(:forum))
   end
   
   def test_should_create_forum_with_xml

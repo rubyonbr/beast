@@ -23,7 +23,6 @@ class ForumTest < Test::Unit::TestCase
     assert_equal topics(:il8n), forums(:rails).recent_topic
   end
 
-
   def test_should_format_body_html
     forum = Forum.new(:description => 'foo')
     forum.send :format_content
@@ -32,5 +31,9 @@ class ForumTest < Test::Unit::TestCase
     forum.description = ''
     forum.send :format_content
     assert forum.description_html.blank?
+  end
+  
+  def test_should_find_ordered_forums
+    assert_equal [forums(:comics), forums(:rails)], Forum.find_ordered
   end
 end
