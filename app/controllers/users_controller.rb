@@ -47,7 +47,7 @@ class UsersController < ApplicationController
         flash[:error] = "I could not find an account with the email address '{email}'. Did you type it correctly?"[:could_not_find_account_message, params[:email]] if params[:email] and !@user
         redirect_to login_path and return unless @user
         begin
-          UserMailer.deliver_signup(@user, request.host_with_port, params[:to]) if @user.new_record? && @user.valid?
+          UserMailer.deliver_signup(@user, request.host_with_port, params[:to]) if @user.valid?
         rescue Net::SMTPFatalError => e
           flash[:notice] = "A permanent error occured while sending the signup message to '{email}'. Please check the e-mail address."[:signup_permanent_error_message, @user.email]
           render :action => "new"

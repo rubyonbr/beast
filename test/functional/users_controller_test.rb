@@ -67,6 +67,12 @@ class UsersControllerTest < Test::Unit::TestCase
     assert old_key != users(:sam).reload.login_key
   end
 
+  def test_should_send_activation_email_for_forgotten_password
+    assert_difference ActionMailer::Base.deliveries, :size do
+      post :create, :email => users(:sam).email
+    end
+  end
+
   def test_should_require_password
     assert_difference User, :count, 0 do
       post :create, :user => { :password => '', :password_confirmation => '', :login => '', :email => '' }
